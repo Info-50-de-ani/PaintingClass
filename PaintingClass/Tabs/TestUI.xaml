@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="PaintingClass.Tabs.TestUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PaintingClass.Tabs"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <DockPanel>
+        <!--Partea din stanga-->
+        <ToolBarTray DockPanel.Dock="Left" Orientation="Vertical">
+            <ToolBar VerticalAlignment="Center" ClipToBounds="True">
+                <RadioButton Content="Draw" ToolTip="Draw" GroupName="G_Draw" VerticalAlignment="Center"/>
+                <RadioButton Content="Erase" ToolTip="Erase" GroupName="G_Draw"/>
+                    <RadioButton Content="Select" ToolTip="Select" GroupName="G_Draw"/>
+            </ToolBar>
+        </ToolBarTray>
+        <!--parte din dreapta-->
+        <TabControl TabStripPlacement="Left" DockPanel.Dock="Right" >
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TabItem}">
+                    <!--pentru invartire laterala-->
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <ContentPresenter Content="{TemplateBinding Content}">
+                                       
+                                    <ContentPresenter.LayoutTransform>
+                                        <RotateTransform Angle="90" />
+                                    </ContentPresenter.LayoutTransform>
+                                </ContentPresenter>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Padding" Value="3" />
+                    <!--aici se inchide tabu-->
+                </Style>
+                <Style TargetType="{x:Type TabControl}">
+                    <Setter Property="Width" Value="30"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Width" Value="150"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TabControl.Resources>
+            <!--tabitemi-->
+            <TabItem Header="Colors" Name="TI_Colors">
+                <Label Content="aaaa" />
+            </TabItem>
+            <TabItem Header="Equasions" Name ="TI_Equasions" />
+            <TabItem Header="Shapes" Name ="TI_Shapes" />
+        </TabControl>
+        <!--Canvas pt testing-->
+        <Canvas>
+            
+        </Canvas>
+    </DockPanel>
+</UserControl>

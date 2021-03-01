@@ -39,6 +39,7 @@ namespace PaintingClass
 
             //pt testing
             AddTab(new TestTab(),"test tab");
+            AddTab(new TestUI(), "test ui");
         }
 
         public void AddTab(UserControl tabuc, string title)
