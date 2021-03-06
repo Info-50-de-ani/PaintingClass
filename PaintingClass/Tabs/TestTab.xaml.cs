@@ -23,6 +23,44 @@ namespace PaintingClass.Tabs
         public TestTab()
         {
             InitializeComponent();
+
+            // un GeometryGroup contine mai multe geometrii
+            GeometryGroup ellipses = new GeometryGroup();
+
+            //adaugam patru elipse
+            ellipses.Children.Add(
+                new EllipseGeometry(new Point(0, 0), 45, 20)
+                );
+            ellipses.Children.Add(
+                new EllipseGeometry(new Point(0, 0), 20, 45)
+                );
+
+            ellipses.Children.Add(
+                new EllipseGeometry(new Point(50, 50), 45, 20)
+                );
+            ellipses.Children.Add(
+                new EllipseGeometry(new Point(50, 50), 20, 45)
+                );
+
+
+
+            // un GeometryDrawing contine un Geometry, un Brush (umplutura geometriei) si un Pen(conturul geometriei)
+            GeometryDrawing geometryDrawing = new GeometryDrawing();
+
+            geometryDrawing.Geometry = ellipses;
+            geometryDrawing.Pen = new Pen(Brushes.Black,2);
+
+            // folosim un gradient
+            geometryDrawing.Brush =
+                new LinearGradientBrush(
+                    Colors.Blue,
+                    Color.FromRgb(204, 204, 255),
+                    new Point(0, 0),
+                    new Point(1, 1));
+
+            // adaugam GeometryDrawing la tabla
+            whiteboard.collection.Add(geometryDrawing);
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
