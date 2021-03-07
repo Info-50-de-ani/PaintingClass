@@ -12,20 +12,30 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Drawing;
 using System.Collections.ObjectModel;
 
 namespace PaintingClass
 {
     /// <summary>
-    /// Tabla simpla
-    /// Foloseste collection pt a adauga si scadea drawing-uri
+    /// Tabla simpla, deoarece foloseste Drawing ar trebui sa fie destul de rapida si eficienta
+    /// 
+    /// Foloseste collection pt a adauga si scoate drawing-uri
     /// Foloseste proprietatea Background (mostenita de la Control) pt a seta un Background
+    /// 
+    /// toate Drawing-urile din collection trebuie sa incapa in acest chenar
+    ///   ⇩ (0,0)
+    ///   ◸   ◹
+    ///            
+    ///   ◺   ◿
+    ///        ⇧ (size,size)
     /// </summary>
     public partial class Whiteboard : UserControl
     {
         //aka List<Drawing>
-        public DrawingCollection collection { get => group.Children;}
+        public DrawingCollection collection { get => group.Children; set => group.Children = value; }
+        public const double sizeX=100,sizeY=100;
+
+        DrawingGroup mainGroup;
         DrawingGroup group;
 
         //constructor principal
@@ -33,12 +43,23 @@ namespace PaintingClass
         {
             InitializeComponent();
 
+            mainGroup = new DrawingGroup();
             group = new DrawingGroup();
+            var clipGeometry = new RectangleGeometry(new Rect(0, 0, sizeX, sizeY));
+            
+            //ne asiguram ca mainGroup este la dimensiunea corecta, un bodge cam stupid dar merge
+            //TODO: poate poti sa gasesti o metoda prin care sa eviti asta
+            mainGroup.Children.Add(new GeometryDrawing(Background, null , clipGeometry) );
+
+            //inseram group in mainGroup
+            mainGroup.Children.Add(group);
+
+            //ignoram tot ce iese din chenar
+            group.ClipGeometry = clipGeometry;
 
             //folosim un DrawingImage pentru a renderiza DrawingGroup pe <Image>
-            image.Source = new DrawingImage(group);
-            image.Stretch = Stretch.None;
-
+            image.Source = new DrawingImage(mainGroup);
+            image.Stretch = Stretch.Fill;//de la aspect 1:1 la 16:9 (sau alt aspect daca schimbi dimensiunea tablei)
         }
     }
 }

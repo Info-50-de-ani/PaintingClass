@@ -24,31 +24,30 @@ namespace PaintingClass.Tabs
         {
             InitializeComponent();
 
-            // un GeometryGroup contine mai multe geometrii
-            GeometryGroup ellipses = new GeometryGroup();
+            // adaugam GeometryDrawing la tabla
+            //whiteboard.collection.Add(geometryDrawing);
 
-            //adaugam patru elipse
-            ellipses.Children.Add(
-                new EllipseGeometry(new Point(0, 0), 45, 20)
-                );
-            ellipses.Children.Add(
-                new EllipseGeometry(new Point(0, 0), 20, 45)
-                );
+            //adaugam niste simple chenare 
+            whiteboard.collection.Add(new GeometryDrawing(null, new Pen(Brushes.Black, 1), new RectangleGeometry(new Rect(new Point(10, 10), new Point( 20, 20)))));
+            whiteboard.collection.Add(new GeometryDrawing(null, new Pen(Brushes.Blue, 1), new RectangleGeometry(new Rect( new Point(40, 50), new Point(60, 70)))));
+            whiteboard.collection.Add(new GeometryDrawing(null, new Pen(Brushes.Green, 1), new RectangleGeometry(new Rect(new Point(80, 70), new Point(120, 130)))));
 
-            ellipses.Children.Add(
-                new EllipseGeometry(new Point(50, 50), 45, 20)
-                );
-            ellipses.Children.Add(
-                new EllipseGeometry(new Point(50, 50), 20, 45)
-                );
+            //un GeometryGroup contine mai multe geometrii
+            GeometryGroup geometryGroup = new GeometryGroup();
 
-
+            //adaugam doua elipse (geometrii)
+            geometryGroup.Children.Add(
+                new EllipseGeometry(new Point(70, 30), 20, 5)
+                );
+            geometryGroup.Children.Add(
+                new EllipseGeometry(new Point(70, 30), 5, 20)
+                );
 
             // un GeometryDrawing contine un Geometry, un Brush (umplutura geometriei) si un Pen(conturul geometriei)
             GeometryDrawing geometryDrawing = new GeometryDrawing();
 
-            geometryDrawing.Geometry = ellipses;
-            geometryDrawing.Pen = new Pen(Brushes.Black,2);
+            geometryDrawing.Geometry = geometryGroup;
+            geometryDrawing.Pen = new Pen(Brushes.Black, 1);
 
             // folosim un gradient
             geometryDrawing.Brush =
@@ -58,19 +57,24 @@ namespace PaintingClass.Tabs
                     new Point(0, 0),
                     new Point(1, 1));
 
-            // adaugam GeometryDrawing la tabla
+            //adaugam desenul
             whiteboard.collection.Add(geometryDrawing);
-
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void AddTab_Click(object sender, RoutedEventArgs e)
         {
             MainWindow.instance.AddTab(new TestTab(),"Test Tab");
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void RemoteTab_Click(object sender, RoutedEventArgs e)
         {
             MainWindow.instance.RemoveTab(this);
+        }
+
+        private void Undo_Click(object sender, RoutedEventArgs e)
+        {
+            if (whiteboard.collection.Count > 0)
+                whiteboard.collection.RemoveAt(whiteboard.collection.Count - 1);
         }
     }
 }

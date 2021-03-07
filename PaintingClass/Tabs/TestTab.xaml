@@ -6,10 +6,12 @@
              xmlns:local="clr-namespace:PaintingClass.Tabs"
              xmlns:uc="clr-namespace:PaintingClass"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignWidth="1920" d:DesignHeight="1000">
     <Canvas Background="White">
-        <Button Content="Adauga alt tab" Height="99" Canvas.Left="33" Canvas.Top="24" Width="147" Click="Button_Click"/>
-        <Button Content="Sterge acest tab" Height="99" Canvas.Left="33" Canvas.Top="152" Width="147" Click="Button_Click_1"/>
         <uc:Whiteboard x:Name="whiteboard" Height="404" Width="558" Canvas.Left="217" Canvas.Top="25"/>
+        <Button Content="Adauga alt tab" Height="24" Canvas.Left="19" Canvas.Top="25" Width="179" Click="AddTab_Click"/>
+        <Button Content="Sterge acest tab" Height="22" Canvas.Left="19" Canvas.Top="54" Width="179" Click="RemoteTab_Click"/>
+        <Button Content="🔄" FontSize="25" Height="37" Canvas.Left="160" Canvas.Top="388" Width="38" Click="Undo_Click"/>
     </Canvas>
 </UserControl>
+ 
