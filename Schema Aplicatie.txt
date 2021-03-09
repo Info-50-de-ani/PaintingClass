@@ -1,0 +1,19 @@
+-/server
+	- stocare json necompilat pe server 
+-/ Login 
+	[student]	
+	- name roomID ClientID(genrat de client)
+	[prof]
+//whitelist?
+	- email parola -> proftoken 
+-/ RegisterRoom 
+	- genereaza room(/room/id)
+	- proftoken -> roomID 
+-/room/id
+	- expira dupa 30min de 0 useri
+	- elevul trimite ClientID
+		- stocat pe server
+		- stocat pe local
+			- lifetime -> room
+
+	
