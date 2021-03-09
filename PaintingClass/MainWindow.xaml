@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PaintingClass"
         mc:Ignorable="d"
-        Title="MainWindow" Width="1920" Height="1030">
+        Title="MainWindow" Width="1536" Height="824">
     <TabControl x:Name="tabControl">
         
     </TabControl>

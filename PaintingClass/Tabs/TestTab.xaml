@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:PaintingClass.Tabs"
              xmlns:uc="clr-namespace:PaintingClass"
              mc:Ignorable="d" 
-             d:DesignWidth="1920" d:DesignHeight="1000">
+             d:DesignWidth="1536" d:DesignHeight="800">
     <Canvas Background="White">
         <uc:Whiteboard x:Name="whiteboard" Height="404" Width="558" Canvas.Left="217" Canvas.Top="25"/>
         <Button Content="Adauga alt tab" Height="24" Canvas.Left="19" Canvas.Top="25" Width="179" Click="AddTab_Click"/>
