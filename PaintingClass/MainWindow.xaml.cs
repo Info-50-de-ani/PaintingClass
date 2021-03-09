@@ -24,6 +24,9 @@ namespace PaintingClass
     {
         // o sa avem mereu o singura instanta a MainWindow pe care o accesam folosind aceasta variabila statica
         public static MainWindow instance;
+
+        public bool connected=false; // daca conextiunea cu serverul a fost facuta
+        public bool teacher=false; // daca este profesor
         
         // trebuie sa folosim ObservableCollection<> in loc de List<> ca sa evitam bug-uri de UI
         ObservableCollection<TabItem> tabs = new ObservableCollection<TabItem>();
@@ -38,8 +41,17 @@ namespace PaintingClass
             WindowState = WindowState.Maximized;
 
             //pt testing
+            InitTabs();
             AddTab(new TestTab(),"test tab");
             AddTab(new TestUI(), "test ui");
+        }
+
+        /// <summary>
+        /// Folosita pentru a instanta Tab-urile in ordinea corecta dupa ce conexiunea cu servarul a fost facuta
+        /// </summary>
+        public void InitTabs()
+        {
+            AddTab( new MyWhiteboard(),"Tabla mea");
         }
 
         public void AddTab(UserControl tabuc, string title)

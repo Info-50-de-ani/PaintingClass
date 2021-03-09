@@ -56,7 +56,7 @@ namespace PaintingClass.Tabs
                     Color.FromRgb(204, 204, 255),
                     new Point(0, 0),
                     new Point(1, 1));
-
+                
             //adaugam desenul
             whiteboard.collection.Add(geometryDrawing);
         }
