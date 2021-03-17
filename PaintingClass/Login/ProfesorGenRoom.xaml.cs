@@ -10,25 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PaintingClass
+namespace PaintingClass.Login
 {
     /// <summary>
-    /// Interaction logic for StartWindow.xaml
+    /// Interaction logic for ProfesorGenRoom.xaml
     /// </summary>
-    public partial class StartWindow : Window
+    public partial class ProfesorGenRoom : Page
     {
-        public StartWindow()
+        public ProfesorGenRoom()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var mw = new MainWindow();
-            mw.Show();
-            Close();
         }
     }
 }

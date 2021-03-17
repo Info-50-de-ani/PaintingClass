@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Shapes;    
 using System.Collections.ObjectModel;
 
 namespace PaintingClass
@@ -51,7 +51,7 @@ namespace PaintingClass
             //TODO: poate poti sa gasesti o metoda prin care sa eviti asta
             mainGroup.Children.Add(new GeometryDrawing(Background, null , clipGeometry) );
 
-            //inseram group in mainGroup
+            //inseram group in mainGroup    
             mainGroup.Children.Add(group);
 
             //ignoram tot ce iese din chenar
