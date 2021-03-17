@@ -28,6 +28,14 @@ namespace PaintingClass.PaintTools
         //genereaza un control care va fi afisat in toolbar
         //poate returna un <Image> sau <Label> de exemplu
         public abstract Control GetControl();
-    }
 
+        public Whiteboard whiteboard;
+
+        //folosita pt a adauga o imagine pe tabla
+        public virtual void MouseDown(Point position) { }
+        //folosita pt a adauga pucte la acea imagine
+        public virtual void MouseDrag(Point position) { }
+        //folosita pt a elibera acea imagine
+        public virtual void MouseUp() { }
+    }
 }

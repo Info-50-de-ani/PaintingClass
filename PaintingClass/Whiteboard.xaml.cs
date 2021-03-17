@@ -61,5 +61,11 @@ namespace PaintingClass
             image.Source = new DrawingImage(mainGroup);
             image.Stretch = Stretch.Fill;//de la aspect 1:1 la 16:9 (sau alt aspect daca schimbi dimensiunea tablei)
         }
+
+        // transforma un punct in spatiu XAML in spatiul corect
+        public Point NormalizePosition(Point p)
+        {
+            return new Point(p.X/Width*sizeX,p.Y/ Height * sizeY);
+        }
     }
 }

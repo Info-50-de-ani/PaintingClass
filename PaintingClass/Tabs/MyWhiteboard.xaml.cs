@@ -29,6 +29,9 @@ namespace PaintingClass.Tabs
         //lista uneltelor incarcate
         List<PaintTool> tools = new List<PaintTool>();
 
+        //daca suntem in procesul de a scrie pe tabla
+        bool drawing;
+
         //constructorul
         public MyWhiteboard()
         {
@@ -38,6 +41,7 @@ namespace PaintingClass.Tabs
             foreach (Type type in paintToolTypes)
             {
                 PaintTool tool = (PaintTool)Activator.CreateInstance(type);
+                tool.whiteboard = whiteboard;
                 tools.Add(tool);
             }
 
@@ -60,6 +64,35 @@ namespace PaintingClass.Tabs
             //selecteaza prima unealta
             if (tools.Count>0)
             selectedTool = tools[0];
+
+            //adauga eventuri
+            whiteboard.MouseLeftButtonDown += (sender,args) =>
+            {
+                if (drawing) return;
+                drawing = true;
+                selectedTool.MouseDown(whiteboard.NormalizePosition(args.GetPosition(whiteboard)));
+            };
+
+            whiteboard.MouseMove += (sender, args) =>
+            {
+                if (!drawing) return;
+                selectedTool.MouseDrag(whiteboard.NormalizePosition(args.GetPosition(whiteboard)));
+            };
+
+            whiteboard.MouseLeave += (sender, args) =>
+            {
+                if (!drawing) return;
+                drawing = false;
+                selectedTool.MouseUp();
+            };
+
+            whiteboard.MouseLeftButtonUp += (sender,args) =>
+            {
+                if (!drawing) return;
+                drawing = false;
+                selectedTool.MouseUp();
+                System.Diagnostics.Trace.WriteLine("UP");
+            };
         }
 
         //contine toate tipurile de PaintTool obitnute prin reflexie

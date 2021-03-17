@@ -11,9 +11,9 @@
     <Canvas Background="White">
         <Border BorderThickness="5" BorderBrush="Black" Height="726" Width="170" Canvas.Left="57" Canvas.Top="25">
             <StackPanel x:Name="toolbar" Orientation="Vertical" HorizontalAlignment="Center">
-
+                
             </StackPanel>
         </Border>
-        <PaintingClass:Whiteboard Height="726" Canvas.Left="286" Canvas.Top="25" Width="1208"/>
+        <PaintingClass:Whiteboard x:Name="whiteboard" Height="726" Canvas.Left="286" Canvas.Top="25" Width="1208"/>
     </Canvas>
 </UserControl>
