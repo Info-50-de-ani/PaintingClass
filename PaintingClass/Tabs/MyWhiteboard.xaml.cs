@@ -91,7 +91,6 @@ namespace PaintingClass.Tabs
                 if (!drawing) return;
                 drawing = false;
                 selectedTool.MouseUp();
-                System.Diagnostics.Trace.WriteLine("UP");
             };
         }
 

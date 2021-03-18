@@ -17,17 +17,14 @@ using PaintingClass.PaintTools;
 
 namespace PaintingClass.PaintTools
 {
-    /// <summary>
-    /// Unealta exemplu
-    /// </summary>
-    class SimpleTool : PaintTool
+    class EraseTool : PaintTool
     {
-        public override int priority => 0;
+        public override int priority => 1;
 
         public override Control GetControl()
         {
             Label label = new Label();
-            label.Content = "test";
+            label.Content = "Erase";
             return label;
         }
 
@@ -42,16 +39,16 @@ namespace PaintingClass.PaintTools
 
             var geometry = new PathGeometry();
             geometry.Figures.Add(figure);
-            
+
             drawing = new GeometryDrawing();
-            drawing.Pen = new Pen(Brushes.Black,1);
+            drawing.Pen = new Pen(Brushes.White, 1);
             drawing.Geometry = geometry;
             whiteboard.collection.Add(drawing);
         }
 
         public override void MouseDrag(Point position)
         {
-            figure.Segments.Add(new LineSegment(position,true));
+            figure.Segments.Add(new LineSegment(position, true));
         }
 
         public override void MouseUp()
