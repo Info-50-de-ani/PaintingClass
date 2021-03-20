@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,17 +13,30 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using System.Collections.ObjectModel;
+using PaintingClass.Client;
 namespace PaintingClass.Login
 {
     /// <summary>
     /// Interaction logic for ProfesorGenRoom.xaml
     /// </summary>
-    public partial class ProfesorGenRoom : Page
+    public partial class ProfesorGenRoom : Page  
     {
-        public ProfesorGenRoom()
+        Frame currentFrame;
+        public ProfesorGenRoom(Frame frame)
         {
             InitializeComponent();
+        }
+
+        private void GenRoom_Button_Click(object sender, RoutedEventArgs e)
+        {
+            User.UserInformation.Name = "Gigel";
+            WS.InitHost("ws://localhost:9000/home",User.UserInformation.Name,Ws_OnOpen);
+        }
+
+        private void Ws_OnOpen(object sender, EventArgs e)
+        {
+            this.Dispatcher.Invoke(() => { RoomCode.Text = $"Room: {WS.Host.roomCode}"; });
         }
     }
 }

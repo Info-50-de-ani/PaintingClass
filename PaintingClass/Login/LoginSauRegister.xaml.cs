@@ -40,12 +40,12 @@ namespace PaintingClass.Login
 
         private void EnterINFO_Register_Button_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void EnterINFO_Login_Button_Click(object sender, RoutedEventArgs e)
         {
-
+            // provizoriu 
+            CurrentFrame.Content = new ProfesorGenRoom(CurrentFrame);
         }
     }
 }

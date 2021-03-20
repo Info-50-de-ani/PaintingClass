@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace PaintingClass.Login
 {
     /// <summary>
-    /// Interaction logic for CharacterLimitTextBox.xaml
+    /// Interaction logic for TestSend.xaml
     /// </summary>
-    public partial class CharacterLimitTextBox : UserControl
+    public partial class TestSend : Page
     {
-        public CharacterLimitTextBox()
+        public TestSend()
         {
             InitializeComponent();
         }
