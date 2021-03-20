@@ -49,7 +49,7 @@ namespace PaintingClass
             
             //ne asiguram ca mainGroup este la dimensiunea corecta, un bodge cam stupid dar merge
             //TODO: poate poti sa gasesti o metoda prin care sa eviti asta
-            mainGroup.Children.Add(new GeometryDrawing(Background, null , clipGeometry) );
+            mainGroup.Children.Add(new GeometryDrawing(null, new Pen(Brushes.Red,0) , clipGeometry) );
 
             //inseram group in mainGroup    
             mainGroup.Children.Add(group);
@@ -60,6 +60,12 @@ namespace PaintingClass
             //folosim un DrawingImage pentru a renderiza DrawingGroup pe <Image>
             image.Source = new DrawingImage(mainGroup);
             image.Stretch = Stretch.Fill;//de la aspect 1:1 la 16:9 (sau alt aspect daca schimbi dimensiunea tablei)
+        }
+
+        // transforma un punct in spatiu XAML in spatiul corect
+        public Point NormalizePosition(Point p)
+        {
+            return new Point(p.X/Width*sizeX,p.Y/ Height * sizeY);
         }
     }
 }
