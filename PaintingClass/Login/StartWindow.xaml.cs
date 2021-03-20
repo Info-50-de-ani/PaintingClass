@@ -40,7 +40,7 @@ namespace PaintingClass
 
         private void Skip_Button_Click(object sender, RoutedEventArgs e)
         {
-            var mw = new MainWindow();
+            var mw = new MainWindow(null);
             mw.Show();
             Close();
         }
