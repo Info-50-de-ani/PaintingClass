@@ -8,8 +8,8 @@
         Title="StartWindow" Height="450" Width="600">
     <DockPanel Background="#181A1B">
         <Button x:Name="BackButton" Content="Back" DockPanel.Dock="Bottom" Width="100" Click="Back_Button_Click"/>
-        <Button DockPanel.Dock="Bottom" Height="30" Width="60" Click="Skip_Button_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            SKIP
+        <Button DockPanel.Dock="Bottom" Height="30" Width="80" Click="Skip_Button_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            TEST MODE
         </Button>
         <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Source="">
         </Frame>

@@ -58,26 +58,46 @@ namespace PaintingClass
             InitializeComponent();
             instance = this;
             tabControl.ItemsSource = tabs;
-
             // maximizam window-ul cand se deschide
             WindowState = WindowState.Maximized;
-
-            //pt testing
-            InitTabs();
-            AddTab(new TestTab(),"test tab");
-            AddTab(new TestUI(), "test ui");
 
             //pagina de login va genera UserData si il va trimite prin constructor
             userData = data;
 
-            networkManager = new RoomManager(userData);
+            if (userData==null)
+            {
+                TestInit();
+            }
+            else
+            {
+                Init();
+            }
         }
 
         /// <summary>
-        /// Folosita pentru a instanta Tab-urile in ordinea corecta dupa ce conexiunea cu servarul a fost facuta
+        /// Pt testare, ruleaza cand userData este null
         /// </summary>
-        public void InitTabs()
+        public void TestInit()
         {
+            AddTab(new MyWhiteboard(), "Tabla mea");
+            AddTab(new TestTab(), "test tab");
+            AddTab(new TestUI(), "test ui");
+        }
+
+        /// <summary>
+        /// Init
+        /// </summary>
+        public async void Init()
+        {
+            PleaseWait pw = new PleaseWait();
+            AddTab(pw,"");
+
+            //todo: conectare la server
+            await Task.Delay(1000);
+            networkManager = new RoomManager(userData);
+
+            RemoveTab(pw);
+
             AddTab( new MyWhiteboard(),"Tabla mea");
         }
 
