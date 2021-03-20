@@ -49,7 +49,7 @@ namespace PaintingClass
             
             //ne asiguram ca mainGroup este la dimensiunea corecta, un bodge cam stupid dar merge
             //TODO: poate poti sa gasesti o metoda prin care sa eviti asta
-            mainGroup.Children.Add(new GeometryDrawing(Background, null , clipGeometry) );
+            mainGroup.Children.Add(new GeometryDrawing(null, new Pen(Brushes.Red,0) , clipGeometry) );
 
             //inseram group in mainGroup    
             mainGroup.Children.Add(group);
