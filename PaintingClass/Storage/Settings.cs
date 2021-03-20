@@ -8,7 +8,6 @@ namespace PaintingClass.Storage
     [Serializable]
     public class Settings
     {
-
         void Save()
         {
             AppdataIO.Save<Settings>("GlobalSettings.xml", this);
