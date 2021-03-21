@@ -77,7 +77,7 @@ namespace PaintingClass
         /// <summary>
         /// Pt testare, ruleaza cand userData este null
         /// </summary>
-        public void TestInit()
+        void TestInit()
         {
             AddTab(new MyWhiteboard(), "Tabla mea");
             AddTab(new TestTab(), "test tab");
@@ -85,17 +85,28 @@ namespace PaintingClass
         }
 
         /// <summary>
-        /// Init
+        /// Init, am incercat sa folosesc programare asincrona ca sa o invat putin
         /// </summary>
-        public async void Init()
+        async void Init()
         {
             PleaseWait pw = new PleaseWait();
             AddTab(pw,"");
 
-            //todo: conectare la server
-            await Task.Delay(1000);
-            networkManager = new RoomManager(userData);
+            if (userData.roomId == 0)
+            {
+                if (!userData.isTeacher)
+                    throw new Exception("roomId not set but can't create a new room because user is not a teacher");
 
+                //cream o noua incapere
+                userData.roomId = await CreateRoom.SendRequest(userData.profToken);
+
+                if (userData.roomId == 0)
+                    throw new Exception("roomId nu poate fi 0");
+            }
+
+            //todo: conectare la server
+            //networkManager = new RoomManager(userData);
+            
             RemoveTab(pw);
 
             AddTab( new MyWhiteboard(),"Tabla mea");

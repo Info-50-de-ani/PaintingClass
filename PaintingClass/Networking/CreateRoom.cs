@@ -4,19 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebSocketSharp;
+using System.Threading;
 
 namespace PaintingClass.Networking
 {
     /// <summary>
-    /// Folosita de pagina de logare pentru a cere crearea unui nou Room
+    /// Creaza un nou Room
     /// </summary>
     public static class CreateRoom
     {
         const string endpoint = "/createRoom";
-        public static void SendRequest(int profToken, Action<int> onCompletion)
+        public static async Task<int> SendRequest(int profToken)
         {
-            //daca este 0 inseamna ca ceva rau sa intamplat
+            //daca este 0 inseamna ca ceva rau sa 
             int result = 0;
+
+            //folosit pt a sincroniza thread-urile
+            SemaphoreSlim semaphore = new SemaphoreSlim(1);
+
             WebSocket ws = new WebSocket(Constants.url + endpoint + $"?profToken={profToken}");
             ws.OnMessage += (sender, args) =>
             {
@@ -28,9 +33,16 @@ namespace PaintingClass.Networking
             };
             ws.OnClose += (sender,args) =>
             {
-                onCompletion?.Invoke(result);
+                System.Diagnostics.Trace.WriteLine("createRoom websocket closed with code: " + args.Code.ToString());
+                semaphore.Release();
             };
-            ws.ConnectAsync();
+
+            //am putea folosi ConnectAsync dar nu este necesar
+            ws.Connect();
+
+            //asteptam ca conexiunea sa se inchida
+            await semaphore.WaitAsync();
+            return result;
         }
     }
 }

@@ -47,5 +47,24 @@ namespace PaintingClass.Login
             // provizoriu 
             CurrentFrame.Content = new ProfesorGenRoom(CurrentFrame);
         }
+
+        //pt debbuging
+        private void Inject_Click(object sender, RoutedEventArgs e)
+        {
+            int token = Convert.ToInt32(injectorText.Text);
+            if (token == 0)
+            {
+                System.Diagnostics.Trace.WriteLine("Nu poti injecta un token cu valoarea 0");
+                return;
+            }
+
+            UserData ud = new UserData();
+            ud.name = "profu";
+            ud.profToken = token;
+
+            (new MainWindow(ud)).Show();
+            
+            Window.GetWindow(CurrentFrame).Close();
+        }
     }
 }
