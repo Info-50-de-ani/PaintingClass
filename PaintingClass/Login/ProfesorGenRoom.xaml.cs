@@ -14,7 +14,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
-using PaintingClass.Client;
 namespace PaintingClass.Login
 {
     /// <summary>
@@ -30,13 +29,13 @@ namespace PaintingClass.Login
 
         private void GenRoom_Button_Click(object sender, RoutedEventArgs e)
         {
-            User.UserInformation.Name = "Gigel";
-            WS.InitHost("ws://localhost:9000/home",User.UserInformation.Name,Ws_OnOpen);
+            //User.UserInformation.Name = "Gigel";
+            //WS.InitHost("ws://localhost:9000/home",User.UserInformation.Name,Ws_OnOpen);
         }
 
         private void Ws_OnOpen(object sender, EventArgs e)
         {
-            this.Dispatcher.Invoke(() => { RoomCode.Text = $"Room: {WS.Host.roomCode}"; });
+            //this.Dispatcher.Invoke(() => { RoomCode.Text = $"Room: {WS.Host.roomCode}"; });
         }
     }
 }
