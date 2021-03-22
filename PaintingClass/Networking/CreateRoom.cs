@@ -26,6 +26,7 @@ namespace PaintingClass.Networking
             ws.OnMessage += (sender, args) =>
             {
                 result = Convert.ToInt32(args.Data);
+                ws.Close();
             };
             ws.OnError += (sender, args) =>
             {
