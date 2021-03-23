@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebSocketSharp;
 using System.Threading;
+using System.Windows;
 
 namespace PaintingClass.Networking
 {
@@ -40,7 +41,6 @@ namespace PaintingClass.Networking
 
             //am putea folosi ConnectAsync dar nu este necesar
             ws.Connect();
-
             //asteptam ca conexiunea sa se inchida
             await semaphore.WaitAsync();
             return result;

@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Networking\WS.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Networking\RoomManager" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="websocketsharp.core" Version="1.0.0" />
   </ItemGroup>
 

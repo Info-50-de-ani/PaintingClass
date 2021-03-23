@@ -33,7 +33,6 @@ namespace PaintingClass
 
         //roomId
         public int roomId;
-
         public bool isTeacher { get => profToken != 0; }
     }
 
@@ -44,11 +43,9 @@ namespace PaintingClass
     {
         // o sa avem mereu o singura instanta a MainWindow pe care o accesam folosind aceasta variabila statica
         public static MainWindow instance;
+        public static UserData userData;
+        RoomManager roomManager;
 
-        public UserData userData;
-        public bool connected=false; // daca conextiunea initiala cu serverul a fost facuta
-        public RoomManager networkManager;// face conexiunea cu server-ul
-        
         // trebuie sa folosim ObservableCollection<> in loc de List<> ca sa evitam bug-uri de UI
         ObservableCollection<TabItem> tabs = new ObservableCollection<TabItem>();
 
@@ -104,11 +101,12 @@ namespace PaintingClass
                     throw new Exception("roomId nu poate fi 0");
             }
 
+            roomManager = new RoomManager(userData);
             //todo: conectare la server
             //networkManager = new RoomManager(userData);
             
             RemoveTab(pw);
-
+            
             AddTab( new MyWhiteboard(),"Tabla mea");
         }
 

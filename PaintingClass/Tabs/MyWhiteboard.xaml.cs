@@ -14,6 +14,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Reflection;
 using PaintingClass.PaintTools;
+using System.Threading;
+using System.Text.Json;
+using PaintingClass.Networking;
 
 namespace PaintingClass.Tabs
 {
@@ -22,8 +25,11 @@ namespace PaintingClass.Tabs
     /// TODO: tabla are o marime fixa deocamdata dar ar fi ideal daca ar suporta orice rezolutie, mentinand aspectul de 16:9
     /// TODO: NU ESTE TERMINATA
     /// </summary>
+    
+
     public partial class MyWhiteboard : UserControl
     {
+
         PaintTool selectedTool;//click stanga o sa foloseasca unealta selectata
 
         //lista uneltelor incarcate
@@ -92,7 +98,10 @@ namespace PaintingClass.Tabs
                 drawing = false;
                 selectedTool.MouseUp();
             };
+
         }
+
+
 
         //contine toate tipurile de PaintTool obitnute prin reflexie
         static Type[] paintToolTypes;
