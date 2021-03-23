@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Reflection;
 using PaintingClass.PaintTools;
+using PaintingClass.Networking;
 
 namespace PaintingClass.PaintTools
 {
@@ -54,6 +55,8 @@ namespace PaintingClass.PaintTools
         public override void MouseUp()
         {
             drawing.Freeze();//extra performanta
+            MainWindow.instance.roomManager.SendMessage(RoomManager.Message.SerialzieDrawing(drawing));
+
             drawing = null;
             figure = null;
         }

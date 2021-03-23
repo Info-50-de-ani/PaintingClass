@@ -14,8 +14,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;    
 using System.Collections.ObjectModel;
 using System.Threading;
-using System.Text.Json;
-
 namespace PaintingClass
 {
     /// <summary>

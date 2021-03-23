@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Reflection;
+using PaintingClass.Tabs;
 
 namespace PaintingClass.PaintTools
 {
@@ -29,6 +30,7 @@ namespace PaintingClass.PaintTools
         //poate returna un <Image> sau <Label> de exemplu
         public abstract Control GetControl();
 
+        public MyWhiteboard owner;
         public Whiteboard whiteboard;
 
         //folosita pt a adauga o imagine pe tabla

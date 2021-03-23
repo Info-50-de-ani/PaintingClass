@@ -44,7 +44,7 @@ namespace PaintingClass
         // o sa avem mereu o singura instanta a MainWindow pe care o accesam folosind aceasta variabila statica
         public static MainWindow instance;
         public static UserData userData;
-        RoomManager roomManager;
+        public RoomManager roomManager;
 
         // trebuie sa folosim ObservableCollection<> in loc de List<> ca sa evitam bug-uri de UI
         ObservableCollection<TabItem> tabs = new ObservableCollection<TabItem>();
@@ -102,11 +102,8 @@ namespace PaintingClass
             }
 
             roomManager = new RoomManager(userData);
-            //todo: conectare la server
-            //networkManager = new RoomManager(userData);
             
             RemoveTab(pw);
-            
             AddTab( new MyWhiteboard(),"Tabla mea");
         }
 

@@ -29,7 +29,6 @@ namespace PaintingClass.Tabs
 
     public partial class MyWhiteboard : UserControl
     {
-
         PaintTool selectedTool;//click stanga o sa foloseasca unealta selectata
 
         //lista uneltelor incarcate
@@ -47,6 +46,7 @@ namespace PaintingClass.Tabs
             foreach (Type type in paintToolTypes)
             {
                 PaintTool tool = (PaintTool)Activator.CreateInstance(type);
+                tool.owner  =  this;
                 tool.whiteboard = whiteboard;
                 tools.Add(tool);
             }
@@ -99,9 +99,10 @@ namespace PaintingClass.Tabs
                 selectedTool.MouseUp();
             };
 
+
         }
 
-
+        
 
         //contine toate tipurile de PaintTool obitnute prin reflexie
         static Type[] paintToolTypes;
