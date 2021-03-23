@@ -23,9 +23,9 @@ namespace PaintingClass.Networking
                 Drawing,Action
             };
 
-            public int clientId;
-            public MessageType type;
-            public string content;
+            public int clientId { get; set; }
+            public MessageType type { get; set; }
+            public string content { get; set; }
 
             public static Message SerialzieDrawing(Drawing drawing)
             {
