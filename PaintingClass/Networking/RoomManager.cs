@@ -15,63 +15,42 @@ namespace PaintingClass.Networking
 {
     public class RoomManager
     {
-        [Serializable]
-        public class Message
-        {
-            public enum MessageType
-            {
-                Drawing,Action
-            };
-
-            public int clientId { get; set; }
-            public MessageType type { get; set; }
-            public string content { get; set; }
-
-            public static Message SerialzieDrawing(Drawing drawing)
-            {
-                Message msg = new Message { clientId = MainWindow.userData.clientID, type=MessageType.Drawing };
-                msg.content = XamlWriter.Save(drawing);
-                return msg;
-            }
-            public static Message SerializeAction(string str)
-            {
-                Message msg = new Message { clientId = MainWindow.userData.clientID, type = MessageType.Action };
-                msg.content = str;
-                return msg;
-            }
-
-            public static object DeserializeContent(Message msg)
-            {
-                if (msg.type == MessageType.Drawing)
-                {
-                    return XamlReader.Parse(msg.content);
-                }
-                else 
-                {
-                    return msg.content;
-                }
-            }
-        }
-
         public WebSocket ws;
+        public UserListMessage userList;
         
-        public static Dictionary<string, UserData> whiteboardCollections = new Dictionary<string, UserData>();
+        //public static Dictionary<string, UserData> whiteboardCollections = new Dictionary<string, UserData>();
 
-        public void SendMessage(Message msg)
+        public void SendWhiteboardMessage(WhiteboardMessage msg)
         {
-            string msgSerialized = JsonSerializer.Serialize(msg, typeof(Message));
-            ws.Send(msgSerialized);
+            string msgSerialized = JsonSerializer.Serialize(msg, typeof(WhiteboardMessage));
+            ws.Send(Packet.Pack(PacketType.WhiteboardMessage,msgSerialized));
         }
 
         public RoomManager(UserData userData)
         {
             ws = new WebSocket($"{Constants.url}/room/{userData.roomId}?name={userData.name}&clientID={userData.clientID}&profToken={userData.profToken}");
-            ws.OnMessage += (sender, e) =>
-            {
-
-            };
+            ws.OnMessage += OnMessage;
             ws.Connect();
 
+        }
+
+        void OnMessage(object sender, MessageEventArgs e)
+        {
+            Packet p = Packet.Unpack(e.Data);
+
+            switch (p.type)
+            {
+                case PacketType.none:
+                    throw new Exception("PacketType nu ar trb sa fie 0");
+                case PacketType.WhiteboardMessage:
+                    //todo:
+                    break;
+                case PacketType.UserListMessage:
+                    userList = JsonSerializer.Deserialize<UserListMessage>(p.msg);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
