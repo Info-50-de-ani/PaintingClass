@@ -58,12 +58,15 @@ namespace PaintingClass.Login
                 return;
             }
 
-            UserData ud = new UserData();
-            ud.name = "profu";
-            ud.profToken = token;
+            UserData ud = new UserData
+            {
+                name = "profu",
+                clientID = PaintingClass.Storage.Settings.instance.clientID,
+                profToken = token,
+                roomId = 0
+            };
 
             (new MainWindow(ud)).Show();
-            
             Window.GetWindow(CurrentFrame).Close();
         }
     }

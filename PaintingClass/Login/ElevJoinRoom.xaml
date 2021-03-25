@@ -8,27 +8,15 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ElevJoinRoom">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="2*"/>
-            </Grid.ColumnDefinitions>
-            <!--Enter Code-->
-            <TextBlock Grid.Row="0" Text="Introduceti Codul:  " Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" />
-            <TextBox x:Name="TB_Code"  Grid.Row="0" Grid.Column="1"  Width="200" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBox>
-            <!--Enter name-->
-            <TextBlock Grid.Row="1" Text="Introduceti Numele:  " Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" />
-            <TextBox x:Name="TB_Name" Grid.Row="1" Grid.Column="1"  Width="200" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBox>
-        </Grid>
-    </Grid>
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <!--Enter Code-->
+        <TextBlock Grid.Row="0" Text="Introduceti Codul:  " Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" />
+        <TextBox x:Name="roomId"  Grid.Row="0" Grid.Column="1"  Width="200" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBox>
+        
+        <!--Enter name-->
+        <TextBlock Margin="0,20,0,0" Grid.Row="1" Text="Introduceti Numele:  " Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" />
+        <TextBox x:Name="name" Grid.Row="1" Grid.Column="1"  Width="200" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBox>
+
+        <Button Margin="0,20,0,0" MinWidth="40" HorizontalAlignment="Center" Click="Button_Click">Go</Button>
+    </StackPanel>
 </Page>

@@ -8,9 +8,55 @@ namespace PaintingClass.Storage
     [Serializable]
     public class Settings
     {
+        //daca sa genereze un nou ClientId la fiecare start al programului si sa ignoreze cel din fisier 
+        //daca este false atunci clientul se poate reconecta la acelasi room chiar daca da crash
+        const bool regenerateClientIdAtStart=true;
+
+        static Settings _instance;
+        public static Settings instance
+        {
+            get
+            {
+                if (_instance==null)
+                {
+                    _instance = AppdataIO.Load<Settings>("Settings.xml");
+                    if (_instance == null) _instance = new Settings();
+                    _instance.deserializationFinished = true;
+                }
+                return _instance;
+            }
+        }
+
+        //ne asiguram ca nu salvam cand deserializer-ul seteaza variabilele
+        bool deserializationFinished;
+
+        int _clientID;
+        public int clientID
+        {
+            get
+            {
+                //daca nu am generat un clientID generam unul
+                if (_clientID==0)
+                {
+                    _clientID = (new Random()).Next(1,int.MaxValue);
+                    Save();
+                }
+
+                return _clientID;
+            }
+
+            set
+            {
+                if (deserializationFinished || regenerateClientIdAtStart==false)
+                    _clientID = value;
+                Save();
+            }
+        }
+
         void Save()
         {
-            AppdataIO.Save<Settings>("GlobalSettings.xml", this);
+            if (deserializationFinished)
+                AppdataIO.Save<Settings>("Settings.xml", this);
         }
     }
 }

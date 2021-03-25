@@ -26,5 +26,19 @@ namespace PaintingClass.Login
             InitializeComponent();
             CurrentFrame = frame;
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            UserData ud = new UserData
+            {
+                name = name.Text,
+                roomId = int.Parse(roomId.Text),
+                clientID = PaintingClass.Storage.Settings.instance.clientID,
+                profToken=0
+            };
+
+            (new MainWindow(ud)).Show();
+            Window.GetWindow(CurrentFrame).Close();
+        }
     }
 }
