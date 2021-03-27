@@ -66,7 +66,6 @@ namespace PaintingClass.PaintTools
                 double normy = (double)whiteboard.Height / whiteboard.Width*(position.Y - initialPos.Y);
                 if (Math.Abs(normy) > Math.Abs(normx)) 
                 {//x
-                    Window.GetWindow(whiteboard).Title = $"{normx} {normy}";
                     if (initialPos.Y - position.Y < 0)
                         rectangle.Rect = new Rect(initialPos, new Point(position.X, (initialPos.Y + (double)whiteboard.Width / whiteboard.Height * Math.Abs(position.X - initialPos.X))));
                     else
@@ -74,7 +73,6 @@ namespace PaintingClass.PaintTools
                 }
                 else
                 {//y
-                    Window.GetWindow(whiteboard).Title = $"{normx} {normy}";
                     if (initialPos.X - position.X < 0)
                         rectangle.Rect = new Rect(initialPos, new Point(initialPos.X + (double)whiteboard.Height / whiteboard.Width * Math.Abs(position.Y - initialPos.Y), position.Y));
                     else
