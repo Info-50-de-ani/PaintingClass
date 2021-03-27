@@ -21,14 +21,14 @@ namespace PaintingClass.PaintTools
     /// <summary>
     /// Unealta exemplu
     /// </summary>
-    class SimpleTool : PaintTool
+    class DrawTool : PaintTool
     {
         public override int priority => 0;
 
         public override Control GetControl()
         {
             Label label = new Label();
-            label.Content = "test";
+            label.Content = "Draw";
             return label;
         }
 
