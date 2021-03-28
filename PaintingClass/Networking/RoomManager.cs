@@ -15,9 +15,19 @@ namespace PaintingClass.Networking
 {
     public class RoomManager
     {
+        //tine informatii legate de alt utilizator
+        public class NetworkUser
+        {
+            public int clientId;
+            public string name;
+            public bool isConnected;
+            public bool isShared;
+        }
+
         public WebSocket ws;
-        public UserListMessage userList;
-        
+
+        public static Dictionary<int,NetworkUser> userList = new();
+
         //public static Dictionary<string, UserData> whiteboardCollections = new Dictionary<string, UserData>();
 
         public void SendWhiteboardMessage(WhiteboardMessage msg)
@@ -46,7 +56,17 @@ namespace PaintingClass.Networking
                     //todo:
                     break;
                 case PacketType.UserListMessage:
-                    userList = JsonSerializer.Deserialize<UserListMessage>(p.msg);
+                    var msg = JsonSerializer.Deserialize<UserListMessage>(p.msg);
+
+                    //updatam lista de utilizatori
+                    foreach (var nu in userList) nu.Value.isConnected = false;
+                    for (int i=0;i<msg.idList.Length;i++)
+                    {
+                        if (!userList.TryGetValue(msg.idList[i], out var networkUser))
+                            networkUser.isConnected = true;
+                        else
+                            userList.Add(msg.idList[i],new NetworkUser { clientId = msg.idList[i], name = msg.nameList[i],isConnected=true });
+                    }
                     break;
                 default:
                     break;
