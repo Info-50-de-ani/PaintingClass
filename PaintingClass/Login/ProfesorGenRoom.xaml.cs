@@ -21,7 +21,7 @@ namespace PaintingClass.Login
     /// </summary>
     public partial class ProfesorGenRoom : Page  
     {
-        Frame currentFrame;
+        public Frame currentFrame;
         public ProfesorGenRoom(Frame frame)
         {
             InitializeComponent();

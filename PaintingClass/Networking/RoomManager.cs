@@ -10,6 +10,7 @@ using WebSocketSharp.Net.WebSockets;
 using System.Text.Json;
 using System.Windows.Markup;
 using PaintingClass.Tabs;
+using PaintingClassCommon;
 
 namespace PaintingClass.Networking
 {

@@ -102,7 +102,7 @@ namespace PaintingClass.PaintTools
         }
         public override void MouseUp()
         {
-            MainWindow.instance.roomManager.SendWhiteboardMessage(WhiteboardMessage.SerialzieDrawing(geometryDrawing));
+            MainWindow.instance.roomManager.SendWhiteboardMessage(Networking.MessageUtils.SerialzieDrawing(geometryDrawing));
             ellipse.Freeze();//extra performanta
             ellipse = null;
         }
