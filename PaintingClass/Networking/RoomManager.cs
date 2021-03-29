@@ -10,20 +10,49 @@ using WebSocketSharp.Net.WebSockets;
 using System.Text.Json;
 using System.Windows.Markup;
 using PaintingClass.Tabs;
+using PaintingClassCommon;
 
 namespace PaintingClass.Networking
 {
     public class RoomManager
     {
-        public WebSocket ws;
-        public UserListMessage userList;
-        
-        //public static Dictionary<string, UserData> whiteboardCollections = new Dictionary<string, UserData>();
-
-        public void SendWhiteboardMessage(WhiteboardMessage msg)
+        //tine informatii legate de alt utilizator
+        public class NetworkUser
         {
-            string msgSerialized = JsonSerializer.Serialize(msg, typeof(WhiteboardMessage));
-            ws.Send(Packet.Pack(PacketType.WhiteboardMessage,msgSerialized));
+            public int clientId;
+            public string name;
+            public bool isConnected;
+            bool _isShared;
+            public bool isShared
+            {
+                get => _isShared;
+                set
+                {
+                    if (_isShared == value)
+                        return;
+                    if (value==true)
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+                    _isShared = value;
+                }
+            }
+            
+        }
+
+        public WebSocket ws;
+
+        public static Dictionary<int,NetworkUser> userList = new();
+
+
+        public void PackAndSend<T>(PacketType type, T msg)
+        {
+            string msgSerialized = JsonSerializer.Serialize<T>(msg);
+            ws.Send(Packet.Pack(type,msgSerialized));
         }
 
         public RoomManager(UserData userData)
@@ -45,8 +74,32 @@ namespace PaintingClass.Networking
                 case PacketType.WhiteboardMessage:
                     //todo:
                     break;
+
                 case PacketType.UserListMessage:
-                    userList = JsonSerializer.Deserialize<UserListMessage>(p.msg);
+                    var msg = JsonSerializer.Deserialize<UserListMessage>(p.msg);
+
+                    //updatam lista de utilizatori
+                    foreach (var nu in userList) nu.Value.isConnected = false;
+                    for (int i=0;i<msg.idList.Length;i++)
+                    {
+                        if (msg.idList[i] == MainWindow.userData.clientID) continue;
+                        if (!userList.TryGetValue(msg.idList[i], out var networkUser))
+                            networkUser.isConnected = true;
+                        else
+                            userList.Add(msg.idList[i],new NetworkUser { clientId = msg.idList[i], name = msg.nameList[i],isConnected=true });
+                    }
+                    break;
+
+                case PacketType.ShareMessage:
+                    ShareMessage sm = JsonSerializer.Deserialize<ShareMessage>(p.msg);
+                    if (sm.clientId == MainWindow.userData.clientID)
+                    {
+                        //TODO:
+                    }
+                    else
+                    {
+                        userList[sm.clientId].isShared = sm.shared;
+                    }
                     break;
                 default:
                     break;
