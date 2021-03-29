@@ -1,29 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using WebSocketSharp;
-using WebSocketSharp.Net;
-using WebSocketSharp.Net.WebSockets;
 using System.Text.Json;
-using System.Windows.Markup;
-using PaintingClass.Tabs;
 using System.Web;
 
-namespace PaintingClass.Networking
+namespace PaintingClassCommon
 {
+    /// <summary>
+    /// Aceasta clasa TREBUIE sa fie identica cu cealalta copie
+    /// </summary>
     public enum PacketType
     {
-        none=0, 
-        WhiteboardMessage=1, 
-        UserListMessage=2
+        none = 0,
+        WhiteboardMessage = 1,
+        UserListMessage = 2,
+        ShareRequestMessage = 3
     }
     [Serializable]
     public class Packet
     {
-
         public PacketType type { get; set; }
         public string msg { get; set; }
 
@@ -40,6 +33,7 @@ namespace PaintingClass.Networking
         }
     }
 
+    //trimis de client si de server
     [Serializable]
     public class WhiteboardMessage
     {
@@ -47,42 +41,31 @@ namespace PaintingClass.Networking
         {
             Drawing, Action
         };
-       
+
         public int clientId { get; set; }
         public ContentType type { get; set; }
         public string content { get; set; }
-
-        public static WhiteboardMessage SerialzieDrawing(Drawing drawing)
-        {
-            WhiteboardMessage msg = new WhiteboardMessage { clientId = MainWindow.userData.clientID, type = ContentType.Drawing };
-            msg.content = XamlWriter.Save(drawing);
-            return msg;
-        }
-
-        public static WhiteboardMessage SerializeAction(string str)
-        {
-            WhiteboardMessage msg = new WhiteboardMessage { clientId = MainWindow.userData.clientID, type = ContentType.Action };
-            msg.content = str;
-            return msg;
-        }
-
-        public static object DeserializeContent(WhiteboardMessage msg)
-        {
-            if (msg.type == ContentType.Drawing)
-            {
-                return XamlReader.Parse(msg.content);
-            }
-            else
-            {
-                return msg.content;
-            }
-        }
     }
 
+    //trimis de server
     [Serializable]
     public class UserListMessage
     {
-        public int[] idList { get; set;  }
-        public string[] nameList { get; set;  }
+        [Serializable]
+        public class UserListItem
+        {
+            public int id { get; set; }
+            public string name { get; set; }
+            public bool isConnected { get; set; }
+            public bool isShared { get; set; }
+        }
+        public UserListItem[] list { get; set; }
+    }
+
+    //trims de client-ul profesorului
+    public class ShareRequestMessage
+    {
+        public int clientId { get; set; }
+        public bool isShared { get; set; }
     }
 }

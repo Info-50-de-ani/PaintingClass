@@ -59,27 +59,29 @@ namespace PaintingClass.PaintTools
             if(e.Key == Key.Return)
             {
                 tb.Text = tb.Text + '\n';
-            }
+        }
         }
 
         private void Tb_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
+                    {
             TextBox tb = (TextBox)sender;
             if (tb.Text == "")
-            {
+                    {
                 tb.Foreground = Brushes.Gray;
                 tb.Text = "Scrie aici";
             }
+            return ch;
         }
 
         private void Tb_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             TextBox tb = (TextBox)sender;
             if (tb.Text == "Scrie aici")
-            {
+                {
                 tb.Foreground = Brushes.Black;
                 tb.Text = "";
-            }
+                }
+                glyphDrawing.GlyphRun = new GlyphRun(glyphTypeface, 0, false, size, glyphIndexes, initialPos, advanceWidths, null, null, null, null, null, null);
         }
 
         public override void MouseDrag(Point position)

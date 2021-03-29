@@ -21,14 +21,14 @@ namespace PaintingClass.PaintTools
     /// <summary>
     /// Unealta exemplu
     /// </summary>
-    class SimpleTool : PaintTool
+    class DrawTool : PaintTool
     {
         public override int priority => 0;
 
         public override Control GetControl()
         {
             Label label = new Label();
-            label.Content = "test";
+            label.Content = "Draw";
             return label;
         }
 
@@ -43,7 +43,7 @@ namespace PaintingClass.PaintTools
 
             var geometry = new PathGeometry();
             geometry.Figures.Add(figure);
-            
+
             drawing = new GeometryDrawing();
             drawing.Pen = new Pen(Brushes.Black,1);
             drawing.Geometry = geometry;
@@ -58,7 +58,7 @@ namespace PaintingClass.PaintTools
         public override void MouseUp()
         {
             drawing.Freeze();//extra performanta
-            MainWindow.instance.roomManager.SendWhiteboardMessage(WhiteboardMessage.SerialzieDrawing(drawing) );
+            MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage,MessageUtils.SerialzieDrawing(drawing) );
 
             drawing = null;
             figure = null;

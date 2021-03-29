@@ -91,16 +91,19 @@ namespace PaintingClass
             PleaseWait pw = new PleaseWait();
             AddTab(pw,"");
 
-            if (userData.roomId == 0)
+            if (userData.roomId==0)
             {
                 if (!userData.isTeacher)
                     throw new Exception("roomId not set but can't create a new room because user is not a teacher");
 
-                //cream o noua incapere
-                userData.roomId = await CreateRoom.SendRequest(userData.profToken);
+                while (userData.roomId == 0)
+                {
+                    //cream o noua incapere
+                    userData.roomId = await CreateRoom.SendRequest(userData.profToken);
 
-                if (userData.roomId == 0)
-                    throw new Exception("roomId nu poate fi 0");
+                    if (userData.roomId == 0)
+                        System.Diagnostics.Trace.WriteLine("roomId nu poate fi 0, incercam din nou");
+                }
             }
 
             roomManager = new RoomManager(userData);

@@ -7,6 +7,5 @@
         mc:Ignorable="d"
         Title="MainWindow" Width="1536" Height="824">
     <TabControl x:Name="tabControl">
-        
     </TabControl>
 </Window>

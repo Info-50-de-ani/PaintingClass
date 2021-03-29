@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Reflection;
+using PaintingClass.Networking;
 
 namespace PaintingClass.PaintTools
 {
@@ -22,7 +23,7 @@ namespace PaintingClass.PaintTools
     class RectangleTool : PaintTool
     {
 
-        public override int priority => 0;
+        public override int priority => 2;
 
         public override Control GetControl()
         {
@@ -31,7 +32,7 @@ namespace PaintingClass.PaintTools
             return label;
         }
 
-
+        GeometryDrawing geometryDrawing;
         RectangleGeometry rectangle;
         Point initialPos;
         bool isControlPressed = false;
@@ -41,8 +42,8 @@ namespace PaintingClass.PaintTools
             Window.GetWindow(whiteboard).KeyUp += Whiteboard_KeyUp;
             initialPos = position;
             rectangle = new RectangleGeometry(new Rect(position,position));
-
-            whiteboard.collection.Add(new GeometryDrawing(null, new Pen(new SolidColorBrush(Colors.Black),0.3),rectangle));
+            geometryDrawing = new GeometryDrawing(null, new Pen(new SolidColorBrush(Colors.Black), 0.3), rectangle);
+            whiteboard.collection.Add(geometryDrawing);
         }
 
         private void Whiteboard_KeyDown(object sender, KeyEventArgs e)
@@ -86,6 +87,7 @@ namespace PaintingClass.PaintTools
         public override void MouseUp()
         {
             rectangle.Freeze();//extra performanta
+            MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage, MessageUtils.SerialzieDrawing(geometryDrawing));
             rectangle = null;
         }
     }

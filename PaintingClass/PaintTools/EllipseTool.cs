@@ -13,12 +13,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Reflection;
+using PaintingClass.Networking;
 
 namespace PaintingClass.PaintTools
 {
     class EllipseTool : PaintTool
     {
-        public override int priority => 0;
+        public override int priority => 3;
 
         public override Control GetControl()
         {
@@ -28,6 +29,7 @@ namespace PaintingClass.PaintTools
         }
 
 
+        GeometryDrawing geometryDrawing;
         EllipseGeometry ellipse;
         Point initialPos;
         bool isControlPressed = false;
@@ -37,8 +39,8 @@ namespace PaintingClass.PaintTools
             Window.GetWindow(whiteboard).KeyUp += Whiteboard_KeyUp;
             initialPos = position;
             ellipse = new EllipseGeometry(new Rect(position, position));
-
-            whiteboard.collection.Add(new GeometryDrawing(null, new Pen(new SolidColorBrush(Colors.Black), 0.3), ellipse));
+            geometryDrawing = new GeometryDrawing(null, new Pen(new SolidColorBrush(Colors.Black), 0.3), ellipse);
+            whiteboard.collection.Add(geometryDrawing);
         }
 
         private void Whiteboard_KeyDown(object sender, KeyEventArgs e)
@@ -100,6 +102,7 @@ namespace PaintingClass.PaintTools
         }
         public override void MouseUp()
         {
+            MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage, MessageUtils.SerialzieDrawing(geometryDrawing));
             ellipse.Freeze();//extra performanta
             ellipse = null;
         }

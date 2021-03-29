@@ -14,6 +14,6 @@
                 
             </StackPanel>
         </Border>
-        <PaintingClass:Whiteboard x:Name="whiteboard" Height="726" Canvas.Left="286" Canvas.Top="25" Width="1208" BorderBrush="Black" BorderThickness="5" Background="White"/>
-    </Canvas>
+          <PaintingClass:Whiteboard x:Name="whiteboard" Height="726" Canvas.Left="286" Canvas.Top="25" Width="1208" BorderBrush="Black" BorderThickness="5" Background="White"/>
+      </Canvas>
 </UserControl>
