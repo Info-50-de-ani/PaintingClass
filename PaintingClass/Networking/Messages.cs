@@ -11,7 +11,8 @@ namespace PaintingClassCommon
     {
         none = 0,
         WhiteboardMessage = 1,
-        UserListMessage = 2
+        UserListMessage = 2,
+        ShareRequestMessage = 3
     }
     [Serializable]
     public class Packet
@@ -50,5 +51,12 @@ namespace PaintingClassCommon
     {
         public int[] idList { get; set; }
         public string[] nameList { get; set; }
+    }
+
+    [Serializable]
+    public class ShareRequestMessage
+    {
+        public int clientId;
+        public bool shared;
     }
 }
