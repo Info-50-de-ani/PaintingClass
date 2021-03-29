@@ -43,7 +43,7 @@ namespace PaintingClass.PaintTools
 
             var geometry = new PathGeometry();
             geometry.Figures.Add(figure);
-            
+
             drawing = new GeometryDrawing();
             drawing.Pen = new Pen(Brushes.Black,1);
             drawing.Geometry = geometry;
