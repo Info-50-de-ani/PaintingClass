@@ -90,8 +90,8 @@ namespace PaintingClass.Networking
                     }
                     break;
 
-                case PacketType.ShareMessage:
-                    ShareMessage sm = JsonSerializer.Deserialize<ShareMessage>(p.msg);
+                case PacketType.ShareRequestMessage:
+                    ShareRequestMessage sm = JsonSerializer.Deserialize<ShareRequestMessage>(p.msg);
                     if (sm.clientId == MainWindow.userData.clientID)
                     {
                         //TODO:
@@ -106,4 +106,5 @@ namespace PaintingClass.Networking
             }
         }
     }
+
 }
