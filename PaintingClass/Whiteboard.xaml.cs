@@ -75,5 +75,10 @@ namespace PaintingClass
         {
             return new Point(p.X/Width*sizeX,p.Y/ Height * sizeY);
         }
+
+        public Point DenormalizePosition(Point p)
+        {
+            return new Point(p.X / sizeX * Width, p.Y/ sizeY * Height);
+        }
     }
 }

@@ -45,6 +45,7 @@ namespace PaintingClass
         public static MainWindow instance;
         public static UserData userData;
         public RoomManager roomManager;
+        public MyWhiteboard myWhiteboardInstance;
 
         // trebuie sa folosim ObservableCollection<> in loc de List<> ca sa evitam bug-uri de UI
         ObservableCollection<TabItem> tabs = new ObservableCollection<TabItem>();
@@ -76,7 +77,8 @@ namespace PaintingClass
         /// </summary>
         void TestInit()
         {
-            AddTab(new MyWhiteboard(), "Tabla mea");
+            myWhiteboardInstance = new MyWhiteboard();
+            AddTab(myWhiteboardInstance, "Tabla mea");
             AddTab(new TestTab(), "test tab");
             AddTab(new TestUI(), "test ui");
         }
@@ -104,7 +106,8 @@ namespace PaintingClass
             roomManager = new RoomManager(userData);
             
             RemoveTab(pw);
-            AddTab( new MyWhiteboard(),"Tabla mea");
+            myWhiteboardInstance = new MyWhiteboard();
+            AddTab( myWhiteboardInstance,"Tabla mea");
         }
 
         public void AddTab(UserControl tabuc, string title)
