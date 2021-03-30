@@ -15,13 +15,13 @@ using System.Windows.Shapes;
 using System.Reflection;
 using PaintingClass.PaintTools;
 using PaintingClass.Networking;
-using System.Runtime.InteropServices;
+using PaintingClass.Tabs;
 
 namespace PaintingClass.PaintTools
 {
     class TextTool : PaintTool
     {
-        public override int priority => 0;
+        public override int priority => -1;
 
         public override Control GetControl()
         {
@@ -30,109 +30,66 @@ namespace PaintingClass.PaintTools
             return label;
         }
 
-        double size = 3;
-        Typeface typeface = new Typeface(new FontFamily("Times New Roman"),
-                                FontStyles.Normal,
-                                FontWeights.Normal,
-                                FontStretches.Normal);
-        StringBuilder text = new StringBuilder("dsadsa");
-        GlyphRunDrawing glyphDrawing;
-        GlyphTypeface glyphTypeface;
-        Point initialPos;
+        TextBox tb;
+
         public override void MouseDown(Point position)
         {
-            Window.GetWindow(whiteboard).KeyDown += TextTool_KeyDown;
-            initialPos = position;
-
-            glyphDrawing = new GlyphRunDrawing(new SolidColorBrush(Colors.Black), null);
-            whiteboard.collection.Add(glyphDrawing);
-
+            tb = new TextBox();
+            tb.Background = Brushes.Transparent;
+            tb.Text = "Scrie aici";
+            tb.Width = 100;
+            tb.Height = 100;
+            tb.TextWrapping = TextWrapping.Wrap;
+            tb.Foreground = Brushes.Gray;
+            tb.AcceptsReturn = true;
+            //tb.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+            tb.KeyDown += Tb_KeyDown;
+            tb.GotKeyboardFocus += Tb_GotKeyboardFocus;
+            tb.LostKeyboardFocus += Tb_LostKeyboardFocus;
+            myWhiteboardCanvas.Children.Add(tb);
+            position = MainWindow.instance.myWhiteboardInstance.whiteboard.DenormalizePosition(position);
+            //MessageBox.Show($"{position.X} {position.Y}");
+            Canvas.SetTop(tb, Canvas.GetTop(whiteboard)+ position.Y);
+            Canvas.SetLeft(tb, Canvas.GetLeft(whiteboard) + position.X);
+            //MessageBox.Show($"{position.X + Canvas.GetTop(whiteboard)} {Canvas.GetLeft(whiteboard)+position.Y}");
         }
-        #region Utilz
-        public enum MapType : uint
+
+        private void Tb_KeyDown(object sender, KeyEventArgs e)
         {
-            MAPVK_VK_TO_VSC = 0x0,
-            MAPVK_VSC_TO_VK = 0x1,
-            MAPVK_VK_TO_CHAR = 0x2,
-            MAPVK_VSC_TO_VK_EX = 0x3,
-        }
-
-        [DllImport("user32.dll")]
-        public static extern int ToUnicode(
-            uint wVirtKey,
-            uint wScanCode,
-            byte[] lpKeyState,
-            [Out, MarshalAs(UnmanagedType.LPWStr, SizeParamIndex = 4)]
-            StringBuilder pwszBuff,
-            int cchBuff,
-            uint wFlags);
-
-        [DllImport("user32.dll")]
-        public static extern bool GetKeyboardState(byte[] lpKeyState);
-
-        [DllImport("user32.dll")]
-        public static extern uint MapVirtualKey(uint uCode, MapType uMapType);
-
-        public static char GetCharFromKey(Key key)
-        {
-            char ch = ' ';
-
-            int virtualKey = KeyInterop.VirtualKeyFromKey(key);
-            byte[] keyboardState = new byte[256];
-            GetKeyboardState(keyboardState);
-
-            uint scanCode = MapVirtualKey((uint)virtualKey, MapType.MAPVK_VK_TO_VSC);
-            StringBuilder stringBuilder = new StringBuilder(2);
-
-            int result = ToUnicode((uint)virtualKey, scanCode, keyboardState, stringBuilder, stringBuilder.Capacity, 0);
-            switch (result)
+            if(e.Key == Key.Return)
             {
-                case -1:
-                    break;
-                case 0:
-                    break;
-                case 1:
-                    {
-                        ch = stringBuilder[0];
-                        break;
-                    }
-                default:
-                    {
-                        ch = stringBuilder[0];
-                        break;
-                    }
-            }
-            return ch;
+                tb.Text = tb.Text + '\n';
         }
-        #endregion
-        private void TextTool_KeyDown(object sender, KeyEventArgs e)
+        }
+
+        private void Tb_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+                    {
+            TextBox tb = (TextBox)sender;
+            if (tb.Text == "")
+                    {
+                tb.Foreground = Brushes.Gray;
+                tb.Text = "Scrie aici";
+            }
+        }
+
+        private void Tb_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-                text.Append(GetCharFromKey(e.Key));
-                double[] advanceWidths = new double[text.Length];
-                ushort[] glyphIndexes = new ushort[text.Length];
-                double totalWidth = 0;
-                if (!typeface.TryGetGlyphTypeface(out glyphTypeface))
-                    throw new InvalidOperationException("No glyphtypeface found");
-                for (int i = 0; i < text.Length; i++)
-                {
-                    ushort glyphIndex = glyphTypeface.CharacterToGlyphMap[text[i]];
-                    glyphIndexes[i] = glyphIndex;
-
-                    double width = glyphTypeface.AdvanceWidths[glyphIndex] * size;
-                    advanceWidths[i] = width;
-
-                    totalWidth += width;
-                }
-                glyphDrawing.GlyphRun = new GlyphRun(glyphTypeface, 0, false, size, glyphIndexes, initialPos, advanceWidths, null, null, null, null, null, null);
+            TextBox tb = (TextBox)sender;
+            if (tb.Text == "Scrie aici")
+            {
+                tb.Foreground = Brushes.Black;
+                tb.Text = "";
+            }
         }
 
         public override void MouseDrag(Point position)
         {
+
         }
 
         public override void MouseUp()
         {
-            //MainWindow.instance.roomManager.SendWhiteboardMessage(WhiteboardMessage.SerialzieDrawing(glyphDrawing));
+            // todo sa fie transmisa prin glyph
         }
     }
 }

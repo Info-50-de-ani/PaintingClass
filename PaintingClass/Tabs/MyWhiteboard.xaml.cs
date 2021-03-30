@@ -48,6 +48,7 @@ namespace PaintingClass.Tabs
                 PaintTool tool = (PaintTool)Activator.CreateInstance(type);
                 tool.owner  =  this;
                 tool.whiteboard = whiteboard;
+                tool.myWhiteboardCanvas = myWhiteboardCanvas;
                 tools.Add(tool);
             }
 

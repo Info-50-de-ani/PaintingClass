@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignWidth="1536" d:DesignHeight="800">
     <!-- O sa fie inlocuita de un Grid la un moment dat-->
-    <Canvas Background="White">
+    <Canvas Background="White" x:Name="myWhiteboardCanvas">
         <Border BorderThickness="5" BorderBrush="Black" Height="726" Width="170" Canvas.Left="57" Canvas.Top="25">
             <StackPanel x:Name="toolbar" Orientation="Vertical" HorizontalAlignment="Center">
                 
