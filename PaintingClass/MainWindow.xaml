@@ -6,6 +6,49 @@
         xmlns:local="clr-namespace:PaintingClass"
         mc:Ignorable="d"
         Title="MainWindow" Width="1536" Height="824">
-    <TabControl x:Name="tabControl">
-    </TabControl>
+    <DockPanel>
+    <!--#region Lista Participanti-->
+        <TabControl TabStripPlacement="Left" DockPanel.Dock="Right">
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TabItem}">
+                    <!--pentru invartire laterala-->
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <ContentPresenter Content="{TemplateBinding Content}">
+
+                                    <ContentPresenter.LayoutTransform>
+                                        <RotateTransform Angle="90" />
+                                    </ContentPresenter.LayoutTransform>
+                                </ContentPresenter>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Padding" Value="3" />
+                    <!--aici se inchide tabu-->
+                </Style>
+                <Style TargetType="{x:Type TabControl}">
+                    <Setter Property="Width" Value="30"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Width" Value="auto"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TabControl.Resources>
+            <!--tabitemi-->
+            <TabItem Header="Participanti" Name="TI_Participanti">
+                <ListBox x:Name="UserListBox" >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate >
+                            <TextBlock Text="{Binding}"  Background="Lime" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+        </TabControl>
+        <!--#endregion-->
+        <TabControl x:Name="tabControl">
+        </TabControl>
+    </DockPanel>
 </Window>

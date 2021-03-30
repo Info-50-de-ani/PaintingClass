@@ -53,6 +53,7 @@ namespace PaintingClass
         {
             //UI
             InitializeComponent();
+            this.DataContext = this;
             instance = this;
             tabControl.ItemsSource = tabs;
             // maximizam window-ul cand se deschide
@@ -105,10 +106,26 @@ namespace PaintingClass
             }
 
             roomManager = new RoomManager(userData);
-            
+            roomManager.onUserListUpdate += UserListUpdate;
+            roomManager.onUserListUpdate();
             RemoveTab(pw);
-            AddTab( new MyWhiteboard(),"Tabla mea");
+            AddTab(new MyWhiteboard(), "Tabla mea");
+
         }
+
+        ObservableCollection<string> UserList;
+
+        void UserListUpdate()
+        {
+            UserList = new ObservableCollection<string>();
+            if(roomManager!=null)
+            foreach (var user in roomManager.userList)
+            {
+                UserList.Add($"Name: {user.Value.name} ClientID: {user.Value.clientId} Connected: {user.Value.isConnected} Sharing: {user.Value.isShared}");
+            }
+            Dispatcher.Invoke(()=>UserListBox.ItemsSource = UserList);
+        }
+
 
         public void AddTab(UserControl tabuc, string title)
         {

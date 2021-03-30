@@ -81,10 +81,11 @@ namespace PaintingClass.Networking
 
                     foreach (var item in msg.list)
                     {
-                        NetworkUser nu=null;
+                        NetworkUser nu;
                         if (!userList.TryGetValue(item.id, out nu ))
                         {
                             nu = new NetworkUser { clientId = item.id };
+                            userList.Add(nu.clientId, nu);
                         }
                         nu.name = item.name;
                         nu.isShared = item.isShared;
