@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="PaintingClass.Tabs.MultipleWhiteboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PaintingClass.Tabs"
+             mc:Ignorable="d" 
+             d:DesignWidth="1536" d:DesignHeight="800">
+    <Grid>
+        <ScrollViewer>
+            <!--Patratel cu informatii-->
+            <StackPanel>
+                <Border Background="#778898" Width="auto" Margin="100" Height="200">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                            <TextBox x:Name="TB_sharing" IsReadOnly="True"></TextBox>
+                            <Border Margin="10"></Border>
+                            <TextBox x:Name="TB_particpants" IsReadOnly="True"></TextBox>
+                        </StackPanel>
+                        <Button Grid.Column="1"
+                                    Width="150" 
+                                    Height="50"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Padding="10">Paraseste camera</Button>
+                        <StackPanel Grid.Column="2" 
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center">
+                            <TextBox x:Name="TB_RoomCode" IsReadOnly="True"></TextBox>
+                            <Border Margin="10"></Border>
+                            <TextBox x:Name="TB_BrowserLink" IsReadOnly="True"></TextBox>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                <!--Table-->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel x:Name="WhiteboardColomn1" Grid.Column="0">
+                    </StackPanel>
+                    <StackPanel x:Name="WhiteboardColomn2" Grid.Column="1">
+                    </StackPanel>
+                    <StackPanel x:Name="WhiteboardColomn3" Grid.Column="2">
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

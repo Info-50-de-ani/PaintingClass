@@ -1,6 +1,7 @@
 ﻿using PaintingClass.Login;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,18 @@ namespace PaintingClass
         {
             InitializeComponent();
             BackButton.Visibility = Visibility.Hidden;
+            ///daca e inceputa aplicatia prin browser
+            if (App.startedAppFromBrowserroomId != 0)
+            {
+                var ejr = new ElevJoinRoom(MainFrame);
+                ejr.roomId.Text = App.startedAppFromBrowserroomId.ToString();
+                MainFrame.Content =ejr;
+                App.startedAppFromBrowserroomId = 0;
+            }
+			else
+            {
             MainFrame.Content = new ProfesorSauElev(MainFrame);
+			}
             MainFrame.Navigated += MainFrame_Navigated;
 
         }

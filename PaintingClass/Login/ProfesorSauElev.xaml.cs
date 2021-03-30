@@ -24,6 +24,7 @@ namespace PaintingClass.Login
         public ProfesorSauElev(Frame frame)
         {
             InitializeComponent();
+            
             CurrentFrame = frame;
         }
 

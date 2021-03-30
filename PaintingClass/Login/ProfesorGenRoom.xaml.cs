@@ -29,13 +29,10 @@ namespace PaintingClass.Login
 
         private void GenRoom_Button_Click(object sender, RoutedEventArgs e)
         {
-            //User.UserInformation.Name = "Gigel";
-            //WS.InitHost("ws://localhost:9000/home",User.UserInformation.Name,Ws_OnOpen);
         }
 
         private void Ws_OnOpen(object sender, EventArgs e)
         {
-            //this.Dispatcher.Invoke(() => { RoomCode.Text = $"Room: {WS.Host.roomCode}"; });
         }
     }
 }

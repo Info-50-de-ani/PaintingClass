@@ -89,6 +89,8 @@ namespace PaintingClass
         /// </summary>
         async void Init()
         {
+
+            #region Enter room
             PleaseWait pw = new PleaseWait();
             AddTab(pw,"");
 
@@ -106,12 +108,18 @@ namespace PaintingClass
                         System.Diagnostics.Trace.WriteLine("roomId nu poate fi 0, incercam din nou");
                 }
             }
+  #endregion
+
+            #region Generate MyWhiteboard and RoomManager
 
             roomManager = new RoomManager(userData);
             roomManager.onUserListUpdate += UserListUpdate;
             roomManager.onUserListUpdate();
             RemoveTab(pw);
-            AddTab(new MyWhiteboard(), "Tabla mea");
+            myWhiteboardInstance = new MyWhiteboard();
+            AddTab(myWhiteboardInstance, "Tabla mea");
+            AddTab(new MultipleWhiteboardView(), "Tablele Elevilor");
+#endregion
 
         }
 
