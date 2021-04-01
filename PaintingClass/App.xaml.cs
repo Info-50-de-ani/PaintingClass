@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using PaintingClass.Login;
+
 namespace PaintingClass
 {
 	/// <summary>
@@ -17,6 +18,7 @@ namespace PaintingClass
 	{
 		public const string costumUrl = "PaintingClassLauncher";
 		public static int startedAppFromBrowserroomId = 0;
+
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
 			if (e.Args.Length > 0)
@@ -35,7 +37,6 @@ namespace PaintingClass
 				}
 				#endregion
 				Debug.Assert(startedAppFromBrowserroomId != 0);
-				
 			}
 			else
 			{

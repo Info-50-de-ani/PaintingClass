@@ -42,16 +42,13 @@ namespace PaintingClass.PaintTools
             tb.TextWrapping = TextWrapping.Wrap;
             tb.Foreground = Brushes.Gray;
             tb.AcceptsReturn = true;
-            //tb.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
             tb.KeyDown += Tb_KeyDown;
             tb.GotKeyboardFocus += Tb_GotKeyboardFocus;
             tb.LostKeyboardFocus += Tb_LostKeyboardFocus;
             myWhiteboardCanvas.Children.Add(tb);
             position = MainWindow.instance.myWhiteboardInstance.whiteboard.DenormalizePosition(position);
-            //MessageBox.Show($"{position.X} {position.Y}");
             Canvas.SetTop(tb, Canvas.GetTop(whiteboard)+ position.Y);
             Canvas.SetLeft(tb, Canvas.GetLeft(whiteboard) + position.X);
-            //MessageBox.Show($"{position.X + Canvas.GetTop(whiteboard)} {Canvas.GetLeft(whiteboard)+position.Y}");
         }
 
         private void Tb_KeyDown(object sender, KeyEventArgs e)
