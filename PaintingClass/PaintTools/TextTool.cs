@@ -56,7 +56,7 @@ namespace PaintingClass.PaintTools
             if(e.Key == Key.Return)
             {
                 tb.Text = tb.Text + '\n';
-        }
+            }
         }
 
         private void Tb_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)

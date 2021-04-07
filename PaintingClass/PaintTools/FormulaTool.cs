@@ -24,7 +24,7 @@ namespace PaintingClass.PaintTools
 {
 	class FormulaTool : PaintTool
 	{
-		public override int priority => -1;
+		public override int priority => 3;
 
 		public override Control GetControl()
 		{
@@ -53,7 +53,7 @@ namespace PaintingClass.PaintTools
 			tb.TextChanged += Tb_TextChanged;
 			tb.GotKeyboardFocus += Tb_GotKeyboardFocus;
 			tb.LostKeyboardFocus += Tb_LostKeyboardFocus;
-#endregion
+			#endregion
 
 			StackPanel stackPanel = new StackPanel();
 			stackPanel.MouseEnter += StackPanel_MouseEnter;

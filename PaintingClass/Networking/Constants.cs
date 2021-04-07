@@ -9,7 +9,7 @@ namespace PaintingClass.Networking
     public static class Constants
     {
         //cui nui plac url-urile hardcodate?
-        public const string url = "ws://127.0.0.1:32281";
+        public const string url = "wss://localhost:32281";
         public const int port = 32281;
     }
 }

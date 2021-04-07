@@ -8,12 +8,12 @@ namespace PaintingClass.Storage
     [Serializable]
     public class Settings
     {
-        //daca sa genereze un nou ClientId la fiecare start al programului si sa ignoreze cel din fisier 
-        //daca este false atunci clientul se poate reconecta la acelasi room chiar daca da crash
-        const bool regenerateClientIdAtStart=true;
+		//daca sa genereze un nou ClientId la fiecare start al programului si sa ignoreze cel din fisier 
+		//daca este false atunci clientul se poate reconecta la acelasi room chiar daca da crash
+		const bool regenerateClientIdAtStart = true;
 
-        static Settings _instance;
-        public static Settings instance
+		static Settings _instance;
+		public static Settings instance
         {
             get
             {

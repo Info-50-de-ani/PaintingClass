@@ -42,7 +42,7 @@ namespace PaintingClass.PaintTools
             geometry.Figures.Add(figure);
 
             drawing = new GeometryDrawing();
-            drawing.Pen = new Pen(Brushes.White, 1);
+            drawing.Pen = new Pen(Brushes.White, 2);
             drawing.Geometry = geometry;
             whiteboard.collection.Add(drawing);
         }
