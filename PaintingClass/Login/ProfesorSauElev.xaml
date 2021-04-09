@@ -1,31 +1,166 @@
-﻿<Page x:Class="PaintingClass.Login.ProfesorSauElev"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:PaintingClass.Login"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="ProfesorSauElev">
+﻿<Page
+    x:Class="PaintingClass.Login.ProfesorSauElev"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:PaintingClass.Login"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="ProfesorSauElev"
+    d:DesignHeight="500"
+    d:DesignWidth="700"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <Style TargetType="Image">
+            <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
+        </Style>
+    </Page.Resources>
 
-    <Grid >
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="97*"/>
-            <RowDefinition Height="353*"/>
+            <RowDefinition Height="97*" />
+            <RowDefinition Height="133*" />
+            <RowDefinition Height="220*" />
         </Grid.RowDefinitions>
-        <Border Background="#669DB3FF" BorderThickness="0" CornerRadius="30" Width="400" Margin="0,26,0,10">
-            <TextBlock Foreground="White" FontWeight="DemiBold" Background="Transparent" Text="Profesor sau elev ? " FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Border>
-        <StackPanel Grid.Row="1">
-
-            <Border Grid.Row="1" Width="200" Height="50" Background="PaleGoldenrod" CornerRadius="25" Margin="0,50" BorderBrush ="Gold" BorderThickness="1">
-                <Button x:Name="BT_Profesor" Background="Transparent" Content="Profesor" FontSize="20" FontWeight="DemiBold" BorderBrush="Transparent" Click="BT_Profesor_Click">
-                </Button>
-        </Border>
-            <Border Grid.Row="1" Width="200" Height="50" Background="PaleGoldenrod" CornerRadius="25" BorderBrush ="Gold" BorderThickness="1" >
-                <Button x:Name="BT_Elev" Background="Transparent" Content="Elev" FontSize="20" FontWeight="DemiBold" BorderBrush="Transparent" Click="BT_Elev_Click">
-                </Button>
-            </Border>
-        </StackPanel>
+        <Border Grid.RowSpan="3"
+            x:Name="MainBorder"
+            CornerRadius="{StaticResource CornerRadius}" Background="{StaticResource MainWindowBackgroundBrush}" />
+        <Image Source="/Resources/Login/Images/Whiteboard.png" Grid.RowSpan="3" RenderOptions.BitmapScalingMode="Fant" Margin="-3,0,3,0">
+            <Image.OpacityMask>
+                <VisualBrush Visual="{Binding ElementName=MainBorder}"/>
+            </Image.OpacityMask>
+        </Image>
+        <!--  Buton Profesor  -->
+        <Image
+            Name="ButonProfesor"
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Margin="74,34,-74,244"
+            Panel.ZIndex="1"
+            MouseDown="BT_Profesor_Click"
+            RenderTransformOrigin="0.381,1.918"
+            Source="/Resources/Login/Images/ButonProfesor.png">
+            <!--  Animatie  -->
+            <!--  Am considerat ca nu e nevoie sa facem un style cu parametrii pt asta fiindca oricum nu va fi refolosita decat de 2 ori  -->
+            <Image.Style>
+                <Style TargetType="Image">
+                    <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
+                    <Style.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ThicknessAnimationUsingKeyFrames
+                                        BeginTime="0:0:0"
+                                        DecelerationRatio="0.9"
+                                        Storyboard.TargetProperty="Margin">
+                                        <SplineThicknessKeyFrame KeyTime="0:0:0" Value="74,34,-74,244" />
+                                        <SplineThicknessKeyFrame KeyTime="0:0:0.3" Value="69,47,-69,231" />
+                                    </ThicknessAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames
+                                        BeginTime="0:0:0"
+                                        Storyboard.TargetProperty="Opacity"
+                                        Duration="0:0:0.3">
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0" Value="1" />
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0.8" />
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ThicknessAnimationUsingKeyFrames
+                                        BeginTime="0:0:0"
+                                        DecelerationRatio="0.9"
+                                        Storyboard.TargetProperty="Margin"
+                                        Duration="0:0:0.3">
+                                        <SplineThicknessKeyFrame KeyTime="0:0:0" Value="69,47,-69,231" />
+                                        <SplineThicknessKeyFrame KeyTime="0:0:0.3" Value="74,34,-74,244" />
+                                    </ThicknessAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames
+                                        BeginTime="0:0:0"
+                                        Storyboard.TargetProperty="Opacity"
+                                        Duration="0:0:0.3">
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0.8" />
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="1" />
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
+        <!--  Shadow Profesor  -->
+        <Image
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Margin="63,54,-67,228"
+            Opacity="0.4"
+            Source="/Resources/Login/Images/Shadow.png" />
+        <!--  Buton Elev  -->
+        <Image
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Margin="-194,106,216,170"
+            Panel.ZIndex="1"
+            MouseDown="BT_Elev_Click"
+            Source="/Resources/Login/Images/ButonElev.png">
+            <!--  Animatie  -->
+            <Image.Style>
+                <Style TargetType="Image">
+                    <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality" />
+                    <Style.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ThicknessAnimationUsingKeyFrames
+                                        BeginTime="0:0:0"
+                                        DecelerationRatio="0.9"
+                                        Storyboard.TargetProperty="Margin">
+                                        <SplineThicknessKeyFrame KeyTime="0:0:0" Value="-194,106,216,170" />
+                                        <SplineThicknessKeyFrame KeyTime="0:0:0.3" Value="-201,118,223,158" />
+                                    </ThicknessAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames
+                                        BeginTime="0:0:0"
+                                        Storyboard.TargetProperty="Opacity"
+                                        Duration="0:0:0.3">
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0" Value="1" />
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0.8" />
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ThicknessAnimationUsingKeyFrames
+                                        BeginTime="0:0:0"
+                                        DecelerationRatio="0.9"
+                                        Storyboard.TargetProperty="Margin"
+                                        Duration="0:0:0.3">
+                                        <SplineThicknessKeyFrame KeyTime="0:0:0" Value="-201,118,223,158" />
+                                        <SplineThicknessKeyFrame KeyTime="0:0:0.3" Value="-194,106,216,170" />
+                                    </ThicknessAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames
+                                        BeginTime="0:0:0"
+                                        Storyboard.TargetProperty="Opacity"
+                                        Duration="0:0:0.3">
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0.8" />
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="1" />
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
+        <!--  Shadow Elev  -->
+        <Image
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Margin="-165,126,265,153"
+            Opacity="0.4"
+            Source="/Resources/Login/Images/Shadow.png" />
     </Grid>
 </Page>

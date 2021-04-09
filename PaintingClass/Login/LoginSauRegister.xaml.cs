@@ -266,7 +266,7 @@ namespace PaintingClass.Login
 
 
 		/// <summary>
-		// contacteaza serverul pentru a trimite datele primite de la utilizator
+		/// contacteaza serverul pentru a trimite datele primite de la utilizator
 		/// </summary>
 		/// <param name="registerUserData"></param>
 		/// <returns></returns>
