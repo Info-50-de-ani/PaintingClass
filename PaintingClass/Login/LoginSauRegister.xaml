@@ -32,14 +32,14 @@
                 Margin="5"
                 Click="Select_Login_Button_Click"
                 Content="Login"
-                FontFamily="{StaticResource ResourceKey=TimeBurnerBold}" />
+                FontFamily="{StaticResource ResourceKey=ManropeBold}" />
             <!--  Register  -->
             <Button
                 Width="100"
                 Height="30"
                 Click="Select_Register_Button_Click"
                 Content="Register"
-                FontFamily="{StaticResource ResourceKey=TimeBurnerBold}" />
+                FontFamily="{StaticResource ResourceKey=ManropeBold}" />
             <!--  Injector  -->
             <StackPanel
                 Margin="5"

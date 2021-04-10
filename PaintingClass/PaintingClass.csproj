@@ -14,11 +14,19 @@
   <ItemGroup>
     <None Remove="Images\whiteboard.png" />
     <None Remove="Networking\RoomManager" />
-    <None Remove="Resources\Fonts\Timeburner-xJB8.ttf" />
-    <None Remove="Resources\Fonts\TimeburnerBold-peGR.ttf" />
+    <None Remove="Resources\Fonts\Manrope-Bold.ttf" />
+    <None Remove="Resources\Fonts\Manrope-ExtraBold.ttf" />
+    <None Remove="Resources\Fonts\Manrope-ExtraLight.ttf" />
+    <None Remove="Resources\Fonts\Manrope-Light.ttf" />
+    <None Remove="Resources\Fonts\Manrope-Medium.ttf" />
+    <None Remove="Resources\Fonts\Manrope-Regular.ttf" />
+    <None Remove="Resources\Fonts\Manrope-SemiBold.ttf" />
     <None Remove="Resources\Login\Images\ButonElev.png" />
     <None Remove="Resources\Login\Images\ButonProfesor.png" />
+    <None Remove="Resources\Login\Images\Clock.png" />
+    <None Remove="Resources\Login\Images\CloseIcon.png" />
     <None Remove="Resources\Login\Images\Shadow.png" />
+    <None Remove="Tabs\Images\DeleteIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -69,12 +77,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Fonts\Manrope-Bold.ttf" />
+    <Resource Include="Resources\Fonts\Manrope-ExtraBold.ttf" />
+    <Resource Include="Resources\Fonts\Manrope-ExtraLight.ttf" />
+    <Resource Include="Resources\Fonts\Manrope-Light.ttf" />
+    <Resource Include="Resources\Fonts\Manrope-Medium.ttf" />
+    <Resource Include="Resources\Fonts\Manrope-Regular.ttf" />
+    <Resource Include="Resources\Fonts\Manrope-SemiBold.ttf" />
     <Resource Include="Resources\Login\Images\ButonElev.png" />
     <Resource Include="Resources\Login\Images\ButonProfesor.png" />
+    <Resource Include="Resources\Login\Images\Clock.png" />
+    <Resource Include="Resources\Login\Images\CloseIcon.png" />
     <Resource Include="Resources\Login\Images\Shadow.png" />
     <Resource Include="Resources\Login\Images\Whiteboard.png" />
-    <Resource Include="Resources\Fonts\Timeburner-xJB8.ttf" />
-    <Resource Include="Resources\Fonts\TimeburnerBold-peGR.ttf" />
+    <Resource Include="Tabs\Images\DeleteIcon.png" />
   </ItemGroup>
 
 </Project>

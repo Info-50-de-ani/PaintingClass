@@ -29,38 +29,91 @@ namespace PaintingClass.PaintTools
             label.Content = "Text";
             return label;
         }
+        
+        /// <summary>
+        /// Returneaza un grid ce contine textboxul cu marime editabila de catre 
+        /// utilizator
+        /// </summary>
+        /// <returns></returns>
+        private Grid GetResizableTextboxGrid(string defaultText)
+		{
+			// cream grid pt functia de resize
+			Grid grid = new Grid();
+			grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Auto });
+			grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5) });
+			grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(0) });
 
-        TextBox tb;
+			grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+			grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(5) });
+			grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(0) });
+			// cream un textbox 
+			TextBox tb = new TextBox()
+			{
+				Background = Brushes.Transparent,
+				Text = defaultText,
+				MinHeight = 100,
+				MinWidth = 100,
+				TextWrapping = TextWrapping.Wrap,
+				Foreground = Brushes.Gray,
+				AcceptsReturn = true,
+			};
+			tb.GotKeyboardFocus += Tb_GotKeyboardFocus;
+			tb.LostKeyboardFocus += Tb_LostKeyboardFocus;
 
-        public override void MouseDown(Point position)
+			// setam coloana si randul
+			grid.Children.Add(tb);
+			Grid.SetRow(tb, 0);
+			Grid.SetColumn(tb, 0);
+
+			// Grid splitter vertical 
+			GridSplitter gsVert = new GridSplitter();
+			gsVert.Width = 5;
+			gsVert.HorizontalAlignment = HorizontalAlignment.Stretch;
+			grid.Children.Add(gsVert);
+			Grid.SetColumn(gsVert, 1);
+			Grid.SetRow(gsVert, 0);
+
+			// Grid splitter orizontal
+			GridSplitter gsHorz = new GridSplitter();
+			gsHorz.Height = 5;
+			gsHorz.HorizontalAlignment = HorizontalAlignment.Stretch;
+			grid.Children.Add(gsHorz);
+			Grid.SetColumn(gsHorz, 0);
+			Grid.SetRow(gsHorz, 1);
+
+			Image closeIcon = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Tabs/Images/DeleteIcon.png")), Width = 15, Height = 15 };
+			RenderOptions.SetBitmapScalingMode(closeIcon, BitmapScalingMode.Fant);
+			closeIcon.MouseDown += CloseIcon_MouseDown;
+			Canvas canv = new Canvas();
+			canv.Children.Add(closeIcon);
+
+			grid.Children.Add(canv);
+			Grid.SetColumn(canv, 1);
+			Grid.SetRow(canv, 1);
+			return grid;
+		}
+
+		#region Events
+		/// <summary>
+		/// are loc cand userul da click pe tabla
+		/// </summary>
+		/// <param name="position"></param>
+		public override void MouseDown(Point position)
         {
-            tb = new TextBox();
-            tb.Background = Brushes.Transparent;
-            tb.Text = "Scrie aici";
-            tb.Width = 100;
-            tb.Height = 100;
-            tb.TextWrapping = TextWrapping.Wrap;
-            tb.Foreground = Brushes.Gray;
-            tb.AcceptsReturn = true;
-            tb.KeyDown += Tb_KeyDown;
-            tb.GotKeyboardFocus += Tb_GotKeyboardFocus;
-            tb.LostKeyboardFocus += Tb_LostKeyboardFocus;
-            myWhiteboardCanvas.Children.Add(tb);
+			var grid = GetResizableTextboxGrid("Scrie aici");
+			myWhiteboardCanvas.Children.Add(grid);
             position = MainWindow.instance.myWhiteboardInstance.whiteboard.DenormalizePosition(position);
-            Canvas.SetTop(tb, Canvas.GetTop(whiteboard)+ position.Y);
-            Canvas.SetLeft(tb, Canvas.GetLeft(whiteboard) + position.X);
+            Canvas.SetTop(grid, Canvas.GetTop(whiteboard)+ position.Y);
+            Canvas.SetLeft(grid, Canvas.GetLeft(whiteboard) + position.X);
         }
 
-        private void Tb_KeyDown(object sender, KeyEventArgs e)
+		private void CloseIcon_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+            myWhiteboardCanvas.Children.Remove(((Grid)((Canvas)((Image)sender).Parent).Parent));
+		}
+
+		private void Tb_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            if(e.Key == Key.Return)
-            {
-                tb.Text = tb.Text + '\n';
-            }
-        }
-
-        private void Tb_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-                    {
             TextBox tb = (TextBox)sender;
             if (tb.Text == "")
                     {
@@ -86,7 +139,9 @@ namespace PaintingClass.PaintTools
 
         public override void MouseUp()
         {
-            // todo sa fie transmisa prin glyph
+            // TODO Transmitere la server
         }
-    }
+
+		#endregion
+	}
 }

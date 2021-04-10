@@ -15,19 +15,50 @@
         </Style>
     </Page.Resources>
 
-    <Grid>
+    <Grid RenderTransformOrigin="0.5,0.5">
+        <Grid.RenderTransform>
+            <TransformGroup>
+                <ScaleTransform />
+                <SkewTransform AngleX="0" />
+                <RotateTransform />
+                <TranslateTransform />
+            </TransformGroup>
+        </Grid.RenderTransform>
         <Grid.RowDefinitions>
             <RowDefinition Height="97*" />
             <RowDefinition Height="133*" />
             <RowDefinition Height="220*" />
         </Grid.RowDefinitions>
-        <Border Grid.RowSpan="3"
+        <Border
             x:Name="MainBorder"
-            CornerRadius="{StaticResource CornerRadius}" Background="{StaticResource MainWindowBackgroundBrush}" />
-        <Image Source="/Resources/Login/Images/Whiteboard.png" Grid.RowSpan="3" RenderOptions.BitmapScalingMode="Fant" Margin="-3,0,3,0">
+            Grid.RowSpan="3"
+            Background="{StaticResource MainWindowBackgroundBrush}"
+            CornerRadius="{StaticResource CornerRadius}" />
+        <Image
+            Grid.RowSpan="3"
+            Margin="-3,0,3,0"
+            RenderOptions.BitmapScalingMode="Fant"
+            Source="/Resources/Login/Images/Whiteboard.png">
             <Image.OpacityMask>
-                <VisualBrush Visual="{Binding ElementName=MainBorder}"/>
+                <VisualBrush Visual="{Binding ElementName=MainBorder}" />
             </Image.OpacityMask>
+        </Image>
+        <Image
+            Margin="257,1,-257,125"
+            Panel.ZIndex="3"
+            RenderTransformOrigin="1,0.5"
+            Source="/Resources/Login/Images/Clock.png" Grid.RowSpan="2">
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform />
+                    <SkewTransform AngleX="13" AngleY="-9" />
+                    <RotateTransform />
+                    <TranslateTransform />
+                </TransformGroup>
+            </Image.RenderTransform>
+            <Image.Effect>
+                <DropShadowEffect Direction="220" ShadowDepth="1" />
+            </Image.Effect>
         </Image>
         <!--  Buton Profesor  -->
         <Image

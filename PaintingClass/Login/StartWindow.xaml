@@ -9,11 +9,12 @@
     Width="700"
     Height="500"
     AllowsTransparency="True"
-    ResizeMode="NoResize"
+    ResizeMode="CanMinimize"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
     <Window.Resources>
+
         <Style TargetType="local:StartWindow">
             <Setter Property="Template">
                 <Setter.Value>
@@ -26,9 +27,12 @@
                                     ShadowDepth="1"
                                     Color="Black" />
                             </Border.Effect>
+                            <!--  Grid folosit pentru a tine si opacity maskul si gridul cu content  -->
                             <Grid>
+                                <!--  Opacity Mask  -->
+
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="10" />
+                                    <RowDefinition Height="20" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
                                 <Border
@@ -37,11 +41,112 @@
                                     Grid.RowSpan="2"
                                     Background="#C3C193"
                                     CornerRadius="{StaticResource CornerRadius}" />
-                                <Grid Grid.Row="1">
+
+                                <Grid Grid.Row="0" Grid.RowSpan="2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="20" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
                                     <Grid.OpacityMask>
                                         <VisualBrush Visual="{Binding ElementName=mask}" />
                                     </Grid.OpacityMask>
-                                    <ContentPresenter />
+                                    <!--  Header  -->
+                                    <Grid Grid.Row="0">
+                                        <!--  Header Grid  -->
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="15*" />
+                                                <ColumnDefinition Width="1*" />
+                                                <ColumnDefinition Width="1*" />
+                                            </Grid.ColumnDefinitions>
+                                            <!--  Buton de close  -->
+                                            <Border
+                                                Grid.Column="2"
+                                                Width="40"
+                                                Height="20"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Top"
+                                                Background="{StaticResource MainWindowDarkBackgroundBrush}"
+                                                CornerRadius="0,0,20,0"
+                                                MouseDown="CloseApplication_MouseDown"
+                                                WindowChrome.IsHitTestVisibleInChrome="True">
+                                                <!--  animatie  -->
+                                                <Border.Triggers>
+                                                    <EventTrigger RoutedEvent="Border.MouseEnter">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <ColorAnimation
+                                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                                    To="Red"
+                                                                    Duration="0:0:0.15" />
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                    <EventTrigger RoutedEvent="Border.MouseLeave">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <ColorAnimation
+                                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                                    To="{StaticResource ResourceKey=MainWindowDarkBackgroundColor}"
+                                                                    Duration="0:0:0.15" />
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                </Border.Triggers>
+                                                <Image
+                                                    Height="10"
+                                                    Margin="0,0,5,0"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    RenderOptions.BitmapScalingMode="Fant"
+                                                    Source="/Resources/Login/Images/CloseIcon.png" />
+                                            </Border>
+                                            <!--  Butonul de minimize  -->
+                                            <Border
+                                                Grid.Column="1"
+                                                Background="{StaticResource MainWindowDarkBackgroundBrush}"
+                                                MouseDown="Minimize_MouseDown"
+                                                WindowChrome.IsHitTestVisibleInChrome="True">
+                                                <!--  Animatie  -->
+                                                <Border.Triggers>
+                                                    <EventTrigger RoutedEvent="Border.MouseEnter">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <ColorAnimation
+                                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                                    To="{StaticResource MainWindowSecondaryDarkColor}"
+                                                                    Duration="0:0:0.15" />
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                    <EventTrigger RoutedEvent="Border.MouseLeave">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <ColorAnimation
+                                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                                    To="{StaticResource ResourceKey=MainWindowDarkBackgroundColor}"
+                                                                    Duration="0:0:0.15" />
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                </Border.Triggers>
+                                                <Border
+                                                    Width="15"
+                                                    Height="3"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Background="Black"
+                                                    BorderThickness="1"
+                                                    CornerRadius="1" />
+                                            </Border>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid Grid.Row="1">
+                                        <Grid.OpacityMask>
+                                            <VisualBrush Visual="{Binding ElementName=mask}" />
+                                        </Grid.OpacityMask>
+                                        <ContentPresenter />
+                                    </Grid>
                                 </Grid>
                             </Grid>
                         </Border>
@@ -53,10 +158,10 @@
 
     <WindowChrome.WindowChrome>
         <WindowChrome
-            ResizeBorderThickness="0"
-            CaptionHeight="10"
+            CaptionHeight="20"
             CornerRadius="0"
-            GlassFrameThickness="0" />
+            GlassFrameThickness="0"
+            ResizeBorderThickness="0" />
     </WindowChrome.WindowChrome>
 
 

@@ -61,5 +61,15 @@ namespace PaintingClass
         {
             MainFrame.GoBack();
         }
-    }
+
+		private void CloseApplication_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+            Application.Current.Shutdown();
+        }
+
+		private void Minimize_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+            this.WindowState = WindowState.Minimized;
+		}
+	}
 }
