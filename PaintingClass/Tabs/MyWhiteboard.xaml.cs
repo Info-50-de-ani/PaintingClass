@@ -30,6 +30,7 @@ namespace PaintingClass.Tabs
     public partial class MyWhiteboard : UserControl
     {
         PaintTool selectedTool;//click stanga o sa foloseasca unealta selectata
+        public SolidColorBrush globalBrush = Brushes.Black;
 
         //lista uneltelor incarcate
         List<PaintTool> tools = new List<PaintTool>();
@@ -103,8 +104,6 @@ namespace PaintingClass.Tabs
 
         }
 
-        
-
         //contine toate tipurile de PaintTool obitnute prin reflexie
         static Type[] paintToolTypes;
 
@@ -118,5 +117,46 @@ namespace PaintingClass.Tabs
                               where type.IsAbstract == false && type.IsSubclassOf(typeof(PaintTool))
                               select type).ToArray();
         }
+
+        #region Event Handlere butoane
+
+        private void Culori_Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (ColorPanel.Visibility == Visibility.Visible)
+                ColorPanel.Visibility = Visibility.Hidden;
+            else
+                ColorPanel.Visibility = Visibility.Visible;
+        }
+
+        private void Grosime_Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Marime_Font_Button_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void Color_Buton_Click(object sender, RoutedEventArgs e)
+        {
+            var buton = (Button)sender;
+            ColorPanel.Visibility = Visibility.Hidden;
+
+            switch ((string)buton.Tag)
+            {
+                case "Red":
+                    globalBrush = Brushes.Red;
+                    break;
+                case "Blue":
+                    globalBrush = Brushes.Blue;
+                    break;
+
+                case "Green":
+                    globalBrush = Brushes.Green;
+                    break;
+            }
+        }
+
+        #endregion
     }
 }

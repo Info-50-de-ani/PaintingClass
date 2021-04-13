@@ -60,30 +60,11 @@ namespace PaintingClass.Login
         {
             InitializeComponent();
             CurrentFrame = frame;
-        }
+			LoginMenu.Visibility = Visibility.Visible;
+			RegisterMenu.Visibility = Visibility.Hidden;
+		}
+        
 
-		#region Alegere optiune de inregistrare
-        /// <summary>
-		/// are loc cand profesorul selecteaza optiunea de login
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void Select_Login_Button_Click(object sender, RoutedEventArgs e)
-        {
-            LoginOrRegister.Visibility = Visibility.Hidden;
-            LoginMenu.Visibility = Visibility.Visible;
-        }
-        /// <summary>
-        /// are loc cand profesorul selecteaza optiunea de register
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Select_Register_Button_Click(object sender, RoutedEventArgs e)
-        {
-            LoginOrRegister.Visibility = Visibility.Hidden;
-            RegisterMenu.Visibility = Visibility.Visible;
-        }
-		#endregion
 
 		#region Debugging
 		//pt debbuging

@@ -9,6 +9,7 @@
     d:DesignHeight="800"
     d:DesignWidth="1536"
     mc:Ignorable="d">
+
     <!--  O sa fie inlocuita de un Grid la un moment dat  -->
     <Canvas x:Name="myWhiteboardCanvas" Background="White">
         <Border
@@ -18,11 +19,75 @@
             Height="726"
             BorderBrush="Black"
             BorderThickness="5">
-            <StackPanel
-                x:Name="toolbar"
-                HorizontalAlignment="Center"
-                Orientation="Vertical" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="2*" />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    x:Name="toolbar"
+                    Grid.Row="0"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical" />
+                <!--  Grid cu setari pt tooluri  -->
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Button
+                        Grid.Row="0"
+                        Click="Culori_Button_Click"
+                        Content="Culori" />
+                    <Button
+                        Grid.Row="1"
+                        Click="Grosime_Button_Click"
+                        Content="Grosimi linii" />
+                    <Button
+                        Grid.Row="2"
+                        Click="Marime_Font_Button_Click"
+                        Content="Font size" />
+
+                </Grid>
+            </Grid>
         </Border>
+        <Grid
+            x:Name="ColorPanel"
+            Canvas.Left="246"
+            Canvas.Top="463"
+            Width="233"
+            Height="288"
+            Panel.ZIndex="2"
+            Visibility="Visible">
+            <Border
+                x:Name="border"
+                Background="#9D9D9D"
+                CornerRadius="15" />
+            <Grid Panel.ZIndex="1">
+                <StackPanel VerticalAlignment="Center">
+                    <Button
+                        Background="Red"
+                        Click="Color_Buton_Click"
+                        Content="Rosu"
+                        Tag="Red" />
+                    <Button
+                        Background="Yellow"
+                        Click="Color_Buton_Click"
+                        Content="Galben"
+                        Tag="Yellow" />
+                    <Button
+                        Background="Green"
+                        Click="Color_Buton_Click"
+                        Content="Verde"
+                        Tag="Green" />
+                    <Button Content="Negru" />
+                    <Button Content="Rosu" />
+                    <Button Content="Rosu" />
+                </StackPanel>
+            </Grid>
+        </Grid>
         <PaintingClass:Whiteboard
             x:Name="whiteboard"
             Canvas.Left="286"
@@ -34,3 +99,4 @@
             BorderThickness="5" />
     </Canvas>
 </UserControl>
+

@@ -62,7 +62,7 @@ namespace PaintingClass.PaintTools
 
             // punem totul in drawing collection 
             drawing = new GeometryDrawing();
-            drawing.Pen = new Pen(Brushes.Black,0.3);
+            drawing.Pen = new Pen(owner.globalBrush,0.3);
             drawing.Geometry = geometry;
             whiteboard.collection.Add(drawing);
         }

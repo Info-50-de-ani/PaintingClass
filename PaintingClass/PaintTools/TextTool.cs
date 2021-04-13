@@ -56,10 +56,12 @@ namespace PaintingClass.PaintTools
 				TextWrapping = TextWrapping.Wrap,
 				Foreground = Brushes.Gray,
 				AcceptsReturn = true,
+				FontFamily = new FontFamily("Arial"),
+				FontSize = 12,
 			};
 			tb.GotKeyboardFocus += Tb_GotKeyboardFocus;
 			tb.LostKeyboardFocus += Tb_LostKeyboardFocus;
-
+			tb.MouseRightButtonDown += (sender,e) => { };
 			// setam coloana si randul
 			grid.Children.Add(tb);
 			Grid.SetRow(tb, 0);
