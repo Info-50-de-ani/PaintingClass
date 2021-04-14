@@ -23,7 +23,7 @@ namespace PaintingClass.Login
 	{
 		#region Public Properties
 
-		public FormTextbox instance { get; set; }
+		public FormTextbox instance { get; private set; }
 		public string Text { get; set; } = "";
 		public double minimumWidth { get; set; } = 100;
 		public string defaultText { get; set; } = "Scrie aici";
@@ -47,6 +47,17 @@ namespace PaintingClass.Login
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
+			if(value is FormPasswordbox)
+			{
+				var inst = (FormPasswordbox)value;
+				if (inst.isSyntaxCorrect == null)
+					return inst.DefaultAnsColor;
+				else if ((bool)inst.isSyntaxCorrect)
+					return inst.CorrectAnsColor;
+				else
+					return inst.WrongAnsColor;
+			}
+
 			var instance = ((FormTextbox)value);
 			if (instance.isSyntaxCorrect == null)
 				return instance.DefaultAnsColor;

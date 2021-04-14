@@ -36,15 +36,15 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Focusable="false"
-                                FontWeight="Bold"
                                 FontFamily="{StaticResource ManropeBold}"
+                                FontWeight="Bold"
                                 HorizontalScrollBarVisibility="Hidden"
                                 VerticalScrollBarVisibility="Hidden" />
                             <TextBlock
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                IsHitTestVisible="False"
                                 FontFamily="{StaticResource ManropeExtraLight}"
+                                IsHitTestVisible="False"
                                 Text="{Binding defaultText}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
@@ -67,8 +67,17 @@
                         <Storyboard>
                             <DoubleAnimation
                                 Storyboard.TargetProperty="(Border.Opacity)"
-                                From="{StaticResource defaultOpacity}"
                                 To="{StaticResource focusOpacity}"
+                                Duration="0:0:0.3" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="LostKeyboardFocus">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="(Border.Opacity)"
+                                To="{StaticResource defaultOpacity}"
                                 Duration="0:0:0.3" />
                         </Storyboard>
                     </BeginStoryboard>

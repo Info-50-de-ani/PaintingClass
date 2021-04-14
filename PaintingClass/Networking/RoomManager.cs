@@ -67,14 +67,16 @@ namespace PaintingClass.Networking
 
         public RoomManager(UserData userData)
         {
-			ws = new WebSocket($"{Constants.url}/room/{userData.roomId}?name={userData.name}&clientID={userData.clientID}&profToken={userData.profToken}");
+			ws = new WebSocket($"{Constants.urlWebSocket}/room/{userData.roomId}?name={userData.name}&clientID={userData.clientID}&profToken={userData.profToken}");
             ws.SslConfiguration.ServerCertificateValidationCallback = CertificateValidation;
             ws.OnError += (sender, e) => { MessageBox.Show(e.Message); };
+			ws.OnOpen += (sender,e) => { ws.Send("0"); };
             ws.OnMessage += OnMessage;
             ws.Connect();
         }
 
-        void OnMessage(object sender, MessageEventArgs e)
+
+		void OnMessage(object sender, MessageEventArgs e)
         {
             Packet p = Packet.Unpack(e.Data);
 

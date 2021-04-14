@@ -9,6 +9,7 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
+     
     <Grid>
         <!--#region Select Registration Option-->
         <Grid.RowDefinitions>
@@ -32,7 +33,59 @@
         </StackPanel>
         <!--#endregion-->
 
+        <!--  Gradient Background  -->
+        <Grid Grid.RowSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="2.5*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Border
+                Grid.Column="1"
+                Grid.ColumnSpan="1"
+                Margin="0,25,0,0"
+                CornerRadius="30">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
+                        <LinearGradientBrush.GradientStops>
+                            <GradientStop Offset="0" Color="{StaticResource MainWindowSecondaryDarkColor}" />
+                            <GradientStop Offset="1" Color="Transparent" />
+                        </LinearGradientBrush.GradientStops>
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
+            <Border
+                Grid.Column="1"
+                Grid.ColumnSpan="1"
+                Margin="0,25,0,0"
+                CornerRadius="30">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="1,0.5" EndPoint="1,1">
+                        <LinearGradientBrush.GradientStops>
+                            <GradientStop Offset="0" Color="{StaticResource MainWindowSecondaryDarkColor}" />
+                            <GradientStop Offset="1" Color="Transparent" />
+                        </LinearGradientBrush.GradientStops>
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
+        </Grid>
+
         <!--#region Login menu-->
+        <Border
+            Margin="0,40,0,0"
+            Padding="20,10"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Background="White"
+            BorderBrush="#242331"
+            BorderThickness="6"
+            CornerRadius="20"
+            Opacity="0.8">
+            <TextBlock
+                FontSize="40"
+                Foreground="Black"
+                Text="Login" />
+        </Border>
         <Grid
             x:Name="LoginMenu"
             Grid.Row="1"
@@ -50,33 +103,51 @@
                 VerticalAlignment="Center"
                 CornerRadius="15"
                 FontSize="{StaticResource FontSizeLarge}"
-                defaultText="Email" />
+                defaultText="Email"
+                isSyntaxCorrect="{x:Null}" />
             <!--  Password  -->
-            <PasswordBox
+            <local:FormPasswordbox
                 x:Name="TB_Login_Password"
                 Grid.Row="1"
-                Width="100"
-                Height="30" />
-            <!--  Login Button  -->
-            <!--  Name Erorr  -->
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                CornerRadius="15"
+                FontSize="{StaticResource FontSizeLarge}"
+                defaultText="Password"
+                isSyntaxCorrect="{x:Null}" />
+
             <StackPanel
                 Grid.Row="4"
                 Grid.RowSpan="1"
                 Grid.Column="0"
                 Grid.ColumnSpan="2">
+                <!--  Login Error texbox  -->
                 <TextBlock
                     x:Name="TB_Login_Error"
                     HorizontalAlignment="Center"
                     Foreground="Red"
                     Text=""
                     Visibility="Visible" />
+                <!--  Login button  -->
                 <Button
-                    Width="100"
-                    Height="30"
                     Margin="0,10,0,0"
+                    Padding="20,2"
                     HorizontalAlignment="Center"
                     Click="EnterINFO_Login_Button_Click"
-                    Content="Login" />
+                    Content="Login"
+                    FontFamily="{StaticResource ManropeBold}"
+                    FontSize="{StaticResource FontSizeMedium}"
+                    Style="{DynamicResource SlidingAnimatedButtonStyle}" />
+                <Button
+                    Margin="10"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Content="Creeaza un cont nou"
+                    Template="{DynamicResource ButtonTemplate1}">
+                    <Button.Resources>
+                        <Style TargetType="Button" />
+                    </Button.Resources>
+                </Button>
             </StackPanel>
         </Grid>
         <!--  endregion  -->
@@ -103,7 +174,7 @@
                 Grid.Row="0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                Foreground="White">
+                Foreground="Black">
                 Name:
             </TextBlock>
             <TextBox
@@ -120,7 +191,7 @@
                 Grid.Row="1"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                Foreground="White">
+                Foreground="Black">
                 Email:
             </TextBlock>
             <TextBox
@@ -137,7 +208,7 @@
                 Grid.Row="2"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                Foreground="White">
+                Foreground="Black">
                 Password:
             </TextBlock>
             <PasswordBox
@@ -155,7 +226,7 @@
                 Grid.Row="3"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                Foreground="White">
+                Foreground="Black">
                 Confirm Password:
             </TextBlock>
             <PasswordBox
@@ -202,7 +273,7 @@
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Foreground="White">
+                Foreground="Black">
                 Inregistrare finalizata!
             </TextBlock>
         </Grid>
@@ -219,7 +290,7 @@
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Foreground="White">
+                Foreground="Black">
                 Logare finalizata!
             </TextBlock>
         </Grid>
@@ -235,7 +306,7 @@
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Foreground="White">
+                Foreground="Black">
                 NU sunteti inregistrat inca!
             </TextBlock>
         </Grid>
@@ -251,13 +322,13 @@
                 <TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Foreground="White">
+                    Foreground="Black">
                     V-am trimis un mesaj de confirmare pe emailul introdus.
                 </TextBlock>
                 <TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Foreground="White">
+                    Foreground="Black">
                     Va rugam sa urmati instructiunile din email pentru a continua.
                 </TextBlock>
             </StackPanel>

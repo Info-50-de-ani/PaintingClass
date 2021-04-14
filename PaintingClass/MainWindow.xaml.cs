@@ -112,7 +112,7 @@ namespace PaintingClass
 
             #region Generate MyWhiteboard and RoomManager
 
-            roomManager = new RoomManager(userData);
+            roomManager = new RoomManager(userData);//2sec
             roomManager.onUserListUpdate += UserListUpdate;
             roomManager.onUserListUpdate();
             RemoveTab(pw);

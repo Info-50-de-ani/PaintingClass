@@ -9,7 +9,20 @@ namespace PaintingClass.Networking
     public static class Constants
     {
         //cui nui plac url-urile hardcodate?
-        public const string url = "wss://localhost:32281";
-        public const int port = 32281;
+        public static string urlWebSocket { 
+        get
+			{
+                return $"wss://localhost:{portWebSocket}";
+            }
+        }
+        public static string urlHttp
+        {
+            get
+            {
+                return $"http://localhost:{portHttp}";
+            }
+        }
+        public const int portWebSocket = 32281;
+        public const int portHttp = 32221;
     }
 }

@@ -74,7 +74,7 @@ namespace PaintingClass.PaintTools
         public override void MouseDrag(Point position)
         {
             pointCounter++;
-            if (pointCounter % 3 == 0)
+            if (pointCounter % 2 == 0)
                 poliBezierSegment.Points.Add(position);
         }
 
