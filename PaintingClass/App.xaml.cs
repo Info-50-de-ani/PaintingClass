@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using PaintingClass.Login;
+
 namespace PaintingClass
 {
 	/// <summary>
@@ -16,6 +17,7 @@ namespace PaintingClass
 	public partial class App : Application
 	{
 		public static int startedAppFromBrowserroomId = 0;
+
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
 			return; // todo: temporar
@@ -35,7 +37,6 @@ namespace PaintingClass
 				}
 				#endregion
 				Debug.Assert(startedAppFromBrowserroomId != 0);
-				
 			}
 			else
 			{

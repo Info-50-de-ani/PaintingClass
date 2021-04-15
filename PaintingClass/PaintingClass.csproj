@@ -18,6 +18,28 @@
 
   <ItemGroup>
     <PackageReference Include="websocketsharp.core" Version="1.0.0" />
+    <PackageReference Include="WpfMath" Version="0.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Analytics">
+      <HintPath>..\..\..\..\Downloads\FormulaDrawWPF\FormulaDrawWPF\DEVLIBNET.ACADEMIC\Libraries\Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="Analytics.Real">
+      <HintPath>..\..\..\..\Downloads\FormulaDrawWPF\FormulaDrawWPF\DEVLIBNET.ACADEMIC\Libraries\Analytics.Real.dll</HintPath>
+    </Reference>
+    <Reference Include="Exversion">
+      <HintPath>..\..\..\..\Downloads\FormulaDrawWPF\FormulaDrawWPF\DEVLIBNET.ACADEMIC\Libraries\Exversion.dll</HintPath>
+    </Reference>
+    <Reference Include="Mathematics">
+      <HintPath>..\..\..\..\Downloads\FormulaDrawWPF\FormulaDrawWPF\DEVLIBNET.ACADEMIC\Libraries\Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="NRTE">
+      <HintPath>..\..\..\..\Downloads\FormulaDrawWPF\FormulaDrawWPF\DEVLIBNET.ACADEMIC\Libraries\NRTE.dll</HintPath>
+    </Reference>
+    <Reference Include="Physics">
+      <HintPath>..\..\..\..\Downloads\FormulaDrawWPF\FormulaDrawWPF\DEVLIBNET.ACADEMIC\Libraries\Physics.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

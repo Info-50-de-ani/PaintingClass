@@ -12,7 +12,7 @@ namespace PaintingClassCommon
         none = 0,
         WhiteboardMessage = 1,
         UserListMessage = 2,
-        ShareRequestMessage = 3
+        ShareRequestMessage = 3, 
     }
     [Serializable]
     public class Packet
@@ -39,7 +39,7 @@ namespace PaintingClassCommon
     {
         public enum ContentType
         {
-            Drawing, Action
+            Drawing, Action, TextMessage
         };
 
         public int clientId { get; set; }
@@ -60,6 +60,18 @@ namespace PaintingClassCommon
             public bool isShared { get; set; }
         }
         public UserListItem[] list { get; set; }
+    }
+
+    /// <summary>
+    /// Contine informatie despre un textbox (TextTool)
+    /// </summary>
+    [Serializable]
+	public class UserTextMessage
+	{
+        static private int newId = 0;
+        public static int NewId { get {newId++; return newId - 1; } } 
+        public string text { set; get; }
+        public int id { set; get; }
     }
 
     //trims de client-ul profesorului

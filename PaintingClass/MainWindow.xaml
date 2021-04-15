@@ -8,6 +8,23 @@
         Title="MainWindow" Width="1536" Height="824">
     <DockPanel>
     <!--#region Lista Participanti-->
+        
+        <!--#region Formule -->
+        <Grid x:Name="FormulaGrid" Width="300" Height="300" DockPanel.Dock="Right" VerticalAlignment="Bottom" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+        </Grid>
+        <!--#endregion-->
+        
         <TabControl TabStripPlacement="Left" DockPanel.Dock="Right">
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
@@ -37,6 +54,7 @@
                 </Style>
             </TabControl.Resources>
             <!--tabitemi-->
+                <!--List de participanti-->
             <TabItem Header="Participanti" Name="TI_Participanti">
                 <ListBox x:Name="UserListBox" >
                     <ListBox.ItemTemplate>
