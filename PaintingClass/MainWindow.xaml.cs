@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using PaintingClass.Tabs;
 using PaintingClass.Networking;
+using PaintingClass.PaintTools;
 
 namespace PaintingClass
 {
@@ -74,6 +75,8 @@ namespace PaintingClass
             {
                 Init();
             }
+
+           //TODO FormulaTool.FillFormulaPanel();
         }
 
         /// <summary>
@@ -110,9 +113,11 @@ namespace PaintingClass
                         System.Diagnostics.Trace.WriteLine("roomId nu poate fi 0, incercam din nou");
                 }
             }
-            
-            //ne conectam la room
-            roomManager = new RoomManager(userData);
+  #endregion
+
+            #region Generate MyWhiteboard and RoomManager
+
+            roomManager = new RoomManager(userData);//2sec
             roomManager.onUserListUpdate += UserListUpdate;
             roomManager.onUserListUpdate();//reparam bug
             RemoveTab(pw);

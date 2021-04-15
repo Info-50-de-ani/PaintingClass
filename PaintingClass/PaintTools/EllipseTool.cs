@@ -39,7 +39,7 @@ namespace PaintingClass.PaintTools
             Window.GetWindow(whiteboard).KeyUp += Whiteboard_KeyUp;
             initialPos = position;
             ellipse = new EllipseGeometry(new Rect(position, position));
-            geometryDrawing = new GeometryDrawing(null, new Pen(new SolidColorBrush(Colors.Black), 0.3), ellipse);
+            geometryDrawing = new GeometryDrawing(null, new Pen(this.owner.globalBrush, 0.3), ellipse);
             whiteboard.collection.Add(geometryDrawing);
         }
 

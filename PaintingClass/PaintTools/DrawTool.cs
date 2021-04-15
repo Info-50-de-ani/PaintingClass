@@ -35,31 +35,57 @@ namespace PaintingClass.PaintTools
 
         GeometryDrawing drawing;
         PathFigure figure;
+        PolyBezierSegment poliBezierSegment;
+        public UInt64 pointCounter = 0;
 
+        /// <summary>
+        /// Incepe sa deseneze o noua linie
+        /// </summary>
+        /// <param name="position"></param>
         public override void MouseDown(Point position)
         {
+            // un nou path figure pentru a adauga segemnte
             figure = new PathFigure();
             figure.StartPoint = position;
+            // resetam point counter
+            pointCounter = 0;
 
             var geometry = new PathGeometry();
             geometry.Figures.Add(figure);
+            
+            // array gol pentru a putea initializa cu contructorul ce 
+            // ia doua argumente
+            Point[] startPos = new Point[] { };
+            // adaugam un singur segment si apoi ii adaugam puncte
+            poliBezierSegment = new PolyBezierSegment(startPos,true);
+            figure.Segments.Add(poliBezierSegment);
 
+            // punem totul in drawing collection 
             drawing = new GeometryDrawing();
-            drawing.Pen = new Pen(Brushes.Black,1);
+            drawing.Pen = new Pen(owner.globalBrush,0.3);
             drawing.Geometry = geometry;
             whiteboard.collection.Add(drawing);
         }
 
+        /// <summary>
+        /// Adaugam puncte la bezier din 5 in 5 puncte
+        /// </summary>
+        /// <param name="position"></param>
         public override void MouseDrag(Point position)
         {
-            figure.Segments.Add(new LineSegment(position,true));
+            pointCounter++;
+            if (pointCounter % 3 == 0)
+                poliBezierSegment.Points.Add(position);
         }
 
+        /// <summary>
+        /// Finalizam editatul segmentului si il trimitem la server
+        /// </summary>
         public override void MouseUp()
         {
             drawing.Freeze();//extra performanta
             MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage,MessageUtils.SerialzieDrawing(drawing) );
-
+            poliBezierSegment = null;    
             drawing = null;
             figure = null;
         }

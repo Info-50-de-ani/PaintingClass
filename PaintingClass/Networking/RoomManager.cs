@@ -10,11 +10,19 @@ using System.Text.Json;
 using System.Windows.Markup;
 using PaintingClass.Tabs;
 using PaintingClassCommon;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
+using System.Windows;
 
 namespace PaintingClass.Networking
 {
-    public partial class RoomManager
+    public class RoomManager
     {
+        public static bool CertificateValidation(object sender, X509Certificate? certificate, X509Chain? chain, SslPolicyErrors sslPolicyErrors)
+		{
+            // TODO
+            return true;
+		}
 
         public WebSocket ws;
 
@@ -30,13 +38,15 @@ namespace PaintingClass.Networking
 
         public RoomManager(UserData userData)
         {
-            ws = new WebSocket($"{Constants.url}/room/{userData.roomId}?name={userData.name}&clientID={userData.clientID}&profToken={userData.profToken}");
+			ws = new WebSocket($"{Constants.urlWebSocket}/room/{userData.roomId}?name={userData.name}&clientID={userData.clientID}&profToken={userData.profToken}");
+            ws.SslConfiguration.ServerCertificateValidationCallback = CertificateValidation;
+            ws.OnError += (sender, e) => { MessageBox.Show(e.Message); };
+			ws.OnOpen += (sender,e) => { ws.Send("0"); };
             ws.OnMessage += OnMessage;
             ws.Connect();
-
         }
 
-        void OnMessage(object sender, MessageEventArgs e)
+		void OnMessage(object sender, MessageEventArgs e)
         {
             Packet p = Packet.Unpack(e.Data);
 
@@ -70,8 +80,7 @@ namespace PaintingClass.Networking
                         nu.isConnected = item.isConnected;
                     }
                     onUserListUpdate?.Invoke();
-                    break;
-                     
+                    break;   
                 default:
                     break;
             }

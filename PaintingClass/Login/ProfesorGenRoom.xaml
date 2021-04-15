@@ -30,7 +30,7 @@
             <TextBlock HorizontalAlignment="Center"
                        x:Name="RoomCode"
                         Text="Cod: -- --- --- "
-                       Foreground="White"
+                       Foreground="Black"
                        />
         </StackPanel>
     </Grid>

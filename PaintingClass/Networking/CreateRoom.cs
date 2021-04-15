@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebSocketSharp;
 using System.Threading;
 using System.Windows;
+using System.Net.Http;
 
 namespace PaintingClass.Networking
 {
@@ -20,30 +21,12 @@ namespace PaintingClass.Networking
             //daca este 0 inseamna ca ceva rau sa 
             int result = 0;
 
-            //folosit pt a sincroniza thread-urile
-            SemaphoreSlim semaphore = new SemaphoreSlim(1);
-
-            WebSocket ws = new WebSocket(Constants.url + endpoint + $"?profToken={profToken}");
-            ws.OnMessage += (sender, args) =>
-            {
-                result = Convert.ToInt32(args.Data);
-                ws.Close();
-            };
-            ws.OnError += (sender, args) =>
-            {
-                System.Diagnostics.Trace.WriteLine("createRoom websocket error with code: " + (args.Exception as WebSocketException).Code.ToString());
-            };
-            ws.OnClose += (sender,args) =>
-            {
-                System.Diagnostics.Trace.WriteLine("createRoom websocket closed with code: " + args.Code.ToString());
-                semaphore.Release();
-            };
-
-            //am putea folosi ConnectAsync dar nu este necesar
-            ws.Connect();
-            //asteptam ca conexiunea sa se inchida
-            await semaphore.WaitAsync();
-            return result;
+            HttpClient httpClient = new HttpClient();
+            HttpResponseMessage response = await httpClient.GetAsync(new Uri($"{Constants.urlHttp}{endpoint}?profToken={profToken}"));
+            if (int.TryParse(await response.Content.ReadAsStringAsync(), out result))
+                return result;
+            else
+                return 0;
         }
     }
 }

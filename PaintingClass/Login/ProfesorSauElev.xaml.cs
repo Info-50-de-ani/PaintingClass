@@ -24,7 +24,6 @@ namespace PaintingClass.Login
         public ProfesorSauElev(Frame frame)
         {
             InitializeComponent();
-            
             CurrentFrame = frame;
         }
 
@@ -37,5 +36,6 @@ namespace PaintingClass.Login
         {
             CurrentFrame.Content = new LoginSauRegister(CurrentFrame);
         }
-    }
+
+	}
 }
