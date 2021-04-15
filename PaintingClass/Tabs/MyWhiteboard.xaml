@@ -11,12 +11,17 @@
     mc:Ignorable="d">
 
     <!--  O sa fie inlocuita de un Grid la un moment dat  -->
-    <Canvas x:Name="myWhiteboardCanvas" Background="White">
+    <Grid x:Name="myWhiteboardGrid" Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="6*" />
+        </Grid.ColumnDefinitions>
+
+        <!--#region tool bar-->
         <Border
-            Canvas.Left="57"
-            Canvas.Top="25"
-            Width="170"
-            Height="726"
+            Grid.Column="0"
+            Margin="20"
             BorderBrush="Black"
             BorderThickness="5">
             <Grid>
@@ -41,8 +46,7 @@
                     <Button
                         Grid.Row="0"
                         Click="ColorMenu_Button_Click"
-                        Content="Culori">
-                    </Button>
+                        Content="Culori" />
                     <Button
                         Grid.Row="1"
                         Click="Grosime_Button_Click"
@@ -55,60 +59,122 @@
                 </Grid>
             </Grid>
         </Border>
-        <!--#region Color panel-->
+        <!--#endregion-->
 
-        <Grid
-            x:Name="ColorPanel"
-            Canvas.Left="246"
-            Canvas.Top="463"
-            Width="233"
-            Height="288"
-            Panel.ZIndex="2">
-            <Grid.RenderTransform>
-                <ScaleTransform ScaleX="0" />
-            </Grid.RenderTransform>
-            <Border
-                x:Name="border"
-                Background="#9D9D9D"
-                CornerRadius="15" />
-            <Grid Panel.ZIndex="1">
-                <StackPanel VerticalAlignment="Center">
-                    <Button
-                        Background="Red"
-                        Click="Color_Buton_Click"
-                        Content="Rosu"
-                        Tag="Red" />
-                    <Button
-                        Background="Yellow"
-                        Click="Color_Buton_Click"
-                        Content="Galben"
-                        Tag="Yellow" />
-                    <Button
-                        Background="Green"
-                        Click="Color_Buton_Click"
-                        Content="Verde"
-                        Tag="Green" />
-                    <Button
-                        Background="Black"
-                        Click="Color_Buton_Click"
-                        Content="Negru"
-                        Foreground="White"
-                        Tag="Black" />
-                    <Button Content="Rosu" />
-                    <Button Content="Rosu" />
-                </StackPanel>
+        <!--#region Color panel-->
+        <Grid Grid.Column="1" Panel.ZIndex="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="9*" />
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="2*" />
+            </Grid.RowDefinitions>
+
+            <Grid
+                x:Name="ColorPanel"
+                Grid.Row="1"
+                Grid.RowSpan="2">
+                <Grid.RenderTransform>
+                    <ScaleTransform ScaleX="0" />
+                </Grid.RenderTransform>
+                <Border
+                    x:Name="border"
+                    Background="#9D9D9D"
+                    CornerRadius="15" />
+                <Grid Panel.ZIndex="1">
+                    <StackPanel VerticalAlignment="Center">
+                        <Button
+                            Background="Red"
+                            Click="Color_Buton_Click"
+                            Content="Rosu"
+                            Tag="Red" />
+                        <Button
+                            Background="Yellow"
+                            Click="Color_Buton_Click"
+                            Content="Galben"
+                            Tag="Yellow" />
+                        <Button
+                            Background="Green"
+                            Click="Color_Buton_Click"
+                            Content="Verde"
+                            Tag="Green" />
+                        <Button
+                            Background="Black"
+                            Click="Color_Buton_Click"
+                            Content="Negru"
+                            Foreground="White"
+                            Tag="Black" />
+                        <Button Content="Rosu" />
+                        <Button Content="Rosu" />
+                    </StackPanel>
+                </Grid>
             </Grid>
         </Grid>
         <!--#endregion-->
-        <PaintingClass:Whiteboard
-            x:Name="whiteboard"
-            Canvas.Left="286"
-            Canvas.Top="25"
-            Width="1208"
-            Height="726"
-            Background="White"
-            BorderBrush="Black"
-            BorderThickness="5" />
-    </Canvas>
+
+        <!--#region Formula Panel-->
+        <Grid
+            x:Name="FormulaPanelParentGrid"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Panel.ZIndex="2"
+            Visibility="Hidden">
+            <Grid.Effect>
+                <DropShadowEffect
+                    BlurRadius="20"
+                    Opacity="0.6"
+                    ShadowDepth="3"
+                    Color="Black" />
+            </Grid.Effect>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="2*" />
+            </Grid.RowDefinitions>
+            <Border
+                Grid.Row="1"
+                Margin="10"
+                Padding="8"
+                Background="#4ECDC4"
+                BorderBrush="#1A535C"
+                BorderThickness="4"
+                CornerRadius="20">
+                <Grid x:Name="FormulaPanel">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                </Grid>
+            </Border>
+        </Grid>
+        <!--#endregion-->
+        <Viewbox
+            x:Name="myWhiteboardViewBox"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            Stretch="Uniform">
+
+            <PaintingClass:Whiteboard
+                x:Name="whiteboard"
+                Grid.ColumnSpan="2"
+                Width="160"
+                Height="90"
+                Background="Transparent"
+                BorderBrush="Black"
+                BorderThickness="1" />
+        </Viewbox>
+        <Canvas
+            x:Name="myWhiteboardCanvas"
+            Grid.Column="1"
+            Grid.ColumnSpan="2" />
+    </Grid>
 </UserControl>
 

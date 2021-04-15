@@ -21,9 +21,6 @@ namespace PaintingClass.Networking
             //daca este 0 inseamna ca ceva rau sa 
             int result = 0;
 
-            //folosit pt a sincroniza thread-urile
-            SemaphoreSlim semaphore = new SemaphoreSlim(0);
-
             HttpClient httpClient = new HttpClient();
             HttpResponseMessage response = await httpClient.GetAsync(new Uri($"{Constants.urlHttp}{endpoint}?profToken={profToken}"));
             if (int.TryParse(await response.Content.ReadAsStringAsync(), out result))

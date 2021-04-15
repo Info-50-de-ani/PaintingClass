@@ -75,7 +75,6 @@ namespace PaintingClass.Networking
             ws.Connect();
         }
 
-
 		void OnMessage(object sender, MessageEventArgs e)
         {
             Packet p = Packet.Unpack(e.Data);

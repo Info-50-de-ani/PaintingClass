@@ -26,17 +26,34 @@ namespace PaintingClass.Tabs
     /// TODO: tabla are o marime fixa deocamdata dar ar fi ideal daca ar suporta orice rezolutie, mentinand aspectul de 16:9
     /// TODO: NU ESTE TERMINATA
     /// </summary>
-   
+
     public partial class MyWhiteboard : UserControl
     {
-        PaintTool selectedTool;//click stanga o sa foloseasca unealta selectata
+        // se produce atunci cand cineva selecteaza un tool
+        Action<PaintTool> OnToolSelect = (tool) => { };
+
+        private PaintTool _selectedTool;
+        private PaintTool selectedTool {
+            get { return _selectedTool; } 
+            set {
+                _selectedTool = value;
+                OnToolSelect(_selectedTool);
+            } 
+        }//click stanga o sa foloseasca unealta selectata
+
         public SolidColorBrush globalBrush = Brushes.Black;
 
         //lista uneltelor incarcate
         List<PaintTool> tools = new List<PaintTool>();
 
+        /// <summary>
+        /// Contine toate TextBoxurile facute de <see cref="TextTool"/> pentru a le 
+        /// updata dimensiunea dinamic cu usurinta
+        /// </summary>
+        public List<TextBoxMessage> textBoxMessages = new List<TextBoxMessage>();
+
         //daca suntem in procesul de a scrie pe tabla
-        bool drawing;
+        bool isDrawing;
 
         //constructorul
         public MyWhiteboard()
@@ -50,6 +67,7 @@ namespace PaintingClass.Tabs
                 tool.owner  =  this;
                 tool.whiteboard = whiteboard;
                 tool.myWhiteboardCanvas = myWhiteboardCanvas;
+                tool.myWhiteboardGrid = myWhiteboardGrid;
                 tools.Add(tool);
             }
 
@@ -64,9 +82,11 @@ namespace PaintingClass.Tabs
                 Button button = new Button();
                 button.Content = toolControl;
                 //adaugam butonul la toolbar
-                toolbar.Children.Add(button);
+                toolbar.Children.Add(button); 
                 //cand butonul este apasat o sa selecteze unealta corecta
                 button.Click+=(sender,e) => selectedTool = tools[toolbar.Children.IndexOf(sender as UIElement) ];
+                if(tool is FormulaTool)
+                    OnToolSelect += ((FormulaTool)tool).SelectToolEventHandler;
             }
 
             //selecteaza prima unealta
@@ -76,28 +96,28 @@ namespace PaintingClass.Tabs
             //adauga eventuri
             whiteboard.MouseLeftButtonDown += (sender,args) =>
             {
-                if (drawing) return;
-                drawing = true;
+                if (isDrawing) return;
+                isDrawing = true;
                 selectedTool.MouseDown(whiteboard.NormalizePosition(args.GetPosition(whiteboard)));
             };
 
             whiteboard.MouseMove += (sender, args) =>
             {
-                if (!drawing) return;
+                if (!isDrawing) return;
                 selectedTool.MouseDrag(whiteboard.NormalizePosition(args.GetPosition(whiteboard)));
             };
 
             whiteboard.MouseLeave += (sender, args) =>
             {
-                if (!drawing) return;
-                drawing = false;
+                if (!isDrawing) return;
+                isDrawing = false;
                 selectedTool.MouseUp();
             };
 
             whiteboard.MouseLeftButtonUp += (sender,args) =>
             {
-                if (!drawing) return;
-                drawing = false;
+                if (!isDrawing) return;
+                isDrawing = false;
                 selectedTool.MouseUp();
             };
 

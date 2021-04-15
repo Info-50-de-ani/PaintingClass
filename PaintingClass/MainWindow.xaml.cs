@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using PaintingClass.Tabs;
 using PaintingClass.Networking;
+using PaintingClass.PaintTools;
 
 namespace PaintingClass
 {
@@ -71,6 +72,8 @@ namespace PaintingClass
             {
                 Init();
             }
+
+           //TODO FormulaTool.FillFormulaPanel();
         }
 
         /// <summary>

@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Images\whiteboard.png" />
     <None Remove="Networking\RoomManager" />
     <None Remove="Resources\Fonts\Manrope-Bold.ttf" />
     <None Remove="Resources\Fonts\Manrope-ExtraBold.ttf" />
@@ -73,10 +72,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Images\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <Resource Include="Login\Images\LoginBackground.jpg" />
     <Resource Include="Resources\Fonts\Manrope-Bold.ttf" />
     <Resource Include="Resources\Fonts\Manrope-ExtraBold.ttf" />
     <Resource Include="Resources\Fonts\Manrope-ExtraLight.ttf" />

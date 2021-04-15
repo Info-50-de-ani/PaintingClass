@@ -33,6 +33,7 @@ namespace PaintingClass.PaintTools
         public MyWhiteboard owner;
         public Whiteboard whiteboard;
         public Canvas myWhiteboardCanvas;
+        public Grid myWhiteboardGrid;
 
         //folosita pt a adauga o imagine pe tabla
         public virtual void MouseDown(Point position) { }

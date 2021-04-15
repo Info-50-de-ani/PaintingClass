@@ -73,12 +73,12 @@ namespace PaintingClass
         // transforma un punct in spatiu XAML in spatiul corect
         public Point NormalizePosition(Point p)
         {
-            return new Point(p.X/Width*sizeX,p.Y/ Height * sizeY);
+            return new Point(p.X/ActualWidth*sizeX,p.Y/ ActualHeight * sizeY);
         }
 
         public Point DenormalizePosition(Point p)
-        {
-            return new Point(p.X / sizeX * Width, p.Y/ sizeY * Height);
+        {   
+            return new Point(p.X / sizeX , p.Y/ sizeY );
         }
     }
 }

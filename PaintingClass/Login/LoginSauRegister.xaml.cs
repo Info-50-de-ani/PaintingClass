@@ -64,8 +64,6 @@ namespace PaintingClass.Login
 			RegisterMenu.Visibility = Visibility.Hidden;
 		}
 
-
-
 		#region Debugging
 		//pt debbuging
 		private void Inject_Click(object sender, RoutedEventArgs e)

@@ -14,8 +14,8 @@
         <!--  Style pentru textbox custom  -->
         <Style x:Key="FormTextBox" TargetType="{x:Type TextBox}">
             <Style.Resources>
-                <sys:Double x:Key="defaultOpacity">0.5</sys:Double>
-                <sys:Double x:Key="focusOpacity">0.7</sys:Double>
+                <sys:Double x:Key="defaultOpacity">0.7</sys:Double>
+                <sys:Double x:Key="focusOpacity">0.9</sys:Double>
             </Style.Resources>
             <Setter Property="Background" Value="Black" />
             <Setter Property="Foreground" Value="White" />

@@ -19,19 +19,40 @@ using PaintingClass.Tabs;
 using Exversion.Analytics;
 using Analytics;
 using WpfMath.Controls;
+using System.Windows.Media.Effects;
+using System.Windows.Media.Animation;
+using System.Threading;
 
 namespace PaintingClass.PaintTools
 {
 	class FormulaTool : PaintTool
 	{
 		#region Constants
-		
+
 		private const string defaultMessage = "Scrie formula aici.";
-		
+
 		#endregion
 
 		#region Properities & fields
+
 		public override int priority => 3;
+		private static AnalyticsTeXConverter converter;
+		private static Translator translator;
+
+		#endregion
+
+		#region Constructors
+
+		static FormulaTool()
+		{
+			translator = new Translator();
+			converter = new AnalyticsTeXConverter();
+			// umplem FormulPanel
+		}
+
+		#endregion
+
+		#region Public Methods
 
 		public override Control GetControl()
 		{
@@ -39,23 +60,66 @@ namespace PaintingClass.PaintTools
 			label.Content = "Formula";
 			return label;
 		}
-		
-		private static AnalyticsTeXConverter converter;
-		private static Translator translator;
+
+		#endregion
+
+		#region Static Methods
+		/// <summary>
+		/// Umple gridul cu operatori pentru a fi folositi la scrierea formulelor
+		/// </summary>
+		public static void FillFormulaPanel()
+		{
+			const string Background = "#FFE66D";
+			const string BorderBrush = "#FFA96C";
+			string operators = "•×√≡≈≠><≥≤¬|&←→↔∂∫ΔΣΠ";
+			var formulaPanel = MainWindow.instance.myWhiteboardInstance.FormulaPanel;
+			int cnt = 0;
+			for (int i = 0; i < formulaPanel.RowDefinitions.Count; i++)
+			{
+				for (int j = 0; j < formulaPanel.ColumnDefinitions.Count; j++, cnt++)
+				{
+					Border border = new Border()
+					{
+						Margin = new Thickness(5),
+						Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(Background)),
+						BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(BorderBrush)),
+						BorderThickness = new Thickness(4),
+						CornerRadius = new CornerRadius(20),
+						Effect = new DropShadowEffect() { BlurRadius = 20, Opacity = 0.6, ShadowDepth = 2, Color = Colors.Black },
+					};
+					TextBlock tb = new TextBlock()
+					{
+						HorizontalAlignment = HorizontalAlignment.Center,
+						VerticalAlignment = VerticalAlignment.Center,
+						FontSize = 35,
+					};
+					if (operators[cnt] == '|')
+						tb.Text = operators[cnt].ToString() + " " + operators[cnt].ToString();
+					else
+						tb.Text = operators[cnt].ToString();
+					border.Child = tb;
+					border.MouseDown += FormulaButtonClick;
+					formulaPanel.Children.Add(border);
+					Grid.SetRow(border, i);
+					Grid.SetColumn(border, j);
+				}
+			}
+		}
 		#endregion
 
 		#region Private Methods
+
 
 		private Grid GetResizableTextboxGrid(string defaultText)
 		{
 			// cream grid pt functia de resize
 			Grid grid = new Grid();
 			grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Auto });
-			grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(5) });
+			grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(9) });
 			grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(0) });
 
 			grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-			grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(5) });
+			grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(9) });
 			grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(0) });
 			// cream un textbox 
 			TextBox tb = new TextBox()
@@ -116,7 +180,69 @@ namespace PaintingClass.PaintTools
 
 		#endregion
 
-		#region Events
+		#region EventHandlers
+
+		private static void FormulaButtonClick(object sender, MouseButtonEventArgs e)
+		{
+			var tb = Keyboard.FocusedElement as TextBox;
+			if (tb == null)
+				return;
+			char op = ((TextBlock)((Border)sender).Child).Text[0];
+			if (op == '|')
+				tb.Text = tb.Text.Insert(tb.CaretIndex, "||");
+			else
+				tb.Text = tb.Text.Insert(tb.CaretIndex, op.ToString());
+		}
+
+		/// <summary>
+		/// Se produce atunci cand acest tool este selectat
+		/// </summary>
+		public void SelectToolEventHandler(PaintTool tool)
+		{
+			if (!(tool is FormulaTool))
+			{
+				if (owner.FormulaPanelParentGrid.Visibility == Visibility.Hidden)
+					return;
+				else
+				{
+					Storyboard sb = new Storyboard() {Duration= new Duration(new TimeSpan(0, 0, 0, 0, 300)) };
+					DoubleAnimation an = new DoubleAnimation()
+					{
+						Duration = new Duration(new TimeSpan(0, 0, 0, 0, 300)),
+						From = 1,
+						To = 0
+					};
+					Storyboard.SetTargetProperty(an, new PropertyPath("(Grid.Opacity)"));
+					Storyboard.SetTarget(an, owner.FormulaPanelParentGrid);
+					sb.Completed += (sender, e) =>
+					{
+						owner.FormulaPanelParentGrid.Visibility = Visibility.Hidden;
+					};
+					sb.Children.Add(an);
+					sb.Begin(owner);
+					return;
+				}
+			}
+
+				if (owner.FormulaPanelParentGrid.Visibility == Visibility.Visible)
+					return;
+			{ 
+				owner.FormulaPanelParentGrid.Visibility = Visibility.Visible;
+				Storyboard storyboard = new Storyboard();
+				DoubleAnimation animation = new DoubleAnimation()
+				{
+					Duration = new Duration(new TimeSpan(0, 0, 0, 0, 300)),
+					From = 0,
+					To = 1
+				};
+				Storyboard.SetTargetProperty(animation, new PropertyPath("(Grid.Opacity)"));
+				Storyboard.SetTarget(animation, owner.FormulaPanelParentGrid);
+
+				storyboard.Children.Add(animation);
+				storyboard.Begin(owner);
+				return;
+			}
+		}
 
 		private void CloseIcon_MouseDown(object sender, MouseButtonEventArgs e)
 		{
@@ -125,9 +251,8 @@ namespace PaintingClass.PaintTools
 
 		public override void MouseDown(Point position)
 		{
-			#region TextBox  
 			var grid = GetResizableTextboxGrid(defaultMessage);
-			#endregion
+
 
 			StackPanel stackPanel = new StackPanel();
 			stackPanel.MouseEnter += StackPanel_MouseEnter;
@@ -139,11 +264,11 @@ namespace PaintingClass.PaintTools
 
 			stackPanel.Children.Add(grid);
 			stackPanel.Children.Add(formulaControl);
-			
+
 			myWhiteboardCanvas.Children.Add(stackPanel);
 			position = MainWindow.instance.myWhiteboardInstance.whiteboard.DenormalizePosition(position);
-			Canvas.SetTop(stackPanel, Canvas.GetTop(whiteboard) + position.Y);
-			Canvas.SetLeft(stackPanel, Canvas.GetLeft(whiteboard) + position.X);
+			Canvas.SetTop(stackPanel, position.Y * myWhiteboardCanvas.ActualHeight);
+			Canvas.SetLeft(stackPanel, position.X * myWhiteboardCanvas.ActualWidth);
 		}
 
 
@@ -158,7 +283,7 @@ namespace PaintingClass.PaintTools
 			FormulaControl formulaControl = ((StackPanel)((Grid)((TextBox)sender).Parent).Parent).Children.OfType<FormulaControl>().First();
 			try
 			{
-				if (translator.CheckSyntax(crudeText) && crudeText.Length>0)
+				if (translator.CheckSyntax(crudeText) && crudeText.Length > 0)
 				{
 					// convertim in LaTeX
 					string texf = converter.Convert(crudeText);
@@ -215,13 +340,8 @@ namespace PaintingClass.PaintTools
 				tb.Text = "";
 			}
 		}
-	#endregion
 
-		static FormulaTool()
-		{
-			translator = new Translator();
-			converter = new AnalyticsTeXConverter();
-		}
+		#endregion
 	}
 	#endregion
 }
