@@ -47,7 +47,7 @@ namespace PaintingClass.PaintTools
             tb.GotKeyboardFocus += Tb_GotKeyboardFocus;
             tb.LostKeyboardFocus += Tb_LostKeyboardFocus;
             myWhiteboardCanvas.Children.Add(tb);
-            position = MainWindow.instance.myWhiteboardInstance.whiteboard.DenormalizePosition(position);
+            position = MainWindow.instance.myWhiteboard.whiteboard.InverseTransformPosition(position);
             //MessageBox.Show($"{position.X} {position.Y}");
             Canvas.SetTop(tb, Canvas.GetTop(whiteboard)+ position.Y);
             Canvas.SetLeft(tb, Canvas.GetLeft(whiteboard) + position.X);

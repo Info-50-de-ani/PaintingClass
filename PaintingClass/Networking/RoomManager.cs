@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media;
 using WebSocketSharp;
 using WebSocketSharp.Net;
 using WebSocketSharp.Net.WebSockets;
@@ -14,35 +13,8 @@ using PaintingClassCommon;
 
 namespace PaintingClass.Networking
 {
-    public class RoomManager
+    public partial class RoomManager
     {
-        //tine informatii legate de alt utilizator
-        public class NetworkUser
-        {
-            public int clientId;
-            public string name;
-            public bool isConnected;
-            bool _isShared;
-            public bool isShared
-            {
-                get => _isShared;
-                set
-                {
-                    if (_isShared == value)
-                        return;
-                    if (value==true)
-                    {
-
-                    }
-                    else
-                    {
-
-                    }
-                    _isShared = value;
-                }
-            }
-            
-        }
 
         public WebSocket ws;
 
@@ -73,7 +45,12 @@ namespace PaintingClass.Networking
                 case PacketType.none:
                     throw new Exception("PacketType nu ar trb sa fie 0");
                 case PacketType.WhiteboardMessage:
-                    //todo:
+                    WhiteboardMessage wm = JsonSerializer.Deserialize<WhiteboardMessage>(p.msg);
+                    if (wm.clientId == MainWindow.userData.clientID) break;
+                    if (userList.TryGetValue(wm.clientId,out NetworkUser user))
+                    {
+                        MessageUtils.ApplyWhiteboardMessage(wm, user.collection);
+                    }
                     break;
 
                 case PacketType.UserListMessage:
@@ -81,6 +58,7 @@ namespace PaintingClass.Networking
 
                     foreach (var item in msg.list)
                     {
+                        if (item.id == MainWindow.userData.clientID) continue;
                         NetworkUser nu;
                         if (!userList.TryGetValue(item.id, out nu ))
                         {

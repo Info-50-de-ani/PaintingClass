@@ -45,7 +45,10 @@ namespace PaintingClass
         public static MainWindow instance;
         public static UserData userData;
         public RoomManager roomManager;
-        public MyWhiteboard myWhiteboardInstance;
+
+        //can be null
+        public TeachersTab teachersTab;
+        public MyWhiteboard myWhiteboard;
 
         // trebuie sa folosim ObservableCollection<> in loc de List<> ca sa evitam bug-uri de UI
         ObservableCollection<TabItem> tabs = new ObservableCollection<TabItem>();
@@ -78,8 +81,8 @@ namespace PaintingClass
         /// </summary>
         void TestInit()
         {
-            myWhiteboardInstance = new MyWhiteboard();
-            AddTab(myWhiteboardInstance, "Tabla mea");
+            myWhiteboard = new MyWhiteboard();
+            AddTab(myWhiteboard, "Tabla mea");
             AddTab(new TestTab(), "test tab");
             AddTab(new TestUI(), "test ui");
         }
@@ -89,10 +92,9 @@ namespace PaintingClass
         /// </summary>
         async void Init()
         {
-
-            #region Enter room
             PleaseWait pw = new PleaseWait();
             AddTab(pw,"");
+            
 
             if (userData.roomId==0)
             {
@@ -108,18 +110,20 @@ namespace PaintingClass
                         System.Diagnostics.Trace.WriteLine("roomId nu poate fi 0, incercam din nou");
                 }
             }
-  #endregion
-
-            #region Generate MyWhiteboard and RoomManager
-
+            
+            //ne conectam la room
             roomManager = new RoomManager(userData);
             roomManager.onUserListUpdate += UserListUpdate;
-            roomManager.onUserListUpdate();
+            roomManager.onUserListUpdate();//reparam bug
             RemoveTab(pw);
-            myWhiteboardInstance = new MyWhiteboard();
-            AddTab(myWhiteboardInstance, "Tabla mea");
-            AddTab(new MultipleWhiteboardView(), "Tablele Elevilor");
-#endregion
+
+            if (userData.isTeacher)
+            {
+                teachersTab = new();
+                AddTab(teachersTab, "Tablele Elevilor");
+            }
+            myWhiteboard = new();
+            AddTab(myWhiteboard, "Tabla mea");
 
         }
 

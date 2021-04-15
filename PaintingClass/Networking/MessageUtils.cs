@@ -24,22 +24,22 @@ namespace PaintingClass.Networking
             return msg;
         }
 
-        public static WhiteboardMessage SerializeAction(this string str)
+        public static WhiteboardMessage SerializeAction(string str)
         {
             WhiteboardMessage msg = new WhiteboardMessage { clientId = MainWindow.userData.clientID, type = WhiteboardMessage.ContentType.Action };
             msg.content = str;
             return msg;
         }
 
-        public static object DeserializeContent(this WhiteboardMessage msg)
+        public static void ApplyWhiteboardMessage(WhiteboardMessage wm, DrawingCollection dc)
         {
-            if (msg.type == WhiteboardMessage.ContentType.Drawing)
+            if (wm.type== WhiteboardMessage.ContentType.Drawing)
             {
-                return XamlReader.Parse(msg.content);
+                dc.Dispatcher.Invoke(()=> dc.Add((Drawing)XamlReader.Parse(wm.content)));
             }
-            else
+            else //Action
             {
-                return msg.content;
+                throw new NotImplementedException();
             }
         }
     }

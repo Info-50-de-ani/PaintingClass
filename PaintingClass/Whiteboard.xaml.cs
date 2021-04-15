@@ -31,12 +31,10 @@ namespace PaintingClass
     /// </summary>
     public partial class Whiteboard : UserControl
     {
-
-       
-        //aka List<Drawing>
-
-        public DrawingCollection collection { get => group.Children; set => group.Children = value; }
         public const double sizeX=100,sizeY=100;
+
+        //aka List<Drawing>
+        public DrawingCollection collection { get => group.Children; set => group.Children = value; }
 
         DrawingGroup mainGroup;
         DrawingGroup group;
@@ -46,12 +44,9 @@ namespace PaintingClass
         {
             InitializeComponent();
 
-
             mainGroup = new DrawingGroup();
             group = new DrawingGroup();
             var clipGeometry = new RectangleGeometry(new Rect(0, 0, sizeX, sizeY));
-
-
 
             //ne asiguram ca mainGroup este la dimensiunea corecta, un bodge cam stupid dar merge
             //TODO: poate poti sa gasesti o metoda prin care sa eviti asta
@@ -66,17 +61,15 @@ namespace PaintingClass
             //folosim un DrawingImage pentru a renderiza DrawingGroup pe <Image>
             image.Source = new DrawingImage(mainGroup);
             image.Stretch = Stretch.Fill;//de la aspect 1:1 la 16:9 (sau alt aspect daca schimbi dimensiunea tablei)
-
-          
         }
 
         // transforma un punct in spatiu XAML in spatiul corect
-        public Point NormalizePosition(Point p)
+        public Point TransformPosition(Point p)
         {
             return new Point(p.X/Width*sizeX,p.Y/ Height * sizeY);
         }
 
-        public Point DenormalizePosition(Point p)
+        public Point InverseTransformPosition(Point p)
         {
             return new Point(p.X / sizeX * Width, p.Y/ sizeY * Height);
         }

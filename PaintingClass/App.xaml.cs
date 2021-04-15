@@ -15,10 +15,10 @@ namespace PaintingClass
 	/// </summary>
 	public partial class App : Application
 	{
-		public const string costumUrl = "PaintingClassLauncher";
 		public static int startedAppFromBrowserroomId = 0;
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
+			return; // todo: temporar
 			if (e.Args.Length > 0)
 			{
 				#region extragem roomId din event args
@@ -28,7 +28,7 @@ namespace PaintingClass
 					{
 						if (char.IsDigit(e.Args[0][i]))
 						{
-						startedAppFromBrowserroomId = startedAppFromBrowserroomId * 10 + e.Args[0][i] -'0';
+							startedAppFromBrowserroomId = startedAppFromBrowserroomId * 10 + e.Args[0][i] -'0';
 						}
 					}
 				
@@ -42,13 +42,13 @@ namespace PaintingClass
 				var process = Process.GetCurrentProcess();
 				foreach (var reg in Registry.ClassesRoot.GetSubKeyNames())
 				{
-					if (reg == "PaintingClassLauncher")
+					if (reg == Networking.Constants.customProtocol)
 					{
 						return;
 					}
 				}
 				{
-					RegistryKey key = Registry.ClassesRoot.CreateSubKey(costumUrl, true);
+					RegistryKey key = Registry.ClassesRoot.CreateSubKey(Networking.Constants.customProtocol, true);
 					key.SetValue("URL protocol", "");
 					RegistryKey shellkey = key.CreateSubKey("shell", true);
 					RegistryKey openkey = shellkey.CreateSubKey("open", true);
