@@ -122,7 +122,7 @@ namespace PaintingClass.Login
 				// afisam ecranul de login succes
 				LoginMenu.Visibility = Visibility.Hidden;
 				Login_Succes_Screen.Visibility = Visibility.Visible;
-				Task.Delay(1000);
+				await Task.Delay(1000);
 
 				// todo stocat token
 				int profToken = int.Parse(response[1]);
@@ -138,10 +138,8 @@ namespace PaintingClass.Login
 				{
 					case ServerResponse.AlreadyRegistered:
 						throw new Exception("Raspuns invalid al serverului");
-						break;
 					case ServerResponse.Fail:
 						throw new Exception("S-a produs o eraore la server cand a primit mesajul");
-						break;
 					case ServerResponse.NotRegistered:
 						TB_Login_Error.Visibility = Visibility.Visible;
 						TB_Login_Error.Text = "Email sau parola introduse gresit.";
@@ -243,7 +241,6 @@ namespace PaintingClass.Login
 					break;
 				case ServerResponse.Fail:
 					throw new Exception("Registration failed");
-					break;
 				case ServerResponse.AlreadyRegistered:
 					TB_Register_Error.Visibility = Visibility.Visible;
 					TB_Register_Error.Text = "Sunteti deja inregistrat. Va rugam frumos sa va logati.";

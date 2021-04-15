@@ -113,13 +113,11 @@ namespace PaintingClass
                         System.Diagnostics.Trace.WriteLine("roomId nu poate fi 0, incercam din nou");
                 }
             }
-  #endregion
-
-            #region Generate MyWhiteboard and RoomManager
 
             roomManager = new RoomManager(userData);//2sec
             roomManager.onUserListUpdate += UserListUpdate;
             roomManager.onUserListUpdate();//reparam bug
+
             RemoveTab(pw);
 
             if (userData.isTeacher)

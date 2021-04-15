@@ -18,7 +18,7 @@ namespace PaintingClass.Networking
 {
     public class RoomManager
     {
-        public static bool CertificateValidation(object sender, X509Certificate? certificate, X509Chain? chain, SslPolicyErrors sslPolicyErrors)
+        public static bool CertificateValidation(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
 		{
             // TODO
             return true;

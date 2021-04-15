@@ -98,13 +98,13 @@ namespace PaintingClass.Tabs
             {
                 if (isDrawing) return;
                 isDrawing = true;
-                selectedTool.MouseDown(whiteboard.NormalizePosition(args.GetPosition(whiteboard)));
+                selectedTool.MouseDown(whiteboard.TransformPosition(args.GetPosition(whiteboard)));
             };
 
             whiteboard.MouseMove += (sender, args) =>
             {
                 if (!isDrawing) return;
-                selectedTool.MouseDrag(whiteboard.NormalizePosition(args.GetPosition(whiteboard)));
+                selectedTool.MouseDrag(whiteboard.TransformPosition(args.GetPosition(whiteboard)));
             };
 
             whiteboard.MouseLeave += (sender, args) =>

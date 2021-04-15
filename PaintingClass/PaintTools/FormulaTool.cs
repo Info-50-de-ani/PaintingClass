@@ -72,7 +72,7 @@ namespace PaintingClass.PaintTools
 			const string Background = "#FFE66D";
 			const string BorderBrush = "#FFA96C";
 			string operators = "•×√≡≈≠><≥≤¬|&←→↔∂∫ΔΣΠ";
-			var formulaPanel = MainWindow.instance.myWhiteboardInstance.FormulaPanel;
+			var formulaPanel = MainWindow.instance.myWhiteboard.FormulaPanel;
 			int cnt = 0;
 			for (int i = 0; i < formulaPanel.RowDefinitions.Count; i++)
 			{
@@ -266,7 +266,7 @@ namespace PaintingClass.PaintTools
 			stackPanel.Children.Add(formulaControl);
 
 			myWhiteboardCanvas.Children.Add(stackPanel);
-			position = MainWindow.instance.myWhiteboardInstance.whiteboard.DenormalizePosition(position);
+			position = MainWindow.instance.myWhiteboard.whiteboard.DenormalizePosition(position);
 			Canvas.SetTop(stackPanel, position.Y * myWhiteboardCanvas.ActualHeight);
 			Canvas.SetLeft(stackPanel, position.X * myWhiteboardCanvas.ActualWidth);
 		}
@@ -322,7 +322,7 @@ namespace PaintingClass.PaintTools
 					if (translator.CheckSyntax(tb.Text) && tb.Text.Length > 0)
 						texf = converter.Convert(tb.Text);
 				}
-				catch (Exception ex)
+				catch
 				{
 					IsSyntaxOk = false;
 				}

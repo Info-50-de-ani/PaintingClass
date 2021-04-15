@@ -78,7 +78,7 @@ namespace PaintingClass.PaintTools
 		public void UpdateTextBoxSize(object sender, SizeChangedEventArgs e)
 		{
 			Point offset = TextTool.CalculateOffset(owner);
-			var positionDenormalized = MainWindow.instance.myWhiteboardInstance.whiteboard.DenormalizePosition(position);
+			var positionDenormalized = MainWindow.instance.myWhiteboard.whiteboard.DenormalizePosition(position);
 			Canvas.SetTop(textBoxGrid, offset.Y + positionDenormalized.Y * myWhiteboardViewBox.RenderSize.Height);
 			Canvas.SetLeft(textBoxGrid, offset.X + positionDenormalized.X * myWhiteboardViewBox.RenderSize.Width);
 
@@ -229,7 +229,7 @@ namespace PaintingClass.PaintTools
 			owner.myWhiteboardViewBox.SizeChanged += tbMsg.UpdateTextBoxSize;
 			grid.Children.OfType<TextBox>().First().SizeChanged += tbMsg.TextBoxMessage_SizeChanged;
 
-			position = MainWindow.instance.myWhiteboardInstance.whiteboard.DenormalizePosition(position);
+			position = MainWindow.instance.myWhiteboard.whiteboard.DenormalizePosition(position);
 
 			owner.textBoxMessages.Add(tbMsg);
 
