@@ -35,7 +35,7 @@ namespace PaintingClass.Networking
         {
             if (wm.type== WhiteboardMessage.ContentType.Drawing)
             {
-                dc.Dispatcher.Invoke(()=> dc.Add((Drawing)XamlReader.Parse(wm.content)));
+                dc.Dispatcher.Invoke(() => dc.Add((Drawing)XamlReader.Parse(wm.content)));
             }
             else //Action
             {

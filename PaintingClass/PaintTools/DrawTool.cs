@@ -35,8 +35,6 @@ namespace PaintingClass.PaintTools
 
         GeometryDrawing drawing;
         PathFigure figure;
-        PolyBezierSegment poliBezierSegment;
-        public int pointCounter = 0;
 
         /// <summary>
         /// Incepe sa deseneze o noua linie
@@ -47,19 +45,11 @@ namespace PaintingClass.PaintTools
             // un nou path figure pentru a adauga segemnte
             figure = new PathFigure();
             figure.StartPoint = position;
-            // resetam point counter
-            pointCounter = 1;
+
 
             var geometry = new PathGeometry();
             geometry.Figures.Add(figure);
             
-            // array gol pentru a putea initializa cu contructorul ce 
-            // ia doua argumente
-            Point[] startPos = new Point[] { position };
-            // adaugam un singur segment si apoi ii adaugam puncte
-            poliBezierSegment = new PolyBezierSegment(startPos,true);
-            figure.Segments.Add(poliBezierSegment);
-
             // punem totul in drawing collection 
             drawing = new GeometryDrawing();
             drawing.Pen = new Pen(owner.globalBrush,0.3);
@@ -68,18 +58,18 @@ namespace PaintingClass.PaintTools
         }
 
         /// <summary>
-        /// Adaugam puncte la bezier din 5 in 5 puncte
+        /// cand userul misca mousul adaugam segmente 
         /// </summary>
         /// <param name="position"></param>
         public override void MouseDrag(Point position)
         {
-            pointCounter++;
-            if (pointCounter % 3 == 0)
-                poliBezierSegment.Points.Add(position);
+            /// Setam proprietatea IsSmoothJoin la true si astfel 
+            /// cand unghiul este prea mic nu vor mai aparea aberatii 
+            figure.Segments.Add(new LineSegment(position, true) { IsSmoothJoin=true });
         }
 
         /// <summary>
-        /// Finalizam editatul segmentului si il trimitem la server
+        /// Finalizam editatul pathGeometry si il trimitem la server
         /// </summary>
         public override void MouseUp()
         {
@@ -87,7 +77,6 @@ namespace PaintingClass.PaintTools
             MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage,MessageUtils.SerialzieDrawing(drawing) );
             drawing = null;
             figure = null;
-            poliBezierSegment = null;    
         }
     }
 }
