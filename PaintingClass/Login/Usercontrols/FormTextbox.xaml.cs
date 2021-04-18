@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -13,25 +14,51 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using PropertyChanged;
 namespace PaintingClass.Login
 {
 	/// <summary>
 	/// Interaction logic for FormTextbox.xaml
 	/// </summary>
-	public partial class FormTextbox : UserControl
+	public partial class FormTextbox : UserControl,INotifyPropertyChanged
 	{
+		#region Events 
+
+		public event TextChangedEventHandler TextChanged;
+		public event PropertyChangedEventHandler PropertyChanged = (sender,e) =>{};
+
+		#endregion
+
+
+		#region Private Properties
+
+		private bool? _isSyntaxCorrect = null;
+
+
+		#endregion
+
 		#region Public Properties
 
 		public FormTextbox instance { get; private set; }
 		public string Text { get; set; } = "";
 		public double minimumWidth { get; set; } = 100;
 		public string defaultText { get; set; } = "Scrie aici";
-		public bool? isSyntaxCorrect { get; set; } = false;
+		public bool? isSyntaxCorrect
+		{
+			get { return _isSyntaxCorrect; } 
+			set {	
+				if(_isSyntaxCorrect!=value)
+				{
+					_isSyntaxCorrect = value; 
+					PropertyChanged(this, new PropertyChangedEventArgs(nameof(instance))); 
+				} 
+			}
+		} 
 		public Color CorrectAnsColor { get; set; } = (Color)ColorConverter.ConvertFromString("#00FF00");
 		public Color WrongAnsColor { get; set; } = Colors.Red;
 		public Color DefaultAnsColor { get; set; } = Colors.Gray;
 		public double CornerRadius { get; set; } = 10;
+		public int MaxLength { get; set; }
 		#endregion
 
 		public FormTextbox()
@@ -39,6 +66,12 @@ namespace PaintingClass.Login
 			InitializeComponent();
 			DataContext = this;
 			instance = this;
+			TextChanged += (sender,e) => { };
+		}
+
+		private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			TextChanged(sender,e);
 		}
 	}
 

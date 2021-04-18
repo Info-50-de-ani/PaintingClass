@@ -87,7 +87,11 @@
     </UserControl.Resources>
 
     <Grid>
-        <TextBox Style="{StaticResource FormTextBox}" Text="{Binding Text}" />
+        <TextBox
+            MaxLength="{Binding MaxLength}"
+            Style="{StaticResource FormTextBox}"
+            Text="{Binding Text,UpdateSourceTrigger=PropertyChanged}"
+            TextChanged="TextBox_TextChanged" />
         <Border
             Margin="0,0,0,-5"
             VerticalAlignment="Stretch"
@@ -96,12 +100,15 @@
             CornerRadius="{Binding CornerRadius}"
             IsHitTestVisible="False"
             Opacity="0.8">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="3" />
+            </Border.Effect>
             <Border.BorderBrush>
                 <LinearGradientBrush>
                     <LinearGradientBrush.GradientStops>
-                        <GradientStop Offset="0" Color="{Binding instance, Converter={StaticResource ResourceKey=BoolToColorConverter}}" />
+                        <GradientStop Offset="0" Color="{Binding instance, Converter={StaticResource ResourceKey=BoolToColorConverter},UpdateSourceTrigger=PropertyChanged}" />
                         <GradientStop Offset="0.5" Color="Gray" />
-                        <GradientStop Offset="1" Color="{Binding instance, Converter={StaticResource ResourceKey=BoolToColorConverter}}" />
+                        <GradientStop Offset="1" Color="{Binding instance, Converter={StaticResource ResourceKey=BoolToColorConverter},UpdateSourceTrigger=PropertyChanged}" />
                     </LinearGradientBrush.GradientStops>
                 </LinearGradientBrush>
             </Border.BorderBrush>

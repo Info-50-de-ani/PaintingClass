@@ -50,7 +50,7 @@ namespace PaintingClass.Tabs
         /// Contine toate TextBoxurile facute de <see cref="TextTool"/> pentru a le 
         /// updata dimensiunea dinamic cu usurinta
         /// </summary>
-        public List<TextBoxMessage> textBoxMessages = new List<TextBoxMessage>();
+        public List<TextBoxResize> textBoxMessages = new List<TextBoxResize>();
 
         //daca suntem in procesul de a scrie pe tabla
         bool isDrawing;
@@ -85,8 +85,10 @@ namespace PaintingClass.Tabs
                 toolbar.Children.Add(button); 
                 //cand butonul este apasat o sa selecteze unealta corecta
                 button.Click+=(sender,e) => selectedTool = tools[toolbar.Children.IndexOf(sender as UIElement) ];
-                if(tool is FormulaTool)
+                if (tool is FormulaTool)
                     OnToolSelect += ((FormulaTool)tool).SelectToolEventHandler;
+                else if (tool is ImageTool)
+                    OnToolSelect += ((ImageTool)tool).SelectToolEventHandler;
             }
 
             //selecteaza prima unealta

@@ -166,6 +166,10 @@
 
 
     <Grid Background="{StaticResource ResourceKey=MainWindowBackgroundBrush}">
+        <Frame
+            x:Name="MainFrame"
+            NavigationUIVisibility="Hidden"
+            Source="" />
         <Button
             x:Name="BackButton"
             Width="100"
@@ -181,9 +185,5 @@
             Click="Skip_Button_Click">
             TEST MODE
         </Button>
-        <Frame
-            x:Name="MainFrame"
-            NavigationUIVisibility="Hidden"
-            Source="" />
     </Grid>
 </Window>

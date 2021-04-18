@@ -32,6 +32,8 @@ namespace PaintingClass.PaintTools
 
 		GeometryDrawing drawing;
 		PathFigure figure;
+        int lineCounter = 0;
+        int mod = 1;
 
         public override void MouseDown(Point position)
         {
@@ -58,7 +60,12 @@ namespace PaintingClass.PaintTools
         {
             /// Setam proprietatea IsSmoothJoin la true si astfel 
             /// cand unghiul este prea mic nu vor mai aparea aberatii 
-            figure.Segments.Add(new LineSegment(position, true) { IsSmoothJoin = true });
+            if(lineCounter == mod)
+			{
+                mod += 5;
+                figure.Segments.Add(new LineSegment(position, true) { IsSmoothJoin = true });
+			}
+            lineCounter++;
         }
 
         /// <summary>

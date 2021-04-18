@@ -16,12 +16,13 @@ using System.Reflection;
 using PaintingClass.PaintTools;
 using PaintingClass.Networking;
 using PaintingClass.Tabs;
+using System.Globalization;
+using System.IO;
 
 namespace PaintingClass.PaintTools
 {
 
-	[Serializable]
-	public class TextBoxMessage
+	public class TextBoxResize
 	{
 		#region private Properties
 		
@@ -213,7 +214,7 @@ namespace PaintingClass.PaintTools
 			var grid = GetResizableTextboxGrid("Scrie aici");
 			myWhiteboardCanvas.Children.Add(grid);
 			TextBox tb = grid.Children.OfType<TextBox>().First();
-			TextBoxMessage tbMsg = new TextBoxMessage()
+			TextBoxResize tbMsg = new TextBoxResize()
 			{
 				position = position,
 				owner = owner,
@@ -262,7 +263,7 @@ namespace PaintingClass.PaintTools
 				tb.Foreground = Brushes.Black;
 				tb.Text = "";
 			}
-		}
+		} 
 
 		public override void MouseDrag(Point position)
 		{

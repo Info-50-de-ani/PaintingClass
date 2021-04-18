@@ -22,17 +22,18 @@ namespace PaintingClass.Login
     public partial class ProfesorGenRoom : Page  
     {
         public Frame currentFrame;
-        public ProfesorGenRoom(Frame frame)
+        public UserData userData;
+
+        public ProfesorGenRoom(Frame frame,UserData userData)
         {
             InitializeComponent();
+            this.userData = userData;
         }
 
         private void GenRoom_Button_Click(object sender, RoutedEventArgs e)
         {
-        }
-
-        private void Ws_OnOpen(object sender, EventArgs e)
-        {
+            (new MainWindow(userData)).Show();
+            Window.GetWindow(currentFrame).Close();
         }
     }
 }

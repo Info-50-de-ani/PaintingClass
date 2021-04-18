@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -60,11 +61,17 @@ namespace PaintingClass.Login
 		{
 			InitializeComponent();
 			CurrentFrame = frame;
-			LoginMenu.Visibility = Visibility.Visible;
-			RegisterMenu.Visibility = Visibility.Hidden;
+			ShowLoginMenu();
+		}
+
+
+		private void RegisterButton_Click(object sender, RoutedEventArgs e)
+		{
+			ShowRegisterMenu();
 		}
 
 		#region Debugging
+
 		//pt debbuging
 		private void Inject_Click(object sender, RoutedEventArgs e)
 		{
@@ -86,9 +93,19 @@ namespace PaintingClass.Login
 			(new MainWindow(ud)).Show();
 			Window.GetWindow(CurrentFrame).Close();
 		}
+		
 		#endregion
 
 		#region Login
+
+		private void ShowLoginMenu()
+		{
+			LoginMenuTitle.Visibility = Visibility.Visible;
+			LoginMenu.Visibility = Visibility.Visible;
+			RegisterMenu.Visibility = Visibility.Hidden;
+			MainGrid.Background = new ImageBrush(new BitmapImage(new Uri(Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory.ToString()).Parent.Parent.Parent+ "/Login/Images/LoginBackground.jpg")));
+		}
+
 		/// <summary>
 		/// are loc cand profesorul apasa pe butonul de completare a logarii
 		/// </summary>
@@ -106,11 +123,15 @@ namespace PaintingClass.Login
 				return;
 			}
 
+			TB_Login_Email.isSyntaxCorrect = true;
+			TB_Login_Password.isSyntaxCorrect = true;
+
 			LoginUserData loginUserData = new LoginUserData() { email = TB_Login_Email.Text, password = TB_Login_Password.Password };
+
+			#region Server Response
 
 			// primeste raspunsul de la server
 			string[] response = (await SendLoginData(loginUserData)).Split();
-			#region Server Response
 
 			// daca sunt doua segmente trimise de server inseamna ca a trimis si tokenul
 			// ce inseamna automat ca logarea a fost acceptata
@@ -124,11 +145,21 @@ namespace PaintingClass.Login
 				Login_Succes_Screen.Visibility = Visibility.Visible;
 				await Task.Delay(1000);
 
-				// todo stocat token
 				int profToken = int.Parse(response[1]);
-				MessageBox.Show(profToken.ToString());
 
-				CurrentFrame.Content = new ProfesorGenRoom(CurrentFrame);
+				// stocam tokenul 
+				Storage.Settings.instance.profToken = profToken;
+
+				UserData userData = new UserData
+				{
+					// numele va fi schimbat cand este primit roomID-ul de la server 
+					name= "HOST",
+					clientID = PaintingClass.Storage.Settings.instance.clientID,
+					profToken = profToken,
+					roomId = 0
+				};
+
+				CurrentFrame.Content = new ProfesorGenRoom(CurrentFrame,userData);
 				return;
 			}
 			else
@@ -179,6 +210,19 @@ namespace PaintingClass.Login
 		#endregion
 
 		#region Register
+
+		/// <summary>
+		/// Afiseaza meniul de inregistrare
+		/// </summary>
+		private void ShowRegisterMenu()
+		{
+			InnerBorder.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#251351")); 
+			LoginMenuTitle.Visibility = Visibility.Hidden;
+			LoginMenu.Visibility = Visibility.Hidden;
+			RegisterMenu.Visibility = Visibility.Visible;
+			MainGrid.Background = new ImageBrush(new BitmapImage(new Uri(Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory.ToString()).Parent.Parent.Parent + "/Login/Images/RegisterBackground.jpg")));
+		}
+
 		/// <summary>
 		/// are loc cand profesorul apasa pe butonul de completare a inregistrarii
 		/// </summary>
@@ -295,9 +339,6 @@ namespace PaintingClass.Login
 
 		#region Colorare activa a erorilor Register
 
-		SolidColorBrush errorColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ff8a70"));
-		SolidColorBrush okColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DFF38C"));
-
 		private void TB_Register_Name_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			if (TB_Register_Name.Text == "")
@@ -307,12 +348,12 @@ namespace PaintingClass.Login
 			{
 				TB_Register_Error.Visibility = Visibility.Visible;
 				TB_Register_Error.Text = "Va rugam sa introduceti un nume valid.";
-				TB_Register_Name.Background = errorColor;
+				TB_Register_Name.isSyntaxCorrect = false;
 				return;
 			}
 
-			TB_Register_Name.Background = okColor;
-			TB_Register_Error.Visibility = Visibility.Collapsed;
+			TB_Register_Name.isSyntaxCorrect = true;
+			TB_Register_Error.Visibility = Visibility.Hidden;
 		}
 
 		private void TB_Register_Email_TextChanged(object sender, TextChangedEventArgs e)
@@ -323,11 +364,11 @@ namespace PaintingClass.Login
 			{
 				TB_Register_Error.Visibility = Visibility.Visible;
 				TB_Register_Error.Text = "Va rugam sa introduceti o adresa de email valida.";
-				TB_Register_Email.Background = errorColor;
+				TB_Register_Email.isSyntaxCorrect = false;
 				return;
 			}
-			TB_Register_Email.Background = okColor;
-			TB_Register_Error.Visibility = Visibility.Collapsed;
+			TB_Register_Email.isSyntaxCorrect = true;
+			TB_Register_Error.Visibility = Visibility.Hidden;
 		}
 
 		private void TB_Register_Password_PasswordChanged(object sender, RoutedEventArgs e)
@@ -338,11 +379,11 @@ namespace PaintingClass.Login
 			{
 				TB_Register_Error.Visibility = Visibility.Visible;
 				TB_Register_Error.Text = "Va rugam sa folositi o parola mai puternica.";
-				TB_Register_Password.Background = errorColor;
+				TB_Register_Password.isSyntaxCorrect = false;
 				return;
 			}
-			TB_Register_Password.Background = okColor;
-			TB_Register_Error.Visibility = Visibility.Collapsed;
+			TB_Register_Password.isSyntaxCorrect = true;
+			TB_Register_Error.Visibility = Visibility.Hidden;
 
 		}
 
@@ -354,14 +395,17 @@ namespace PaintingClass.Login
 			{
 				TB_Register_Error.Visibility = Visibility.Visible;
 				TB_Register_Error.Text = "Parolele nu coincid.";
-				TB_Register_Password_Confirm.Background = errorColor;
+				TB_Register_Password_Confirm.isSyntaxCorrect = false;
 				return;
 			}
-			TB_Register_Password_Confirm.Background = okColor;
-			TB_Register_Error.Visibility = Visibility.Collapsed;
+			TB_Register_Password_Confirm.isSyntaxCorrect = true;
+			TB_Register_Error.Visibility = Visibility.Hidden;
 		}
+
 		#endregion
 
 		#endregion
+
+		
 	}
 }

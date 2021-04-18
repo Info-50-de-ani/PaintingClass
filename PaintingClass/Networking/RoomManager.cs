@@ -41,7 +41,6 @@ namespace PaintingClass.Networking
 			ws = new WebSocket($"{Constants.urlWebSocket}/room/{userData.roomId}?name={userData.name}&clientID={userData.clientID}&profToken={userData.profToken}");
             ws.SslConfiguration.ServerCertificateValidationCallback = CertificateValidation;
             ws.OnError += (sender, e) => { MessageBox.Show(e.Message); };
-			ws.OnOpen += (sender,e) => { ws.Send("0"); };
             ws.OnMessage += OnMessage;
             ws.Connect();
         }

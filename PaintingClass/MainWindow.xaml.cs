@@ -75,8 +75,6 @@ namespace PaintingClass
             {
                 Init();
             }
-
-           //TODO FormulaTool.FillFormulaPanel();
         }
 
         /// <summary>
@@ -98,7 +96,6 @@ namespace PaintingClass
             PleaseWait pw = new PleaseWait();
             AddTab(pw,"");
             
-
             if (userData.roomId==0)
             {
                 if (!userData.isTeacher)
@@ -114,7 +111,7 @@ namespace PaintingClass
                 }
             }
 
-            roomManager = new RoomManager(userData);//2sec
+            roomManager = new RoomManager(userData);
             roomManager.onUserListUpdate += UserListUpdate;
             roomManager.onUserListUpdate();//reparam bug
 
@@ -127,7 +124,6 @@ namespace PaintingClass
             }
             myWhiteboard = new();
             AddTab(myWhiteboard, "Tabla mea");
-
         }
 
         ObservableCollection<string> UserList;

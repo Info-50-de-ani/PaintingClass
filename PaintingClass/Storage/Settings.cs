@@ -8,7 +8,7 @@ namespace PaintingClass.Storage
     [Serializable]
     public class Settings
     {
-		//daca sa genereze un nou ClientId la fiecare start al programului si sa ignoreze cel din fisier 
+		//daca sa genereze un nou ClientId la fiecare start al programului si sa ignore cel din fisier 
 		//daca este false atunci clientul se poate reconecta la acelasi room chiar daca da crash
 		const bool regenerateClientIdAtStart = true;
 
@@ -38,7 +38,7 @@ namespace PaintingClass.Storage
                 //daca nu am generat un clientID generam unul
                 if (_clientID==0)
                 {
-                    _clientID = (new Random()).Next(1,int.MaxValue);
+                    _clientID = (new Random(DateTime.Now.Millisecond)).Next(1,int.MaxValue);
                     Save();
                 }
 
@@ -49,6 +49,18 @@ namespace PaintingClass.Storage
             {
                 if (deserializationFinished || regenerateClientIdAtStart==false)
                     _clientID = value;
+                Save();
+            }
+        }
+
+        int _profToken;
+        public int profToken
+		{
+            get => _profToken;
+			set
+			{
+                if (deserializationFinished)
+                    _profToken = value;
                 Save();
             }
         }
