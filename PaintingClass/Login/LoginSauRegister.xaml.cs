@@ -148,7 +148,7 @@ namespace PaintingClass.Login
 				int profToken = int.Parse(response[1]);
 
 				// stocam tokenul 
-				Storage.Settings.instance.profToken = profToken;
+				//Storage.Settings.instance.profToken = profToken;
 
 				UserData userData = new UserData
 				{

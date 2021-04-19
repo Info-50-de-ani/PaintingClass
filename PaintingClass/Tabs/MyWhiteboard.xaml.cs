@@ -33,7 +33,7 @@ namespace PaintingClass.Tabs
         Action<PaintTool> OnToolSelect = (tool) => { };
 
         private PaintTool _selectedTool;
-        private PaintTool selectedTool {
+        public PaintTool selectedTool {
             get { return _selectedTool; } 
             set {
                 _selectedTool = value;
@@ -88,7 +88,11 @@ namespace PaintingClass.Tabs
                 if (tool is FormulaTool)
                     OnToolSelect += ((FormulaTool)tool).SelectToolEventHandler;
                 else if (tool is ImageTool)
-                    OnToolSelect += ((ImageTool)tool).SelectToolEventHandler;
+				{
+                    ImageTool t = (ImageTool)tool;
+                    OnToolSelect += t.SelectToolEventHandler;
+                    this.Drop += t.OnDropEventHandler;
+				}
             }
 
             //selecteaza prima unealta
@@ -218,6 +222,14 @@ namespace PaintingClass.Tabs
             ColorMenu_Button_Click(null,new RoutedEventArgs());
         }
 
-        #endregion
-    }
+		#endregion
+
+		private void whiteboard_Image_Drop(object sender, DragEventArgs e)
+		{
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files.Count() > 1)
+                return;
+            MessageBox.Show(files[0]);
+        }
+	}
 }

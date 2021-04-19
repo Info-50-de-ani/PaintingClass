@@ -163,6 +163,7 @@
             Stretch="Uniform">
 
             <PaintingClass:Whiteboard
+                AllowDrop="True"
                 x:Name="whiteboard"
                 Grid.ColumnSpan="2"
                 Width="160"

@@ -63,7 +63,7 @@ namespace PaintingClass.PaintTools
             if(lineCounter == mod)
 			{
                 mod += 5;
-                figure.Segments.Add(new LineSegment(position, true) { IsSmoothJoin = true });
+                figure.Segments.Add(new LineSegment(position, true) { IsSmoothJoin=true });
 			}
             lineCounter++;
         }

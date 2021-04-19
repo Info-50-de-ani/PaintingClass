@@ -18,14 +18,22 @@ using PaintingClass.Networking;
 using PaintingClass.Tabs;
 using System.Globalization;
 using System.IO;
+using System.Windows.Media.Animation;
 
 namespace PaintingClass.PaintTools
 {
 
-	public class TextBoxResize
+	public class TextBoxResize 
 	{
+
+		public TextBoxResize(Point position,Size absSize)
+		{
+			this.absSize = absSize;
+			this.position = position;
+		}
+
 		#region private Properties
-		
+
 		bool isUpdating;
 		
 		#endregion
@@ -39,13 +47,9 @@ namespace PaintingClass.PaintTools
 		public double FontSize { get; set; }
 
 		/// <summary>
-		/// relativ cu marimea ecranului in pixeli
+		/// relativ cu marimea ecranului in pixeli 
 		/// </summary>
-		public double absHeight { get; set; }
-		/// <summary>
-		/// relativ cu marimea ecranului in pixeli
-		/// </summary>
-		public double absWidth { get; set; }
+		public Size absSize { get; set; }
 
 		/// <summary>
 		/// gridul care contine text boxul (si gridsplitterul )
@@ -85,8 +89,8 @@ namespace PaintingClass.PaintTools
 
 
 			isUpdating = true;
-			textBoxGrid.RowDefinitions[0].Height = new GridLength(absHeight * myWhiteboardViewBox.RenderSize.Height);
-			textBoxGrid.ColumnDefinitions[0].Width = new GridLength(absWidth * myWhiteboardViewBox.RenderSize.Width);
+			textBoxGrid.RowDefinitions[0].Height = new GridLength(absSize.Height * myWhiteboardViewBox.RenderSize.Height);
+			textBoxGrid.ColumnDefinitions[0].Width = new GridLength(absSize.Width * myWhiteboardViewBox.RenderSize.Width);
 
 			tb.FontSize = FontSize * myWhiteboardViewBox.ActualWidth;
 		}
@@ -98,9 +102,12 @@ namespace PaintingClass.PaintTools
 				isUpdating = false;
 				return;
 			}
-			absHeight = textBoxGrid.ActualHeight / myWhiteboardViewBox.RenderSize.Height;
-			absWidth = textBoxGrid.ActualWidth / myWhiteboardViewBox.RenderSize.Width;
+			absSize = new Size(textBoxGrid.ActualWidth / myWhiteboardViewBox.RenderSize.Width, textBoxGrid.ActualHeight / myWhiteboardViewBox.RenderSize.Height);
 		}
+
+	
+
+
 
 		#endregion
 	}
@@ -115,6 +122,7 @@ namespace PaintingClass.PaintTools
 			label.Content = "Text";
 			return label;
 		}
+
 		#region Constants 
 		public const int defaultTextBoxSize = 100;
 		public const int defaultFontSize = 16;
@@ -214,13 +222,10 @@ namespace PaintingClass.PaintTools
 			var grid = GetResizableTextboxGrid("Scrie aici");
 			myWhiteboardCanvas.Children.Add(grid);
 			TextBox tb = grid.Children.OfType<TextBox>().First();
-			TextBoxResize tbMsg = new TextBoxResize()
+			TextBoxResize tbMsg = new TextBoxResize(position,new Size(defaultTextBoxSize / owner.myWhiteboardViewBox.ActualWidth, defaultTextBoxSize / owner.myWhiteboardViewBox.ActualHeight))
 			{
-				position = position,
 				owner = owner,
 				tb = tb,
-				absHeight = defaultTextBoxSize / owner.myWhiteboardViewBox.ActualHeight,
-				absWidth = defaultTextBoxSize / owner.myWhiteboardViewBox.ActualWidth,
 				FontSize = defaultFontSize / owner.myWhiteboardViewBox.ActualWidth,
 				textBoxGrid = grid,
 				myWhiteboardCanvas = owner.myWhiteboardCanvas,

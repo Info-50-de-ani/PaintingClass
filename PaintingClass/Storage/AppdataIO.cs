@@ -17,7 +17,7 @@ namespace PaintingClass.Storage
             Directory.CreateDirectory(folderPath);
         }
 
-        public static T Load<T>(string fileName, Type[] extraTypes=null) where T:class
+        public static T Load<T>(string fileName, Type[] extraTypes=null) where T:class,new()
         {
             string filePath = folderPath + @"\" +fileName;
             XmlSerializer serializer = new XmlSerializer(typeof(T),extraTypes);
@@ -25,10 +25,12 @@ namespace PaintingClass.Storage
             if (File.Exists(filePath) == true)
             {
                 using FileStream fs = File.OpenRead(filePath);
+                if (fs.Length == 0)
+                    return new T();
                 return (T)serializer.Deserialize(fs);
             }
             else
-                return null;
+                return new T();
         }
 
         public static void Save<T>(string fileName, T obj, Type[] extraTypes=null) 
