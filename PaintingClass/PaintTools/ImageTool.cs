@@ -36,9 +36,17 @@ namespace PaintingClass.PaintTools
             return label;
         }
 
-	
+		#region Fields 
+
 		ImageDrawing image;
         BitmapImage bmp;
+        
+        /// <summary>
+        /// Contine doua gridSplittere cu ajutorul carora userul poate da resize la imagine.
+        /// Important: Este instanta o singura data in constructor 
+        /// </summary>
+        Grid resizeGrid;
+        
         Point mouseOffset;
         Size size;
 
@@ -47,12 +55,76 @@ namespace PaintingClass.PaintTools
         /// cand acesta apasa pe langa poza se va face false insa daca apasa pe poza 
         /// acesta ramane true
         /// </summary>
-		bool isMoving;
+        bool isMoving;
+
+        #endregion
+
+        #region private Methods 
 
         /// <summary>
-        /// Deschide un open file dialog atunci cand userul apasa pe tabla cu toolul acesta selectat
+        /// Folosit pentru a da resize la imagine 
         /// </summary>
-        /// <param name="position"></param>
+        /// <param name="size">dimensiunea normalizata in pixeli fata de tabla </param>
+        /// <param name="img">image la care trebuie dat resize</param>
+        /// <returns></returns>
+        private Grid GetImageResizer()
+        {
+
+            Grid grid = new Grid();
+            grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Auto });
+            grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(9) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(0) });
+            grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+            grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(9) });
+            grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(0) });
+
+            GridSplitter gsVert = new GridSplitter() { Height = 9, HorizontalAlignment = HorizontalAlignment.Stretch,Background = Brushes.Gray};
+            GridSplitter gsHorz = new GridSplitter() { Width = 9, HorizontalAlignment = HorizontalAlignment.Stretch ,Background = Brushes.Gray};
+            grid.SizeChanged += ImageResizer_SizeChanged;
+
+            Canvas dummy = new Canvas() { MinWidth = 100, MinHeight = 100, };
+            Grid.SetRow(dummy, 0);
+            Grid.SetColumn(dummy, 0);
+
+            Grid.SetRow(gsVert, 1);
+            Grid.SetColumn(gsVert, 0);
+
+            Grid.SetRow(gsHorz, 0);
+            Grid.SetColumn(gsHorz, 1);
+
+            grid.Children.Add(gsVert);
+            grid.Children.Add(gsHorz);
+            grid.Children.Add(dummy);
+
+            return grid;
+        }
+
+		private void ImageResizer_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (image != null)
+            {
+                Point offset = TextTool.CalculateOffset(owner);
+                Canvas canvas = resizeGrid.Children.OfType<Canvas>().First();
+                canvas.Height = image.Rect.Height / 100 * owner.myWhiteboardViewBox.ActualHeight;
+                canvas.Width = image.Rect.Width / 100 * owner.myWhiteboardViewBox.ActualWidth;
+                var gridPos = whiteboard.DenormalizePosition(image.Rect.TopLeft);
+                Canvas.SetTop(resizeGrid,gridPos.Y * owner.myWhiteboardViewBox.ActualHeight + offset.Y);
+                Canvas.SetLeft(resizeGrid,gridPos.X*owner.myWhiteboardViewBox.ActualWidth + offset.X);
+
+                size = new Size(resizeGrid.ColumnDefinitions[0].Width.Value / owner.myWhiteboardViewBox.ActualWidth * 100, resizeGrid.RowDefinitions[0].Height.Value / owner.myWhiteboardViewBox.ActualHeight * 100);
+                image.Rect = new Rect(image.Rect.TopLeft,size );
+
+            }
+        }
+
+        #endregion
+
+		#region Event Handlers 
+
+		/// <summary>
+		/// Deschide un open file dialog atunci cand userul apasa pe tabla cu toolul acesta selectat
+		/// </summary>
+		/// <param name="position"></param>
 		public override void MouseDown(Point position)
 		{
             if (image != null) /// see <see cref="isMoving"/>
@@ -76,6 +148,7 @@ namespace PaintingClass.PaintTools
                     bmp = null;
                     mouseOffset = new Point(0, 0);
                     size = new Size(0, 0);
+                    resizeGrid.Visibility = Visibility.Hidden;
                     return;
 				}
 
@@ -100,10 +173,14 @@ namespace PaintingClass.PaintTools
                 // daca bitmapul a fost fct cu succes il afisam pe tabla 
                 if(bmp != null)
 			    {
+                    resizeGrid.Visibility = Visibility.Visible;
                     size = new Size(defaultImageSize / bmp.Width * bmp.Height / 9f * 16f, defaultImageSize) ;
                     var rect = new Rect(position, size);
                     image = new ImageDrawing(bmp,rect);
                     whiteboard.collection.Add(image);
+                    resizeGrid.ColumnDefinitions[0].Width = new GridLength(size.Width / 100 * owner.myWhiteboardViewBox.ActualWidth);
+                    resizeGrid.RowDefinitions[0].Height = new GridLength(size.Height/100*owner.myWhiteboardViewBox.ActualHeight);
+                    ImageResizer_SizeChanged(null,null);
 			    }
             }
         }
@@ -144,32 +221,88 @@ namespace PaintingClass.PaintTools
             isMoving = true;
 
             // introducem noua imagine in tabla
+            resizeGrid.Visibility = Visibility.Visible;
             size = new Size(defaultImageSize / bmp.Width * bmp.Height / 9f * 16f, defaultImageSize);
             var rect = new Rect(position, size);
             image = new ImageDrawing(bmp, rect);
             whiteboard.collection.Add(image);
+            resizeGrid.ColumnDefinitions[0].Width = new GridLength(size.Width / 100 * owner.myWhiteboardViewBox.ActualWidth);
+            resizeGrid.RowDefinitions[0].Height = new GridLength(size.Height / 100 * owner.myWhiteboardViewBox.ActualHeight);
+            ImageResizer_SizeChanged(null, null);
         }
 
+        /// <summary>
+        /// Are loc cand un tool este selectat
+        /// </summary>
+        /// <param name="tool"></param>
         public void SelectToolEventHandler(PaintTool tool)
 		{
             // dam unsubscribe la event atunci cand toolul este deselectat
             if(tool is ImageTool)
 			{
+                if(resizeGrid==null) 
+				{
+					// are loc numai odata 
+					owner.myWhiteboardGrid.MouseRightButtonDown += Whiteboard_RightClick;
+					owner.myWhiteboardGrid.SizeChanged += MyWhiteboardViewBox_SizeChanged;
+                    resizeGrid = GetImageResizer();
+                    owner.myWhiteboardCanvas.Children.Add(resizeGrid);
+                    resizeGrid.Visibility = Visibility.Hidden;
+                }
                 owner.whiteboard.MouseMove += Whiteboard_MouseMove;
             }
             else owner.whiteboard.MouseMove -= Whiteboard_MouseMove;
 
         }
 
-        /// <summary>
-        /// Folosit pentru a da display la cursorul pt size 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+		private void Whiteboard_RightClick(object sender, MouseButtonEventArgs e)
+		{
+            Point position = whiteboard.TransformPosition(e.GetPosition(whiteboard));
+            if (image != null)
+				if ((position.X > image.Rect.X && position.X < image.Rect.X + image.Rect.Width) && (position.Y > image.Rect.Y && position.Y < image.Rect.Y + image.Rect.Height))
+				{
+                    var cm = new ContextMenu();
+                    var mi = new MenuItem() { Header = "Delete" };
+                    mi.Click += (sender, e) =>
+                    {
+                        // delete the foto
+                        isMoving = false;
+                        whiteboard.collection.Remove(image);
+                        image = null;
+                        bmp = null;
+                        mouseOffset = new Point(0, 0);
+                        size = new Size(0, 0);
+                        resizeGrid.Visibility = Visibility.Hidden;
+                        Mouse.OverrideCursor = null;
+                    };
+                    cm.Items.Add(mi);
+                    cm.PlacementTarget = whiteboard;
+                    cm.IsOpen = true;
+				}
+            
+		}
+
+		/// <summary>
+		/// Se produce atunci cand windowul isi ia resize
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void MyWhiteboardViewBox_SizeChanged(object sender, SizeChangedEventArgs e)
+		{
+            // updatam de fiecre data cand windowul este resized 
+            resizeGrid.ColumnDefinitions[0].Width = new GridLength(size.Width / 100 * owner.myWhiteboardViewBox.ActualWidth);
+            resizeGrid.RowDefinitions[0].Height = new GridLength(size.Height / 100 * owner.myWhiteboardViewBox.ActualHeight);
+            ImageResizer_SizeChanged(null, null);
+        }
+
+		/// <summary>
+		/// Folosit pentru a da display la cursorul pt size 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void Whiteboard_MouseMove(object sender, MouseEventArgs e)
 		{
-            Point position = owner.whiteboard.TransformPosition(e.GetPosition(owner.whiteboard));
-            Window.GetWindow(myWhiteboardGrid).Title = $"x:{position.X} y:{position.Y}";
+            Point position = whiteboard.TransformPosition(e.GetPosition(whiteboard));
             
             if(image!=null)
             if ((position.X > image.Rect.X && position.X < image.Rect.X + image.Rect.Width) && (position.Y > image.Rect.Y && position.Y < image.Rect.Y + image.Rect.Height) )
@@ -178,24 +311,27 @@ namespace PaintingClass.PaintTools
             }
             else 
 			{
-                Mouse.OverrideCursor = Cursors.Arrow;
+                Mouse.OverrideCursor = null;
                 mouseOffset = new Point(0,0);
             }
         }
 
+        /// <summary>
+        /// Folosit pentru a modifica pozitia imagini cand userul da 
+        /// ii drag
+        /// </summary>
+        /// <param name="position"></param>
 		public override void MouseDrag(Point position)
         {
+            if(image != null)
             if ((position.X > image.Rect.X && position.X < image.Rect.X + image.Rect.Width) && (position.Y > image.Rect.Y && position.Y < image.Rect.Y + image.Rect.Height))
 			{
-                if(image != null)
-				{
-                    image.Rect = new Rect(new Point(position.X + mouseOffset.X, position.Y + mouseOffset.Y), size);
-                }
+                image.Rect = new Rect(new Point(position.X + mouseOffset.X, position.Y + mouseOffset.Y), size);
+                ImageResizer_SizeChanged(null, null);
             }          
         }
-        public override void MouseUp()
-        {
 
-        }
-    }
+		#endregion
+
+	}
 }

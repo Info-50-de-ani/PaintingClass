@@ -87,7 +87,6 @@ namespace PaintingClass.PaintTools
 			Canvas.SetTop(textBoxGrid, offset.Y + positionDenormalized.Y * myWhiteboardViewBox.RenderSize.Height);
 			Canvas.SetLeft(textBoxGrid, offset.X + positionDenormalized.X * myWhiteboardViewBox.RenderSize.Width);
 
-
 			isUpdating = true;
 			textBoxGrid.RowDefinitions[0].Height = new GridLength(absSize.Height * myWhiteboardViewBox.RenderSize.Height);
 			textBoxGrid.ColumnDefinitions[0].Width = new GridLength(absSize.Width * myWhiteboardViewBox.RenderSize.Width);
@@ -104,10 +103,6 @@ namespace PaintingClass.PaintTools
 			}
 			absSize = new Size(textBoxGrid.ActualWidth / myWhiteboardViewBox.RenderSize.Width, textBoxGrid.ActualHeight / myWhiteboardViewBox.RenderSize.Height);
 		}
-
-	
-
-
 
 		#endregion
 	}
@@ -232,7 +227,7 @@ namespace PaintingClass.PaintTools
 				myWhiteboardViewBox = owner.myWhiteboardViewBox
 			};
 
-			owner.myWhiteboardViewBox.SizeChanged += tbMsg.UpdateTextBoxSize;
+			owner.myWhiteboardGrid.SizeChanged += tbMsg.UpdateTextBoxSize;
 			grid.Children.OfType<TextBox>().First().SizeChanged += tbMsg.TextBoxMessage_SizeChanged;
 
 			position = MainWindow.instance.myWhiteboard.whiteboard.DenormalizePosition(position);
