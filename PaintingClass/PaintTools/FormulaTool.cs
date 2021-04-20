@@ -25,7 +25,44 @@ using System.Threading;
 
 namespace PaintingClass.PaintTools
 {
-	class FormulaTool : PaintTool
+	/// <summary>
+	/// Folosit pentru a da resize la <see cref="FormulaTool"/> pentru descriere mai amanuntita see <see cref="TextToolResize"/>
+	/// </summary>
+	public class FormulaToolResize
+	{
+		/// <summary>
+		/// Marimea normalizata in coordonatele tablei
+		/// </summary>
+		public Size absSize;
+
+		/// <summary>
+		/// Pozitia normalizata in coordonatele tablei
+		/// </summary>
+		public Point absPosition;
+
+		/// <summary>
+		/// Stackpanelul ce contine <see cref="FormulaControl"/>ul
+		/// </summary>
+		public StackPanel stackPanel;
+
+		public MyWhiteboard owner;
+
+		/// <summary>
+		/// Este produs cand windowul isi ia resize de catre user
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		public void UpdateTextBoxSize(object sender, SizeChangedEventArgs e)
+		{
+			Point offset = TextTool.CalculateOffset(owner);
+			var positionDenormalized = MainWindow.instance.myWhiteboard.whiteboard.DenormalizePosition(absPosition);
+			Canvas.SetTop(stackPanel, offset.Y + positionDenormalized.Y * owner.myWhiteboardViewBox.RenderSize.Height);
+			Canvas.SetLeft(stackPanel, offset.X + positionDenormalized.X * owner.myWhiteboardViewBox.RenderSize.Width);
+			stackPanel.RenderTransform = new ScaleTransform(owner.myWhiteboardViewBox.ActualWidth / SystemParameters.PrimaryScreenWidth * 1d / (MainWindow.instance.ViewBoxToWindowSizeHeightRatio * SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth * 16d / 9d), owner.myWhiteboardViewBox.ActualHeight / SystemParameters.PrimaryScreenHeight * 1d / MainWindow.instance.ViewBoxToWindowSizeHeightRatio);
+		}
+	}
+
+	public class FormulaTool : PaintTool
 	{
 		#region Constants
 
@@ -47,7 +84,6 @@ namespace PaintingClass.PaintTools
 		{
 			translator = new Translator();
 			converter = new AnalyticsTeXConverter();
-			// umplem FormulPanel
 		}
 
 		#endregion
@@ -121,6 +157,7 @@ namespace PaintingClass.PaintTools
 			grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
 			grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(9) });
 			grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(0) });
+
 			// cream un textbox 
 			TextBox tb = new TextBox()
 			{
@@ -131,8 +168,9 @@ namespace PaintingClass.PaintTools
 				FontSize = 16,
 				TextWrapping = TextWrapping.Wrap,
 				Foreground = Brushes.Gray,
-				AcceptsReturn = true,
+				AcceptsReturn = false,
 			};
+			Keyboard.Focus(tb);
 			// setam eventuri pentru textbox 
 			tb.GotKeyboardFocus += Tb_GotKeyboardFocus;
 			tb.LostKeyboardFocus += Tb_LostKeyboardFocus;
@@ -188,10 +226,17 @@ namespace PaintingClass.PaintTools
 			if (tb == null)
 				return;
 			char op = ((TextBlock)((Border)sender).Child).Text[0];
+			var indx= tb.CaretIndex;
 			if (op == '|')
-				tb.Text = tb.Text.Insert(tb.CaretIndex, "||");
+			{
+				tb.Text = tb.Text.Insert(indx, "||");
+				tb.CaretIndex = indx + 2;
+			}
 			else
+			{
 				tb.Text = tb.Text.Insert(tb.CaretIndex, op.ToString());
+				tb.CaretIndex = indx + 1;
+			}
 		}
 
 		/// <summary>
@@ -201,6 +246,7 @@ namespace PaintingClass.PaintTools
 		{
 			if (!(tool is FormulaTool))
 			{
+				Keyboard.ClearFocus();
 				if (owner.FormulaPanelParentGrid.Visibility == Visibility.Hidden)
 					return;
 				else
@@ -223,8 +269,10 @@ namespace PaintingClass.PaintTools
 					return;
 				}
 			}
+			else if (owner.FormulaPanel.Children.Count == 0)
+					FillFormulaPanel();
 
-				if (owner.FormulaPanelParentGrid.Visibility == Visibility.Visible)
+			if (owner.FormulaPanelParentGrid.Visibility == Visibility.Visible)
 					return;
 			{ 
 				owner.FormulaPanelParentGrid.Visibility = Visibility.Visible;
@@ -253,9 +301,9 @@ namespace PaintingClass.PaintTools
 		{
 			var grid = GetResizableTextboxGrid(defaultMessage);
 
-
 			StackPanel stackPanel = new StackPanel();
-			stackPanel.MouseEnter += StackPanel_MouseEnter;
+			stackPanel.Background = Brushes.Transparent;
+			stackPanel.MouseDown += StackPanel_MouseClick;
 
 			// cream un nou formula control si il adaugam in stackpanel
 			// formula control functioneaza asemenea unui textbox doar ca accepta doar LaTeX
@@ -265,29 +313,41 @@ namespace PaintingClass.PaintTools
 			stackPanel.Children.Add(grid);
 			stackPanel.Children.Add(formulaControl);
 
+			//stocam stackPanelul pentru resize 
+			FormulaToolResize formulaToolResize = new FormulaToolResize()
+			{
+				absPosition = position,
+				owner = owner,
+				absSize = new Size(stackPanel.ActualWidth/owner.myWhiteboardViewBox.ActualWidth*100, stackPanel.ActualHeight / owner.myWhiteboardViewBox.ActualHeight * 100),
+				stackPanel = stackPanel
+			};
+			owner.FormulaPanelParentGrid.SizeChanged += formulaToolResize.UpdateTextBoxSize;
+			owner.formulaToolResizeCollection.Add(formulaToolResize);
 			myWhiteboardCanvas.Children.Add(stackPanel);
 			position = MainWindow.instance.myWhiteboard.whiteboard.DenormalizePosition(position);
 			Canvas.SetTop(stackPanel, position.Y * myWhiteboardCanvas.ActualHeight);
 			Canvas.SetLeft(stackPanel, position.X * myWhiteboardCanvas.ActualWidth);
 		}
 
-
-		private void StackPanel_MouseEnter(object sender, MouseEventArgs e)
+		private void StackPanel_MouseClick(object sender, MouseEventArgs e)
 		{
-			((StackPanel)sender).Children[0].Visibility = Visibility.Visible;
+			var stackpanel = (StackPanel)sender;
+			stackpanel.Children[0].Visibility = Visibility.Visible;
+			Keyboard.Focus(((Grid)stackpanel.Children[0]).Children.OfType<TextBox>().First());
 		}
 
 		private void Tb_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			string crudeText = ((TextBox)sender).Text;
 			FormulaControl formulaControl = ((StackPanel)((Grid)((TextBox)sender).Parent).Parent).Children.OfType<FormulaControl>().First();
+			crudeText = crudeText.Replace("=", "+equal+").Replace(" ", "");
 			try
 			{
-				if (translator.CheckSyntax(crudeText) && crudeText.Length > 0)
+				if (crudeText.Length > 0)
 				{
 					// convertim in LaTeX
 					string texf = converter.Convert(crudeText);
-					formulaControl.Formula = texf;
+					formulaControl.Formula = texf.Replace("+{equal}+", "=");
 				}
 			}
 			catch (Exception ex)
@@ -301,12 +361,15 @@ namespace PaintingClass.PaintTools
 		{
 			if (e.Key == Key.Return)
 			{
-				((TextBox)sender).Visibility = Visibility.Collapsed;
+				Keyboard.ClearFocus();
 			}
 		}
 
 		private void Tb_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
 		{
+			if (Mouse.DirectlyOver is Border)
+				if(((Border)Mouse.DirectlyOver).TemplatedParent.GetType() == typeof(GridSplitter))
+				return;
 			TextBox tb = (TextBox)sender;
 			if (tb.Text == "")
 			{
@@ -333,6 +396,7 @@ namespace PaintingClass.PaintTools
 
 		private void Tb_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
 		{
+			owner.selectedTool = this;
 			TextBox tb = (TextBox)sender;
 			if (tb.Text == defaultMessage)
 			{

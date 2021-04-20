@@ -119,7 +119,33 @@ namespace PaintingClass.PaintTools
 
         #endregion
 
-		#region Event Handlers 
+        #region Event Handlers 
+
+        /// <summary>
+        /// Are loc cand un tool este selectat
+        /// </summary>
+        /// <param name="tool"></param>
+        public void SelectToolEventHandler(PaintTool tool)
+		{
+            // dam unsubscribe la event atunci cand toolul este deselectat
+            if(tool is ImageTool)
+			{
+                if(resizeGrid==null) 
+				{
+					// are loc numai odata 
+					owner.myWhiteboardGrid.MouseRightButtonDown += Whiteboard_RightClick;
+					owner.myWhiteboardGrid.SizeChanged += MyWhiteboardViewBox_SizeChanged;
+                    resizeGrid = GetImageResizer();
+                    owner.myWhiteboardCanvas.Children.Add(resizeGrid);
+                    resizeGrid.Visibility = Visibility.Hidden;
+                }
+                owner.whiteboard.MouseMove += Whiteboard_MouseMove;
+            }
+            else owner.whiteboard.MouseMove -= Whiteboard_MouseMove;
+
+        }
+
+		#region Insert Image
 
 		/// <summary>
 		/// Deschide un open file dialog atunci cand userul apasa pe tabla cu toolul acesta selectat
@@ -231,35 +257,13 @@ namespace PaintingClass.PaintTools
             ImageResizer_SizeChanged(null, null);
         }
 
-        /// <summary>
-        /// Are loc cand un tool este selectat
-        /// </summary>
-        /// <param name="tool"></param>
-        public void SelectToolEventHandler(PaintTool tool)
-		{
-            // dam unsubscribe la event atunci cand toolul este deselectat
-            if(tool is ImageTool)
-			{
-                if(resizeGrid==null) 
-				{
-					// are loc numai odata 
-					owner.myWhiteboardGrid.MouseRightButtonDown += Whiteboard_RightClick;
-					owner.myWhiteboardGrid.SizeChanged += MyWhiteboardViewBox_SizeChanged;
-                    resizeGrid = GetImageResizer();
-                    owner.myWhiteboardCanvas.Children.Add(resizeGrid);
-                    resizeGrid.Visibility = Visibility.Hidden;
-                }
-                owner.whiteboard.MouseMove += Whiteboard_MouseMove;
-            }
-            else owner.whiteboard.MouseMove -= Whiteboard_MouseMove;
+		#endregion
 
-        }
-
-        /// <summary>
-        /// Context menu pentru imagine 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+		/// <summary>
+		/// Context menu pentru imagine 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void Whiteboard_RightClick(object sender, MouseButtonEventArgs e)
 		{
             Point position = whiteboard.TransformPosition(e.GetPosition(whiteboard));
@@ -286,6 +290,8 @@ namespace PaintingClass.PaintTools
 				}
             
 		}
+
+		#region Movement
 
 		/// <summary>
 		/// Se produce atunci cand windowul isi ia resize
@@ -335,6 +341,8 @@ namespace PaintingClass.PaintTools
                 ImageResizer_SizeChanged(null, null);
             }          
         }
+
+		#endregion
 
 		#endregion
 

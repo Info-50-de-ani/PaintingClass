@@ -50,7 +50,8 @@ namespace PaintingClass.Tabs
         /// Contine toate TextBoxurile facute de <see cref="TextTool"/> pentru a le 
         /// updata dimensiunea dinamic cu usurinta
         /// </summary>
-        public List<TextBoxResize> textBoxMessages = new List<TextBoxResize>();
+        public List<TextToolResize> textToolResizeCollection = new List<TextToolResize>();
+        public List<FormulaToolResize> formulaToolResizeCollection = new List<FormulaToolResize>();
 
         //daca suntem in procesul de a scrie pe tabla
         bool isDrawing;

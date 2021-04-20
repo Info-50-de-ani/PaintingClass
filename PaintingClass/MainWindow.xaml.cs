@@ -42,8 +42,23 @@ namespace PaintingClass
     /// </summary>
     public partial class MainWindow : Window
     {
-        // o sa avem mereu o singura instanta a MainWindow pe care o accesam folosind aceasta variabila statica
-        public static MainWindow instance;
+
+        #region Constants 
+
+        /// <summary>
+        /// Are valoare de ViewBox.ActualHeight/WindowHeight
+        /// </summary>
+        public double ViewBoxToWindowSizeHeightRatio { get; private set; }
+        private void ViewBoxToWindowSizeHeightRationSetter(object sender, SizeChangedEventArgs e)
+        {
+            ViewBoxToWindowSizeHeightRatio = myWhiteboard.myWhiteboardViewBox.ActualHeight / SystemParameters.PrimaryScreenHeight;
+            myWhiteboard.myWhiteboardViewBox.SizeChanged -= ViewBoxToWindowSizeHeightRationSetter;
+        }
+
+		#endregion 
+
+		// o sa avem mereu o singura instanta a MainWindow pe care o accesam folosind aceasta variabila statica
+		public static MainWindow instance;
         public static UserData userData;
         public RoomManager roomManager;
 
@@ -75,7 +90,11 @@ namespace PaintingClass
             {
                 Init();
             }
+
+            /// seteaza constanta <see cref="ViewBoxToWindowSizeHeightRation"/>
+            myWhiteboard.myWhiteboardViewBox.SizeChanged += ViewBoxToWindowSizeHeightRationSetter;
         }
+
 
         /// <summary>
         /// Pt testare, ruleaza cand userData este null

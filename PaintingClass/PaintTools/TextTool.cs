@@ -22,29 +22,24 @@ using System.Windows.Media.Animation;
 
 namespace PaintingClass.PaintTools
 {
-
-	public class TextBoxResize 
+	/// <summary>
+	/// Fiecare textbox de pe <see cref="MyWhiteboard"/> va avea o instanta a acestei clase 
+	/// ea este folosita pentru a da resize acestuia in cazul in care userul da resize la <see cref="MainWindow"/>
+	/// </summary>
+	public class TextToolResize 
 	{
 
-		public TextBoxResize(Point position,Size absSize)
+		public TextToolResize(Point position,Size absSize)
 		{
 			this.absSize = absSize;
-			this.position = position;
+			this.absPosition = position;
 		}
-
-		#region private Properties
-
-		bool isUpdating;
-		
-		#endregion
 
 		#region Public Properties
 		/// <summary>
 		/// pozitia textboxului functie de coordonatele tablei (0-100,0-100)
 		/// </summary>
-		public Point position { get; set; }
-
-		public double FontSize { get; set; }
+		public Point absPosition { get; set; }
 
 		/// <summary>
 		/// relativ cu marimea ecranului in pixeli 
@@ -62,16 +57,6 @@ namespace PaintingClass.PaintTools
 		public TextBox tb { get; set; }
 
 		/// <summary>
-		/// Parent Canvas
-		/// </summary>
-		public Canvas myWhiteboardCanvas { get; set; }
-
-		/// <summary>
-		/// ViewBoxul in care sta myWhiteboard
-		/// </summary>
-		public Viewbox myWhiteboardViewBox { get; set; }
-
-		/// <summary>
 		/// Contine instanta clasei MyWhiteboard
 		/// </summary>
 		public MyWhiteboard owner { get; set; }
@@ -80,30 +65,20 @@ namespace PaintingClass.PaintTools
 
 		#region EventsHandlers
 
+		/// <summary>
+		/// Este produs atunci cand windowul este resized si are rolul de a updata marimea si pozitie textboxului
+		/// relativ cu 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		public void UpdateTextBoxSize(object sender, SizeChangedEventArgs e)
 		{
 			Point offset = TextTool.CalculateOffset(owner);
-			var positionDenormalized = MainWindow.instance.myWhiteboard.whiteboard.DenormalizePosition(position);
-			Canvas.SetTop(textBoxGrid, offset.Y + positionDenormalized.Y * myWhiteboardViewBox.RenderSize.Height);
-			Canvas.SetLeft(textBoxGrid, offset.X + positionDenormalized.X * myWhiteboardViewBox.RenderSize.Width);
-
-			isUpdating = true;
-			textBoxGrid.RowDefinitions[0].Height = new GridLength(absSize.Height * myWhiteboardViewBox.RenderSize.Height);
-			textBoxGrid.ColumnDefinitions[0].Width = new GridLength(absSize.Width * myWhiteboardViewBox.RenderSize.Width);
-
-			tb.FontSize = FontSize * myWhiteboardViewBox.ActualWidth;
+			var positionDenormalized = MainWindow.instance.myWhiteboard.whiteboard.DenormalizePosition(absPosition);
+			Canvas.SetTop(textBoxGrid, offset.Y + positionDenormalized.Y * owner.myWhiteboardViewBox.RenderSize.Height);
+			Canvas.SetLeft(textBoxGrid, offset.X + positionDenormalized.X * owner.myWhiteboardViewBox.RenderSize.Width);
+			textBoxGrid.RenderTransform = new ScaleTransform(owner.myWhiteboardViewBox.ActualWidth / SystemParameters.PrimaryScreenWidth * 1d / (MainWindow.instance.ViewBoxToWindowSizeHeightRatio * SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth * 16d / 9d), owner.myWhiteboardViewBox.ActualHeight / SystemParameters.PrimaryScreenHeight * 1d / MainWindow.instance.ViewBoxToWindowSizeHeightRatio);
 		}
-
-		public void TextBoxMessage_SizeChanged(object sender, SizeChangedEventArgs e)
-		{
-			if (isUpdating)
-			{
-				isUpdating = false;
-				return;
-			}
-			absSize = new Size(textBoxGrid.ActualWidth / myWhiteboardViewBox.RenderSize.Width, textBoxGrid.ActualHeight / myWhiteboardViewBox.RenderSize.Height);
-		}
-
 		#endregion
 	}
 
@@ -217,22 +192,17 @@ namespace PaintingClass.PaintTools
 			var grid = GetResizableTextboxGrid("Scrie aici");
 			myWhiteboardCanvas.Children.Add(grid);
 			TextBox tb = grid.Children.OfType<TextBox>().First();
-			TextBoxResize tbMsg = new TextBoxResize(position,new Size(defaultTextBoxSize / owner.myWhiteboardViewBox.ActualWidth, defaultTextBoxSize / owner.myWhiteboardViewBox.ActualHeight))
+			TextToolResize tbMsg = new TextToolResize(position,new Size(defaultTextBoxSize / owner.myWhiteboardViewBox.ActualWidth, defaultTextBoxSize / owner.myWhiteboardViewBox.ActualHeight))
 			{
 				owner = owner,
 				tb = tb,
-				FontSize = defaultFontSize / owner.myWhiteboardViewBox.ActualWidth,
 				textBoxGrid = grid,
-				myWhiteboardCanvas = owner.myWhiteboardCanvas,
-				myWhiteboardViewBox = owner.myWhiteboardViewBox
 			};
 
 			owner.myWhiteboardGrid.SizeChanged += tbMsg.UpdateTextBoxSize;
-			grid.Children.OfType<TextBox>().First().SizeChanged += tbMsg.TextBoxMessage_SizeChanged;
-
 			position = MainWindow.instance.myWhiteboard.whiteboard.DenormalizePosition(position);
 
-			owner.textBoxMessages.Add(tbMsg);
+			owner.textToolResizeCollection.Add(tbMsg);
 
 			Point offset = CalculateOffset(owner);
 
@@ -264,11 +234,6 @@ namespace PaintingClass.PaintTools
 				tb.Text = "";
 			}
 		} 
-
-		public override void MouseDrag(Point position)
-		{
-
-		}
 
 		public override void MouseUp()
 		{
