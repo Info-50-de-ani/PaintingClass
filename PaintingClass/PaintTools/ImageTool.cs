@@ -174,7 +174,7 @@ namespace PaintingClass.PaintTools
                 if(bmp != null)
 			    {
                     resizeGrid.Visibility = Visibility.Visible;
-                    size = new Size(defaultImageSize / bmp.Width * bmp.Height / 9f * 16f, defaultImageSize) ;
+                    size = new Size(defaultImageSize / bmp.Height * bmp.Width /16*9f, defaultImageSize) ;
                     var rect = new Rect(position, size);
                     image = new ImageDrawing(bmp,rect);
                     whiteboard.collection.Add(image);
@@ -222,12 +222,12 @@ namespace PaintingClass.PaintTools
 
             // introducem noua imagine in tabla
             resizeGrid.Visibility = Visibility.Visible;
-            size = new Size(defaultImageSize / bmp.Width * bmp.Height / 9f * 16f, defaultImageSize);
+            size = new Size(defaultImageSize / bmp.Height * bmp.Width / 16 * 9f, defaultImageSize);
             var rect = new Rect(position, size);
             image = new ImageDrawing(bmp, rect);
             whiteboard.collection.Add(image);
-            resizeGrid.ColumnDefinitions[0].Width = new GridLength(size.Width / 100 * owner.myWhiteboardViewBox.ActualWidth);
-            resizeGrid.RowDefinitions[0].Height = new GridLength(size.Height / 100 * owner.myWhiteboardViewBox.ActualHeight);
+            resizeGrid.ColumnDefinitions[0].Width = new GridLength(bmp.Width);
+            resizeGrid.RowDefinitions[0].Height = new GridLength(bmp.Height);
             ImageResizer_SizeChanged(null, null);
         }
 
@@ -255,6 +255,11 @@ namespace PaintingClass.PaintTools
 
         }
 
+        /// <summary>
+        /// Context menu pentru imagine 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 		private void Whiteboard_RightClick(object sender, MouseButtonEventArgs e)
 		{
             Point position = whiteboard.TransformPosition(e.GetPosition(whiteboard));
