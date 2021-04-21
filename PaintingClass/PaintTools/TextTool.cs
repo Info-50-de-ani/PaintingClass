@@ -77,7 +77,7 @@ namespace PaintingClass.PaintTools
 			var positionDenormalized = MainWindow.instance.myWhiteboard.whiteboard.DenormalizePosition(absPosition);
 			Canvas.SetTop(textBoxGrid, offset.Y + positionDenormalized.Y * owner.myWhiteboardViewBox.RenderSize.Height);
 			Canvas.SetLeft(textBoxGrid, offset.X + positionDenormalized.X * owner.myWhiteboardViewBox.RenderSize.Width);
-			textBoxGrid.RenderTransform = new ScaleTransform(owner.myWhiteboardViewBox.ActualWidth / SystemParameters.PrimaryScreenWidth * 1d / (MainWindow.instance.ViewBoxToWindowSizeHeightRatio * SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth * 16d / 9d), owner.myWhiteboardViewBox.ActualHeight / SystemParameters.PrimaryScreenHeight * 1d / MainWindow.instance.ViewBoxToWindowSizeHeightRatio);
+			textBoxGrid.RenderTransform = new ScaleTransform(owner.myWhiteboardViewBox.ActualWidth / SystemParameters.PrimaryScreenWidth * 1d / (owner.ViewBoxToWindowSizeHeightRatio * SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth * 16d / 9d), owner.myWhiteboardViewBox.ActualHeight / SystemParameters.PrimaryScreenHeight * 1d / owner.ViewBoxToWindowSizeHeightRatio);
 		}
 		#endregion
 	}

@@ -47,6 +47,11 @@ namespace PaintingClass.Tabs
         List<PaintTool> tools = new List<PaintTool>();
 
         /// <summary>
+        /// Are valoare de ViewBox.ActualHeight/WindowHeight
+        /// </summary>
+        public double ViewBoxToWindowSizeHeightRatio { get; private set; }
+
+        /// <summary>
         /// Contine toate TextBoxurile facute de <see cref="TextTool"/> pentru a le 
         /// updata dimensiunea dinamic cu usurinta
         /// </summary>
@@ -60,6 +65,16 @@ namespace PaintingClass.Tabs
         public MyWhiteboard()
         {
             InitializeComponent();
+
+            #region Constants
+            void ViewBoxToWindowSizeHeightRationSetter(object sender, SizeChangedEventArgs e)
+            {
+                ViewBoxToWindowSizeHeightRatio = myWhiteboardViewBox.ActualHeight / SystemParameters.PrimaryScreenHeight;
+                myWhiteboardViewBox.SizeChanged -= ViewBoxToWindowSizeHeightRationSetter;
+            }
+            /// seteaza constanta <see cref="ViewBoxToWindowSizeHeightRation"/>
+            myWhiteboardViewBox.SizeChanged += ViewBoxToWindowSizeHeightRationSetter;
+            #endregion
 
             //instantam uneltele
             foreach (Type type in paintToolTypes)
