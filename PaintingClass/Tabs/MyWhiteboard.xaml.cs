@@ -42,6 +42,7 @@ namespace PaintingClass.Tabs
         }//click stanga o sa foloseasca unealta selectata
 
         public SolidColorBrush globalBrush = Brushes.Black;
+        public double thickness = 0.3;
 
         //lista uneltelor incarcate
         List<PaintTool> tools = new List<PaintTool>();
@@ -168,12 +169,17 @@ namespace PaintingClass.Tabs
         /// <param name="e"></param>
         private void ColorMenu_Button_Click(object sender, RoutedEventArgs e)
         {
+            if (ThicknessPanel.RenderTransform.Value.M11 == 1)
+            {
+                GrosimeMenu_Button_Click(null, null);
+            }
+
             DoubleAnimation panelAnimation = new DoubleAnimation()
             {
                 Duration = new Duration(new TimeSpan(0, 0, 0, 0, 300)),
-                DecelerationRatio=0.9f
+                DecelerationRatio = 0.9f
             };
-            
+
             // matricea normala(care face obiectul sa arate normal) de scaling arata asa 
             // 1 0
             // 0 1 
@@ -185,14 +191,14 @@ namespace PaintingClass.Tabs
             // scaleX reprezinta nr din coloana 1 linia 1
 
             //Daca este collapsed panelul... 
-            if(ColorPanel.RenderTransform.Value.M11 == 0)
-		    {
+            if (ColorPanel.RenderTransform.Value.M11 == 0)
+            {
                 // animam la matricea normala
                 panelAnimation.From = 0;
                 panelAnimation.To = 1;
             }
             else
-			{
+            {
                 // amnimam la matricea care ascunde meniul
                 panelAnimation.From = 1;
                 panelAnimation.To = 0;
@@ -206,9 +212,48 @@ namespace PaintingClass.Tabs
 
         }
 
-        private void Grosime_Button_Click(object sender, RoutedEventArgs e)
+        private void GrosimeMenu_Button_Click(object sender, RoutedEventArgs e)
         {
+            if (ColorPanel.RenderTransform.Value.M11 == 1)
+            {
+                ColorMenu_Button_Click(null, null);
+            }
 
+            DoubleAnimation panelAnimation = new DoubleAnimation()
+            {
+                Duration = new Duration(new TimeSpan(0, 0, 0, 0, 300)),
+                DecelerationRatio = 0.9f
+            };
+
+            // matricea normala(care face obiectul sa arate normal) de scaling arata asa 
+            // 1 0
+            // 0 1 
+            // Matricea cand este ascuns meniul arata asa 
+            // 0 0 
+            // 0 1 
+            // coloana 1 reprezinta i(final) in functie de i(linia 1) si j(linia 2)
+            // coloana 2 reprezinta j(final) in functie de i(linia 1) si j(linia 2)
+            // scaleX reprezinta nr din coloana 1 linia 1
+
+            //Daca este collapsed panelul... 
+            if (ThicknessPanel.RenderTransform.Value.M11 == 0)
+            {
+                // animam la matricea normala
+                panelAnimation.From = 0;
+                panelAnimation.To = 1;
+            }
+            else
+            {
+                // amnimam la matricea care ascunde meniul
+                panelAnimation.From = 1;
+                panelAnimation.To = 0;
+            }
+            Storyboard.SetTargetProperty(panelAnimation, new PropertyPath("(Grid.RenderTransform).(ScaleTransform.ScaleX)"));
+            Storyboard.SetTarget(panelAnimation, ThicknessPanel);
+
+            Storyboard storyboard = new Storyboard();
+            storyboard.Children.Add(panelAnimation);
+            storyboard.Begin(this);
         }
 
         private void Marime_Font_Button_Click(object sender, RoutedEventArgs e)
@@ -235,12 +280,35 @@ namespace PaintingClass.Tabs
                     break;
             }
 
-            ColorMenu_Button_Click(null,new RoutedEventArgs());
+            ColorMenu_Button_Click(null, new RoutedEventArgs());
         }
 
-		#endregion
+        private void Grosime_Buton_Click(object sender, RoutedEventArgs e)
+        {
+            var buton = (Button)sender;
 
-		private void whiteboard_Image_Drop(object sender, DragEventArgs e)
+            switch ((string)buton.Tag)
+            {
+                case "Subtire":
+                    thickness = 0.1;
+                    break;
+                case "Normal":
+                    thickness = 0.3;
+                    break;
+                case "Gros":
+                    thickness = 0.5;
+                    break;
+                case "Foarte gros":
+                    thickness = 0.8;
+                    break;
+            }
+
+            GrosimeMenu_Button_Click(null, new RoutedEventArgs());
+        }
+
+        #endregion
+
+        private void whiteboard_Image_Drop(object sender, DragEventArgs e)
 		{
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
             if (files.Count() > 1)

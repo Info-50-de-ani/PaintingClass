@@ -39,7 +39,7 @@ namespace PaintingClass.PaintTools
 
 			drawing = new GeometryDrawing();
 			line = new LineGeometry(position, position);
-			drawing.Pen = new Pen(owner.globalBrush, 0.2);
+			drawing.Pen = new Pen(owner.globalBrush, owner.thickness);
 			drawing.Geometry = line;
 			whiteboard.collection.Add(drawing);
 		}
