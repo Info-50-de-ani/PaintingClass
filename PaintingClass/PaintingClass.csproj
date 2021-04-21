@@ -26,6 +26,14 @@
     <None Remove="Resources\Login\Images\Clock.png" />
     <None Remove="Resources\Login\Images\CloseIcon.png" />
     <None Remove="Resources\Login\Images\Shadow.png" />
+    <None Remove="Resources\Tools\circle.png" />
+    <None Remove="Resources\Tools\erase.png" />
+    <None Remove="Resources\Tools\formula.png" />
+    <None Remove="Resources\Tools\image.png" />
+    <None Remove="Resources\Tools\line.png" />
+    <None Remove="Resources\Tools\pen.png" />
+    <None Remove="Resources\Tools\square.png" />
+    <None Remove="Resources\Tools\text.png" />
     <None Remove="Tabs\Images\DeleteIcon.png" />
   </ItemGroup>
 
@@ -88,6 +96,14 @@
     <Resource Include="Resources\Login\Images\CloseIcon.png" />
     <Resource Include="Resources\Login\Images\Shadow.png" />
     <Resource Include="Resources\Login\Images\Whiteboard.png" />
+    <Resource Include="Resources\Tools\circle.png" />
+    <Resource Include="Resources\Tools\erase.png" />
+    <Resource Include="Resources\Tools\formula.png" />
+    <Resource Include="Resources\Tools\image.png" />
+    <Resource Include="Resources\Tools\line.png" />
+    <Resource Include="Resources\Tools\pen.png" />
+    <Resource Include="Resources\Tools\square.png" />
+    <Resource Include="Resources\Tools\text.png" />
     <Resource Include="Tabs\Images\DeleteIcon.png" />
   </ItemGroup>
 

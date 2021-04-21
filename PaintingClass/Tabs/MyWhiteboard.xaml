@@ -32,7 +32,6 @@
                 <StackPanel
                     x:Name="toolbar"
                     Grid.Row="0"
-                    HorizontalAlignment="Center"
                     Orientation="Vertical" />
                 <!--  Grid cu setari pt tooluri  -->
                 <Grid Grid.Row="1">
