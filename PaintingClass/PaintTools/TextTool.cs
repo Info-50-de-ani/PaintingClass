@@ -77,7 +77,7 @@ namespace PaintingClass.PaintTools
 			var positionDenormalized = MainWindow.instance.myWhiteboard.whiteboard.DenormalizePosition(absPosition);
 			Canvas.SetTop(textBoxGrid, offset.Y + positionDenormalized.Y * owner.myWhiteboardViewBox.RenderSize.Height);
 			Canvas.SetLeft(textBoxGrid, offset.X + positionDenormalized.X * owner.myWhiteboardViewBox.RenderSize.Width);
-			textBoxGrid.RenderTransform = new ScaleTransform(owner.myWhiteboardViewBox.ActualWidth / SystemParameters.PrimaryScreenWidth * 1d / (MainWindow.instance.ViewBoxToWindowSizeHeightRatio * SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth * 16d / 9d), owner.myWhiteboardViewBox.ActualHeight / SystemParameters.PrimaryScreenHeight * 1d / MainWindow.instance.ViewBoxToWindowSizeHeightRatio);
+			textBoxGrid.RenderTransform = new ScaleTransform(owner.myWhiteboardViewBox.ActualWidth / SystemParameters.PrimaryScreenWidth * 1d / (owner.ViewBoxToWindowSizeHeightRatio * SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth * 16d / 9d), owner.myWhiteboardViewBox.ActualHeight / SystemParameters.PrimaryScreenHeight * 1d / owner.ViewBoxToWindowSizeHeightRatio);
 		}
 		#endregion
 	}
@@ -88,9 +88,11 @@ namespace PaintingClass.PaintTools
 
 		public override Control GetControl()
 		{
-			Label label = new Label();
-			label.Content = "Text";
-			return label;
+			var cc = new ContentControl() { Height = 40 };
+			Image image = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Tools/text.png")) };
+			RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Fant);
+			cc.Content = image;
+			return cc;
 		}
 
 		#region Constants 

@@ -25,9 +25,11 @@ namespace PaintingClass.PaintTools
 
 		public override Control GetControl()
 		{
-			Label label = new Label();
-			label.Content = "Line";
-			return label;
+			var cc = new ContentControl() { Height = 40 };
+			Image image = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Tools/line.png")) };
+			RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Fant);
+			cc.Content = image;
+			return cc;
 		}
 
 
@@ -39,7 +41,7 @@ namespace PaintingClass.PaintTools
 
 			drawing = new GeometryDrawing();
 			line = new LineGeometry(position, position);
-			drawing.Pen = new Pen(owner.globalBrush, 0.2);
+			drawing.Pen = new Pen(owner.globalBrush, owner.thickness);
 			drawing.Geometry = line;
 			whiteboard.collection.Add(drawing);
 		}
