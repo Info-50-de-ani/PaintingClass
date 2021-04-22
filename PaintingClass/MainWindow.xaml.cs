@@ -88,9 +88,6 @@ namespace PaintingClass
             AddTab(myWhiteboard, "Tabla mea");
             AddTab(new TestTab(), "test tab");
             AddTab(new TestUI(), "test ui");
-
-            /// seteaza constanta <see cref="ViewBoxToWindowSizeHeightRation"/>
-            myWhiteboard.myWhiteboardViewBox.SizeChanged += ViewBoxToWindowSizeHeightRationSetter;
         }
 
         /// <summary>
@@ -130,9 +127,6 @@ namespace PaintingClass
             }
             myWhiteboard = new();
             AddTab(myWhiteboard, "Tabla mea");
-
-            /// seteaza constanta <see cref="ViewBoxToWindowSizeHeightRation"/>
-            myWhiteboard.myWhiteboardViewBox.SizeChanged += ViewBoxToWindowSizeHeightRationSetter;
 
         }
 
