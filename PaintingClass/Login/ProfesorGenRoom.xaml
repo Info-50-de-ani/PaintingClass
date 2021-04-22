@@ -27,11 +27,6 @@
                     Width="100"
                     Height="30"
                     Click="GenRoom_Button_Click"/>
-            <TextBlock HorizontalAlignment="Center"
-                       x:Name="RoomCode"
-                        Text="Cod: -- --- --- "
-                       Foreground="Black"
-                       />
         </StackPanel>
     </Grid>
 </Page>

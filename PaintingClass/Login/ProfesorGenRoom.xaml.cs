@@ -28,6 +28,7 @@ namespace PaintingClass.Login
         {
             InitializeComponent();
             this.userData = userData;
+            currentFrame = frame;
         }
 
         private void GenRoom_Button_Click(object sender, RoutedEventArgs e)

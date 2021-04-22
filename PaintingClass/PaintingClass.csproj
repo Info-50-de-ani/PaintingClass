@@ -25,6 +25,8 @@
     <None Remove="Resources\Login\Images\Clock.png" />
     <None Remove="Resources\Login\Images\CloseIcon.png" />
     <None Remove="Resources\Login\Images\Shadow.png" />
+    <None Remove="Resources\Whiteboard\Images\CloseButton.png" />
+    <None Remove="Resources\Whiteboard\Images\ShareButton.png" />
     <None Remove="Tabs\Images\DeleteIcon.png" />
   </ItemGroup>
 
@@ -87,6 +89,8 @@
     <Resource Include="Resources\Login\Images\CloseIcon.png" />
     <Resource Include="Resources\Login\Images\Shadow.png" />
     <Resource Include="Resources\Login\Images\Whiteboard.png" />
+    <Resource Include="Resources\Whiteboard\Images\CloseButton.png" />
+    <Resource Include="Resources\Whiteboard\Images\ShareButton.png" />
     <Resource Include="Tabs\Images\DeleteIcon.png" />
   </ItemGroup>
 

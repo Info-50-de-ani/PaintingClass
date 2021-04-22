@@ -29,16 +29,33 @@ namespace PaintingClass.Login
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            int parsedID;
+            if (!int.TryParse(roomId.Text, out parsedID))
+			{
+                ErrorBox.Visibility = Visibility.Visible;
+                return;
+			}
+
             UserData ud = new UserData
             {
                 name = name.Text,
-                roomId = int.Parse(roomId.Text),
+                roomId = parsedID,
                 clientID = PaintingClass.Storage.Settings.instance.clientID,
-                profToken=0
+                profToken = 0
             };
 
-            (new MainWindow(ud)).Show();
-            Window.GetWindow(CurrentFrame).Close();
+            var mw = new MainWindow(ud, (result, mw) =>
+            {
+                if (result)
+                {
+                    mw.Show();
+                    Window.GetWindow(CurrentFrame).Close();
+                }
+                else
+                {
+                    ErrorBox.Visibility = Visibility.Visible;
+                }
+            });
         }
     }
 }

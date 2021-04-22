@@ -80,6 +80,7 @@ namespace PaintingClass.Networking
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
         #endregion properties
+
         public NetworkUser()
         {
             App.Current.Dispatcher.Invoke(() => _collection = new());
