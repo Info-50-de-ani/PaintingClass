@@ -44,7 +44,7 @@ namespace PaintingClass.Login
                 profToken = 0
             };
 
-            var mw = new MainWindow(ud, (result, mw) =>
+            new MainWindow(ud, (result, mw) =>
             {
                 if (result)
                 {

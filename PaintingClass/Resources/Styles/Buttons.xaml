@@ -1,11 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Resources/Styles/Colors.xaml"/>
+        <ResourceDictionary Source="/Resources/Styles/Colors.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <!--  Sliding button style  -->
-    <Style
-        x:Key="SlidingAnimatedButtonStyle"
-        TargetType="{x:Type Button}">
+    <Style x:Key="SlidingAnimatedButtonStyle" TargetType="{x:Type Button}">
 
         <Style.Resources>
             <SolidColorBrush x:Key="Button.Static.Background" Color="White" />
@@ -121,42 +119,131 @@
         </Setter>
     </Style>
 
-    <!--Style pentru buton cu background transparent si foreground animat -->
+    <!--  Style pentru buton cu background transparent si foreground animat  -->
     <Style x:Key="AnimatedButtonStyle" TargetType="{x:Type Button}">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Effect">
             <Setter.Value>
-                <DropShadowEffect ShadowDepth="0" BlurRadius="10"/>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="0" />
             </Setter.Value>
         </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
-                        <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True"/>
+                    <Border
+                        x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="true">
+                        <ContentPresenter
+                            x:Name="contentPresenter"
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            Focusable="False"
+                            RecognizesAccessKey="True" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation Duration="0:0:0.3" From="0" To="4" Storyboard.TargetProperty="(Button.Effect).(DropShadowEffect.ShadowDepth)"/>
-                                        <ColorAnimation Duration="0:0:0.3" From="Black" To="{StaticResource MainWindowBackgroundColor}" Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"/>
+                                        <DoubleAnimation
+                                            Storyboard.TargetProperty="(Button.Effect).(DropShadowEffect.ShadowDepth)"
+                                            From="0"
+                                            To="4"
+                                            Duration="0:0:0.3" />
+                                        <ColorAnimation
+                                            Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                            From="Black"
+                                            To="{StaticResource MainWindowBackgroundColor}"
+                                            Duration="0:0:0.3" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
                             <Trigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimation Duration="0:0:0.3" From="{StaticResource MainWindowBackgroundColor}" To="Black" Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"/>
+                                        <ColorAnimation
+                                            Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                            From="{StaticResource MainWindowBackgroundColor}"
+                                            To="Black"
+                                            Duration="0:0:0.3" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
                         </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="ColorFadeButtonStyle" TargetType="{x:Type Button}">
+        <Style.Resources>
+            <Brush x:Key="BackgroundStartBrush">#2B2D42</Brush>
+            <Brush x:Key="ForegroundStartBrush">#D3C0D2</Brush>
+            <Color x:Key="BackgroundStartColor">#2B2D42</Color>
+            <Color x:Key="ForegroundStartColor">#D3C0D2</Color>
+        </Style.Resources>
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="{StaticResource BackgroundStartBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource ForegroundStartBrush}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        x:Name="border"
+                        Padding="4"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="10"
+                        SnapsToDevicePixels="true">
+                        <ContentPresenter
+                            x:Name="contentPresenter"
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Focusable="False"
+                            RecognizesAccessKey="True"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation
+                                        Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                        To="{StaticResource ForegroundStartColor}"
+                                        Duration="0:0:0.3" />
+                                    <ColorAnimation
+                                        Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                        To="{StaticResource BackgroundStartColor}"
+                                        Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation
+                                        Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                        To="{StaticResource BackgroundStartColor}"
+                                        Duration="0:0:0.3" />
+                                    <ColorAnimation
+                                        Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                        To="{StaticResource ForegroundStartColor}"
+                                        Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

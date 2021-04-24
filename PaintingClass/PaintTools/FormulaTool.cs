@@ -22,6 +22,7 @@ using WpfMath.Controls;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Animation;
 using System.Threading;
+using PaintingClass.PaintTools.Interfaces;
 
 namespace PaintingClass.PaintTools
 {
@@ -62,7 +63,7 @@ namespace PaintingClass.PaintTools
 		}
 	}
 
-	public class FormulaTool : PaintTool
+	public class FormulaTool : PaintTool, IToolSelected
 	{
 		#region Constants
 

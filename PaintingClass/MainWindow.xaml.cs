@@ -57,8 +57,8 @@ namespace PaintingClass
 
         public MainWindow(UserData data, Action<bool, MainWindow> OnConnectEventHandler = null)
         {
-            //UI
-            InitializeComponent();
+			//UI
+			InitializeComponent();
             OnConnect = OnConnectEventHandler;
             this.DataContext = this;
             instance = this;

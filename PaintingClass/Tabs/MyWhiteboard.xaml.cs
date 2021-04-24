@@ -18,6 +18,9 @@ using System.Threading;
 using System.Text.Json;
 using PaintingClass.Networking;
 using System.Windows.Media.Animation;
+using Microsoft.Win32;
+using System.IO;
+using PaintingClass.PaintTools.Interfaces;
 
 namespace PaintingClass.Tabs
 {
@@ -102,14 +105,13 @@ namespace PaintingClass.Tabs
                 toolbar.Children.Add(button); 
                 //cand butonul este apasat o sa selecteze unealta corecta
                 button.Click+=(sender,e) => selectedTool = tools[toolbar.Children.IndexOf(sender as UIElement) ];
-                if (tool is FormulaTool)
-                    OnToolSelect += ((FormulaTool)tool).SelectToolEventHandler;
-                else if (tool is ImageTool)
-				{
+                if (tool is IToolSelected)
+                    OnToolSelect += ((IToolSelected)tool).SelectToolEventHandler;
+                if (tool is ImageTool)
+                {
                     ImageTool t = (ImageTool)tool;
-                    OnToolSelect += t.SelectToolEventHandler;
                     this.Drop += t.OnDropEventHandler;
-				}
+                }
             }
 
             //selecteaza prima unealta
@@ -161,6 +163,63 @@ namespace PaintingClass.Tabs
         }
 
         #region Event Handlere butoane
+
+        #region Pdf Viewer
+
+        private void ClosePdfButton_Click(object sender, RoutedEventArgs e)
+        {
+            DoubleAnimation opacityAnimation = new DoubleAnimation()
+            {
+                Duration = new Duration(new TimeSpan(0, 0, 0, 0, 300)),
+                To = 0,
+                From = 1
+            };
+            Storyboard sb = new Storyboard() { Duration = new Duration(new TimeSpan(0, 0, 0, 0, 300)) };
+            sb.Completed += (sender, e) => { PdfViewerGrid.Visibility = Visibility.Hidden; };
+            Storyboard.SetTargetProperty(opacityAnimation, new PropertyPath("(Grid.Opacity)"));
+            Storyboard.SetTarget(opacityAnimation, PdfViewerGrid);
+            sb.Children.Add(opacityAnimation);
+            sb.Begin(this);
+        }
+
+		public void ShowPdfViewer()
+		{
+            PdfViewerGrid.Visibility = Visibility.Visible;
+            DoubleAnimation opacityAnimation = new DoubleAnimation()
+            {
+                Duration = new Duration(new TimeSpan(0, 0, 0, 0, 300)),
+                To = 1,
+                From = 0
+            };
+            Storyboard sb = new Storyboard() { Duration = new Duration(new TimeSpan(0, 0, 0, 0, 300)) };
+            Storyboard.SetTargetProperty(opacityAnimation, new PropertyPath("(Grid.Opacity)"));
+            Storyboard.SetTarget(opacityAnimation, PdfViewerGrid);
+            sb.Children.Add(opacityAnimation);
+            sb.Begin(this);
+        }
+
+        private void OpenNewPdfButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShowPdfViewer();
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "PDf files(*.pdf) | *.pdf";
+            dialog.ShowDialog();
+            if (File.Exists(dialog.FileName) == true)
+            {
+                try
+                {
+                    pdfViewer.SetPdfTo(dialog.FileName);
+                }
+                catch // daca este vreo eroare informam userul
+                {
+                    MessageBox.Show("Fisierul nu are un format valid", "Eroare");
+                    pdfViewer.isEmpty = true;
+                    return;
+                }
+            }
+        }
+
+        #endregion
 
         /// <summary>
         /// Animatie pentru meniul de culori
