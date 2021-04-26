@@ -124,6 +124,9 @@
             Margin="20"
             BorderBrush="Black"
             BorderThickness="5">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
+            </Border.Effect>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="3*" />
@@ -157,6 +160,7 @@
 
                     <!--  buton pentru grosime  -->
                     <Button
+                        
                         Grid.Row="1"
                         Click="BrushThicknessMenu_Button_Click"
                         Content="Grosimi linii" />
@@ -184,6 +188,9 @@
 
             <!--#region Font size panel-->
             <Grid Grid.Row="3">
+                <Grid.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2"/>
+                </Grid.Effect>
                 <Grid.RenderTransform>
                     <ScaleTransform ScaleX="1" />
                 </Grid.RenderTransform>
@@ -198,60 +205,77 @@
             </Grid>
 
             <!--#region Color panel-->
-            <Grid x:Name="ColorPanel" Grid.Row="1">
+            <Grid
+                x:Name="ColorPanel"
+                Grid.Row="1"
+                Grid.RowSpan="2">
                 <Grid.RenderTransform>
                     <ScaleTransform ScaleX="1" />
                 </Grid.RenderTransform>
-                <Grid Panel.ZIndex="1">
-                    <StackPanel VerticalAlignment="Center">
-                        <Button
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Height = "30"
-                            Click="Color_Buton_Click"
-                            Tag="Red" >
-                            <Image Source="/Resources/Culori/rosu.png" RenderOptions.BitmapScalingMode="Fant"/>
-                        </Button>
-                        <Button
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Height = "30"
-                            Click="Color_Buton_Click"
-                            Tag="Yellow" >
-                            <Image Source="/Resources/Culori/galben.png" RenderOptions.BitmapScalingMode="Fant">
-                                <Image.Effect>
-                                    <DropShadowEffect BlurRadius="10" ShadowDepth="2">
 
-                                    </DropShadowEffect>
-                                </Image.Effect>
-                            </Image>
-                        </Button>
-                        <Button
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Height = "30"
-                            Click="Color_Buton_Click"
-                            Tag="Green" >
-                            <Image Source="/Resources/Culori/verde.png" RenderOptions.BitmapScalingMode="Fant"/>
-                        </Button>
-                        <Button
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Height = "30"
-                            Click="Color_Buton_Click"
-                            Content="Negru"
-                            Foreground="White"
-                            Tag="Black" />
-                        <Grid>
-                            <xctk:ColorPicker x:Name="colorPicker" SelectedColorChanged="ClrPcker_Background_SelectedColorChanged" />
-                            <TextBlock
-                                x:Name="TB_Alege_Culoare"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Text="Alege" />
-                        </Grid>
-                    </StackPanel>
-                </Grid>
+                <StackPanel VerticalAlignment="Center">
+                    <StackPanel.Effect>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
+                    </StackPanel.Effect>
+                    <Button
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Height="30"
+                        Click="Color_Buton_Click"
+                        Tag="Red">
+                        <Image RenderOptions.BitmapScalingMode="Fant" Source="/Resources/Culori/rosu.png">
+                            <Image.Effect>
+                                <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
+                            </Image.Effect>
+                        </Image>
+                    </Button>
+                    <Button
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Height="30"
+                        Click="Color_Buton_Click"
+                        Tag="Yellow">
+                        <Image RenderOptions.BitmapScalingMode="Fant" Source="/Resources/Culori/galben.png">
+                            <Image.Effect>
+                                <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
+                            </Image.Effect>
+                        </Image>
+                    </Button>
+                    <Button
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Height="30"
+                        Click="Color_Buton_Click"
+                        Tag="Green">
+                        <Image RenderOptions.BitmapScalingMode="Fant" Source="/Resources/Culori/verde.png">
+                            <Image.Effect>
+                                <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
+                            </Image.Effect>
+                        </Image>
+                    </Button>
+                    <Button
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Height="30"
+                        Click="Color_Buton_Click"
+                        Foreground="White"
+                        Tag="Black">
+                        <Image RenderOptions.BitmapScalingMode="Fant" Source="/Resources/Culori/negru.png">
+                            <Image.Effect>
+                                <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
+                            </Image.Effect>
+                        </Image>
+                    </Button>
+                    <Grid>
+                        <xctk:ColorPicker x:Name="colorPicker" SelectedColorChanged="ClrPcker_Background_SelectedColorChanged" />
+                        <TextBlock
+                            x:Name="TB_Alege_Culoare"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontFamily="{StaticResource Manrope}"
+                            Text="Alege" />
+                    </Grid>
+                </StackPanel>
             </Grid>
             <!--#endregion-->
 
@@ -261,6 +285,9 @@
                 Grid.Row="2"
                 Grid.RowSpan="2"
                 Margin="0,0,0,106">
+                <Grid.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
+                </Grid.Effect>
                 <Grid.RenderTransform>
                     <ScaleTransform ScaleX="0" />
                 </Grid.RenderTransform>
@@ -268,28 +295,28 @@
                 <Grid Panel.ZIndex="1">
                     <StackPanel VerticalAlignment="Center">
                         <Button
+                            Height="20"
                             Click="Grosime_Buton_Click"
-                            Tag="Subtire"
-                            Height="20">
-                            <Image Source="/Resources/Grosimi/subtire.png" RenderOptions.BitmapScalingMode="Fant"/>
+                            Tag="Subtire">
+                            <Image RenderOptions.BitmapScalingMode="Fant" Source="/Resources/Grosimi/subtire.png" />
                         </Button>
                         <Button
+                            Height="20"
                             Click="Grosime_Buton_Click"
-                            Tag="Normal"
-                            Height="20">
-                            <Image Source="/Resources/Grosimi/normal.png" RenderOptions.BitmapScalingMode="Fant"/>
+                            Tag="Normal">
+                            <Image RenderOptions.BitmapScalingMode="Fant" Source="/Resources/Grosimi/normal.png" />
                         </Button>
                         <Button
+                            Height="20"
                             Click="Grosime_Buton_Click"
-                            Tag="Gros"
-                            Height="20">
-                            <Image Source="/Resources/Grosimi/gros.png" RenderOptions.BitmapScalingMode="Fant"/>
+                            Tag="Gros">
+                            <Image RenderOptions.BitmapScalingMode="Fant" Source="/Resources/Grosimi/gros.png" />
                         </Button>
                         <Button
+                            Height="20"
                             Click="Grosime_Buton_Click"
-                            Tag="Foarte gros" 
-                            Height="20">
-                            <Image Source="/Resources/Grosimi/foarteGros.png" RenderOptions.BitmapScalingMode="Fant"/>
+                            Tag="Foarte gros">
+                            <Image RenderOptions.BitmapScalingMode="Fant" Source="/Resources/Grosimi/foarteGros.png" />
                         </Button>
                     </StackPanel>
                 </Grid>
@@ -349,7 +376,6 @@
             Grid.Column="1"
             Grid.ColumnSpan="2"
             Stretch="Uniform">
-
             <PaintingClass:Whiteboard
                 x:Name="whiteboard"
                 Grid.ColumnSpan="2"
