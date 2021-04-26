@@ -79,6 +79,19 @@ namespace PaintingClass.PaintTools
 			Canvas.SetLeft(textBoxGrid, offset.X + positionDenormalized.X * owner.myWhiteboardViewBox.RenderSize.Width);
 			textBoxGrid.RenderTransform = new ScaleTransform(owner.myWhiteboardViewBox.ActualWidth / SystemParameters.PrimaryScreenWidth * 1d / (owner.ViewBoxToWindowSizeHeightRatio * SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth * 16d / 9d), owner.myWhiteboardViewBox.ActualHeight / SystemParameters.PrimaryScreenHeight * 1d / owner.ViewBoxToWindowSizeHeightRatio);
 		}
+		
+		/// <summary>
+		/// Este chemat atunci cand Userul selecteaza un font size 
+		/// </summary>
+		public void UpdateTextBoxFontsize(double fontSize)
+		{
+			var tb = textBoxGrid.Children.OfType<TextBox>().First();
+			if (tb.IsKeyboardFocused)
+			{
+				tb.FontSize = fontSize;
+			}
+		}
+
 		#endregion
 	}
 
@@ -200,7 +213,6 @@ namespace PaintingClass.PaintTools
 				tb = tb,
 				textBoxGrid = grid,
 			};
-
 			owner.myWhiteboardGrid.SizeChanged += tbMsg.UpdateTextBoxSize;
 			position = MainWindow.instance.myWhiteboard.whiteboard.DenormalizePosition(position);
 

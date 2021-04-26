@@ -21,6 +21,7 @@ using System.Windows.Media.Animation;
 using Microsoft.Win32;
 using System.IO;
 using PaintingClass.PaintTools.Interfaces;
+using PaintingClass.Resources;
 
 namespace PaintingClass.Tabs
 {
@@ -32,10 +33,20 @@ namespace PaintingClass.Tabs
 
     public partial class MyWhiteboard : UserControl
     {
-        // se produce atunci cand cineva selecteaza un tool
+        #region Events
+        /// <summary>
+        /// se produce atunci cand cineva selecteaza un tool
+        /// </summary>
         Action<PaintTool> OnToolSelect = (tool) => { };
 
-        private PaintTool _selectedTool;
+        /// <summary>
+        /// se produce atunci cand Userul schimba font-sizeul la text
+        /// </summary>
+        Action<double> OnFontSizeChanged = (thickness) => { };
+
+		#endregion
+
+		private PaintTool _selectedTool;
         public PaintTool selectedTool {
             get { return _selectedTool; } 
             set {
@@ -69,7 +80,7 @@ namespace PaintingClass.Tabs
         public MyWhiteboard()
         {
             InitializeComponent();
-
+            
             #region Constants
             void ViewBoxToWindowSizeHeightRationSetter(object sender, SizeChangedEventArgs e)
             {
@@ -230,7 +241,7 @@ namespace PaintingClass.Tabs
         {
             if (ThicknessPanel.RenderTransform.Value.M11 == 1)
             {
-                GrosimeMenu_Button_Click(null, null);
+                BrushThicknessMenu_Button_Click(null, null);
             }
 
             DoubleAnimation panelAnimation = new DoubleAnimation()
@@ -271,7 +282,7 @@ namespace PaintingClass.Tabs
 
         }
 
-        private void GrosimeMenu_Button_Click(object sender, RoutedEventArgs e)
+        private void BrushThicknessMenu_Button_Click(object sender, RoutedEventArgs e)
         {
             if (ColorPanel.RenderTransform.Value.M11 == 1)
             {
@@ -315,8 +326,9 @@ namespace PaintingClass.Tabs
             storyboard.Begin(this);
         }
 
-        private void Marime_Font_Button_Click(object sender, RoutedEventArgs e)
+        private void FontSize_Button_Click(object sender, RoutedEventArgs e)
         {
+
         }
 
         private void Color_Buton_Click(object sender, RoutedEventArgs e)
@@ -339,7 +351,7 @@ namespace PaintingClass.Tabs
                     break;
             }
 
-            ColorMenu_Button_Click(null, new RoutedEventArgs());
+            ColorMenu_Button_Click(null, null);
         }
 
         private void Grosime_Buton_Click(object sender, RoutedEventArgs e)
@@ -362,7 +374,7 @@ namespace PaintingClass.Tabs
                     break;
             }
 
-            GrosimeMenu_Button_Click(null, new RoutedEventArgs());
+            BrushThicknessMenu_Button_Click(null, null);
         }
 
         #endregion
@@ -373,6 +385,15 @@ namespace PaintingClass.Tabs
             if (files.Count() > 1)
                 return;
             MessageBox.Show(files[0]);
+        }   
+
+		private void ClrPcker_Background_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+		{
+            string s = MyWhiteboardUtils.InvertHex(e.NewValue.ToString());
+            globalBrush = new SolidColorBrush((Color)e.NewValue);
+            TB_Alege_Culoare.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(s));
+            ColorMenu_Button_Click(null, null);
+            colorPicker.IsOpen = false;
         }
 	}
 }

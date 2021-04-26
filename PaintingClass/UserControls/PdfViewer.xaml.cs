@@ -43,7 +43,6 @@ namespace PaintingClass.UserControls
 		{
 			InitializeComponent();
 			MainScrollViewer.ScrollChanged += MainScrollViewer_ScrollChanged;
-
         }
 
 		private async void MainScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)

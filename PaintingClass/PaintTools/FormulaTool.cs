@@ -378,22 +378,13 @@ namespace PaintingClass.PaintTools
 			{
 				tb.Foreground = Brushes.Gray;
 				tb.Text = defaultMessage;
+				return;
 			}
 			else
 			{
-				bool IsSyntaxOk = true;
 				string texf;
-				try
-				{
-					if (translator.CheckSyntax(tb.Text) && tb.Text.Length > 0)
-						texf = converter.Convert(tb.Text);
-				}
-				catch
-				{
-					IsSyntaxOk = false;
-				}
-				if (IsSyntaxOk)
-					((Grid)tb.Parent).Visibility = Visibility.Collapsed;
+				((Grid)tb.Parent).Visibility = Visibility.Collapsed;
+				return;
 			}
 		}
 

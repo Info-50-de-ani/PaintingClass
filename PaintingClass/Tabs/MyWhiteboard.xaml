@@ -7,9 +7,67 @@
     xmlns:local="clr-namespace:PaintingClass.Tabs"
     xmlns:local1="clr-namespace:PaintingClass.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     d:DesignHeight="800"
     d:DesignWidth="1536"
     mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <!--  ControlTemplate pentru Toolbar  -->
+        <ControlTemplate x:Key="ToolScrollViewer" TargetType="{x:Type ScrollViewer}">
+            <Grid x:Name="Grid" Background="{TemplateBinding Background}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Rectangle
+                    x:Name="Corner"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Fill="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                <ScrollContentPresenter
+                    x:Name="PART_ScrollContentPresenter"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="{TemplateBinding Padding}"
+                    CanContentScroll="{TemplateBinding CanContentScroll}"
+                    CanHorizontallyScroll="False"
+                    CanVerticallyScroll="False"
+                    Content="{TemplateBinding Content}"
+                    ContentTemplate="{TemplateBinding ContentTemplate}" />
+                <ScrollBar
+                    x:Name="PART_VerticalScrollBar"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    AutomationProperties.AutomationId="VerticalScrollBar"
+                    Cursor="Arrow"
+                    Maximum="{TemplateBinding ScrollableHeight}"
+                    Minimum="0"
+                    ViewportSize="{TemplateBinding ViewportHeight}"
+                    Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                    Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                <ScrollBar
+                    x:Name="PART_HorizontalScrollBar"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Width="5"
+                    AutomationProperties.AutomationId="HorizontalScrollBar"
+                    Background="Pink"
+                    Cursor="Arrow"
+                    Maximum="{TemplateBinding ScrollableWidth}"
+                    Minimum="0"
+                    Orientation="Horizontal"
+                    ViewportSize="{TemplateBinding ViewportWidth}"
+                    Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+                    Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
+            </Grid>
+        </ControlTemplate>
+    </UserControl.Resources>
 
     <!--  O sa fie inlocuita de un Grid la un moment dat  -->
     <Grid x:Name="myWhiteboardGrid" Background="White">
@@ -19,7 +77,6 @@
             <ColumnDefinition Width="6*" />
         </Grid.ColumnDefinitions>
 
-
         <!--#region PDF Viewer-->
         <Grid
             x:Name="PdfViewerGrid"
@@ -28,7 +85,7 @@
             Panel.ZIndex="2"
             Visibility="Hidden">
             <Grid.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="2"/>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
             </Grid.Effect>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*" />
@@ -60,6 +117,7 @@
             <local1:PdfViewer x:Name="pdfViewer" Grid.Row="1" />
         </Grid>
         <!--#endregion-->
+
         <!--#region tool bar-->
         <Border
             Grid.Column="0"
@@ -71,10 +129,19 @@
                     <RowDefinition Height="3*" />
                     <RowDefinition Height="2*" />
                 </Grid.RowDefinitions>
-                <StackPanel
-                    x:Name="toolbar"
-                    Grid.Row="0"
-                    Orientation="Vertical" />
+                <!--  ToolBar  -->
+                <ScrollViewer
+                    HorizontalScrollBarVisibility="Auto"
+                    Template="{StaticResource ResourceKey=ToolScrollViewer}"
+                    VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer.Resources>
+                        <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">10</sys:Double>
+                    </ScrollViewer.Resources>
+                    <StackPanel
+                        x:Name="toolbar"
+                        Grid.Row="0"
+                        Orientation="Vertical" />
+                </ScrollViewer>
                 <!--  Grid cu setari pt tooluri  -->
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
@@ -91,12 +158,13 @@
                     <!--  buton pentru grosime  -->
                     <Button
                         Grid.Row="1"
-                        Click="GrosimeMenu_Button_Click"
+                        Click="BrushThicknessMenu_Button_Click"
                         Content="Grosimi linii" />
 
+                    <!--  buton marime font  -->
                     <Button
                         Grid.Row="2"
-                        Click="Marime_Font_Button_Click"
+                        Click="FontSize_Button_Click"
                         Content="Font size" />
 
                 </Grid>
@@ -107,25 +175,33 @@
 
         <Grid Grid.Column="1" Panel.ZIndex="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="9*" />
-                <RowDefinition Height="1.98*" />
-                <RowDefinition Height="1.98*" />
-                <RowDefinition Height="1.98*" />
-                <RowDefinition Height="0.326*" />
+                <RowDefinition Height="470*" />
+                <RowDefinition Height="103*" />
+                <RowDefinition Height="103*" />
+                <RowDefinition Height="107*" />
+                <RowDefinition Height="17*" />
             </Grid.RowDefinitions>
 
-            <!--#region Color panel-->
-            <Grid
-                x:Name="ColorPanel"
-                Grid.Row="1"
-                Grid.RowSpan="1">
+            <!--#region Font size panel-->
+            <Grid Grid.Row="3">
                 <Grid.RenderTransform>
-                    <ScaleTransform ScaleX="0" />
+                    <ScaleTransform ScaleX="1" />
                 </Grid.RenderTransform>
                 <Border
                     x:Name="border1"
                     Background="Transparent"
                     CornerRadius="15" />
+                <Grid Panel.ZIndex="1">
+                    <StackPanel VerticalAlignment="Center" />
+                </Grid>
+
+            </Grid>
+
+            <!--#region Color panel-->
+            <Grid x:Name="ColorPanel" Grid.Row="1">
+                <Grid.RenderTransform>
+                    <ScaleTransform ScaleX="1" />
+                </Grid.RenderTransform>
                 <Grid Panel.ZIndex="1">
                     <StackPanel VerticalAlignment="Center">
                         <Button
@@ -149,6 +225,14 @@
                             Content="Negru"
                             Foreground="White"
                             Tag="Black" />
+                        <Grid>
+                            <xctk:ColorPicker x:Name="colorPicker" SelectedColorChanged="ClrPcker_Background_SelectedColorChanged" />
+                            <TextBlock
+                                x:Name="TB_Alege_Culoare"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="Alege" />
+                        </Grid>
                     </StackPanel>
                 </Grid>
             </Grid>
@@ -158,14 +242,12 @@
             <Grid
                 x:Name="ThicknessPanel"
                 Grid.Row="2"
-                Grid.RowSpan="1">
+                Grid.RowSpan="2"
+                Margin="0,0,0,106">
                 <Grid.RenderTransform>
                     <ScaleTransform ScaleX="0" />
                 </Grid.RenderTransform>
-                <Border
-                    x:Name="border2"
-                    Background="Transparent"
-                    CornerRadius="15" />
+                <Border Background="Transparent" CornerRadius="15" />
                 <Grid Panel.ZIndex="1">
                     <StackPanel VerticalAlignment="Center">
                         <Button
@@ -235,6 +317,8 @@
             </Border>
         </Grid>
         <!--#endregion-->
+
+        <!--#region Tabla-->
         <Viewbox
             x:Name="myWhiteboardViewBox"
             Grid.Column="1"
@@ -255,6 +339,8 @@
             x:Name="myWhiteboardCanvas"
             Grid.Column="1"
             Grid.ColumnSpan="2" />
+        <!--#endregion-->
+
     </Grid>
 </UserControl>
 

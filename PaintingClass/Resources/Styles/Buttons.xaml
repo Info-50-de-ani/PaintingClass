@@ -182,8 +182,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
     <Style x:Key="ColorFadeButtonStyle" TargetType="{x:Type Button}">
         <Style.Resources>
             <Brush x:Key="BackgroundStartBrush">#2B2D42</Brush>
