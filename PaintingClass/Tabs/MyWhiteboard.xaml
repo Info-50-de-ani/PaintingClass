@@ -127,29 +127,54 @@
                     Background="Transparent"
                     CornerRadius="15" />
                 <Grid Panel.ZIndex="1">
-                    <StackPanel VerticalAlignment="Center">
+                    <Grid VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
                         <Button
-                            Background="Red"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Height = "30"
                             Click="Color_Buton_Click"
-                            Content="Rosu"
-                            Tag="Red" />
+                            Tag="Red" >
+                            <Image Source="/Resources/Culori/rosu.png" RenderOptions.BitmapScalingMode="Fant"/>
+                        </Button>
                         <Button
-                            Background="Yellow"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Height = "30"
                             Click="Color_Buton_Click"
-                            Content="Galben"
-                            Tag="Yellow" />
+                            Tag="Yellow" >
+                            <Image Source="/Resources/Culori/galben.png" RenderOptions.BitmapScalingMode="Fant">
+                                <Image.Effect>
+                                    <DropShadowEffect BlurRadius="10" ShadowDepth="2">
+
+                                    </DropShadowEffect>
+                                </Image.Effect>
+                            </Image>
+                        </Button>
                         <Button
-                            Background="Green"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Height = "30"
                             Click="Color_Buton_Click"
-                            Content="Verde"
-                            Tag="Green" />
+                            Tag="Green" >
+                            <Image Source="/Resources/Culori/verde.png" RenderOptions.BitmapScalingMode="Fant"/>
+                        </Button>
                         <Button
-                            Background="Black"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Height = "30"
                             Click="Color_Buton_Click"
-                            Content="Negru"
-                            Foreground="White"
-                            Tag="Black" />
-                    </StackPanel>
+                            Tag="Black" >
+                            <Image Source="/Resources/Culori/negru.png" RenderOptions.BitmapScalingMode="Fant"/>
+                        </Button>
+                    </Grid>
                 </Grid>
             </Grid>
             <!--#endregion-->
@@ -170,20 +195,28 @@
                     <StackPanel VerticalAlignment="Center">
                         <Button
                             Click="Grosime_Buton_Click"
-                            Content="Subtire"
-                            Tag="Subtire" />
+                            Tag="Subtire"
+                            Height="20">
+                            <Image Source="/Resources/Grosimi/subtire.png" RenderOptions.BitmapScalingMode="Fant"/>
+                        </Button>
                         <Button
                             Click="Grosime_Buton_Click"
-                            Content="Normal"
-                            Tag="Normal" />
+                            Tag="Normal"
+                            Height="20">
+                            <Image Source="/Resources/Grosimi/normal.png" RenderOptions.BitmapScalingMode="Fant"/>
+                        </Button>
                         <Button
                             Click="Grosime_Buton_Click"
-                            Content="Gros"
-                            Tag="Gros" />
+                            Tag="Gros"
+                            Height="20">
+                            <Image Source="/Resources/Grosimi/gros.png" RenderOptions.BitmapScalingMode="Fant"/>
+                        </Button>
                         <Button
                             Click="Grosime_Buton_Click"
-                            Content="Foarte gros"
-                            Tag="Foarte gros" />
+                            Tag="Foarte gros" 
+                            Height="20">
+                            <Image Source="/Resources/Grosimi/foarteGros.png" RenderOptions.BitmapScalingMode="Fant"/>
+                        </Button>
                     </StackPanel>
                 </Grid>
             </Grid>

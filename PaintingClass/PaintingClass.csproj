@@ -14,6 +14,10 @@
 
   <ItemGroup>
     <None Remove="Networking\RoomManager" />
+    <None Remove="Resources\Culori\galben.png" />
+    <None Remove="Resources\Culori\negru.png" />
+    <None Remove="Resources\Culori\rosu.png" />
+    <None Remove="Resources\Culori\verde.png" />
     <None Remove="Resources\Fonts\Manrope-Bold.ttf" />
     <None Remove="Resources\Fonts\Manrope-ExtraBold.ttf" />
     <None Remove="Resources\Fonts\Manrope-ExtraLight.ttf" />
@@ -21,6 +25,11 @@
     <None Remove="Resources\Fonts\Manrope-Medium.ttf" />
     <None Remove="Resources\Fonts\Manrope-Regular.ttf" />
     <None Remove="Resources\Fonts\Manrope-SemiBold.ttf" />
+    <None Remove="Resources\Grosimi\foarte gros.png" />
+    <None Remove="Resources\Grosimi\foarteGros.png" />
+    <None Remove="Resources\Grosimi\gros.png" />
+    <None Remove="Resources\Grosimi\normal.png" />
+    <None Remove="Resources\Grosimi\subtire.png" />
     <None Remove="Resources\Login\Images\ButonElev.png" />
     <None Remove="Resources\Login\Images\ButonProfesor.png" />
     <None Remove="Resources\Login\Images\Clock.png" />
@@ -85,6 +94,10 @@
 
   <ItemGroup>
     <Resource Include="Login\Images\LoginBackground.jpg" />
+    <Resource Include="Resources\Culori\galben.png" />
+    <Resource Include="Resources\Culori\negru.png" />
+    <Resource Include="Resources\Culori\rosu.png" />
+    <Resource Include="Resources\Culori\verde.png" />
     <Resource Include="Resources\Fonts\Manrope-Bold.ttf" />
     <Resource Include="Resources\Fonts\Manrope-ExtraBold.ttf" />
     <Resource Include="Resources\Fonts\Manrope-ExtraLight.ttf" />
@@ -92,6 +105,10 @@
     <Resource Include="Resources\Fonts\Manrope-Medium.ttf" />
     <Resource Include="Resources\Fonts\Manrope-Regular.ttf" />
     <Resource Include="Resources\Fonts\Manrope-SemiBold.ttf" />
+    <Resource Include="Resources\Grosimi\foarteGros.png" />
+    <Resource Include="Resources\Grosimi\gros.png" />
+    <Resource Include="Resources\Grosimi\normal.png" />
+    <Resource Include="Resources\Grosimi\subtire.png" />
     <Resource Include="Resources\Login\Images\ButonElev.png" />
     <Resource Include="Resources\Login\Images\ButonProfesor.png" />
     <Resource Include="Resources\Login\Images\Clock.png" />
