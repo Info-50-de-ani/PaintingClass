@@ -160,7 +160,6 @@
 
                     <!--  buton pentru grosime  -->
                     <Button
-                        
                         Grid.Row="1"
                         Click="BrushThicknessMenu_Button_Click"
                         Content="Grosimi linii" />
@@ -168,8 +167,9 @@
                     <!--  buton marime font  -->
                     <Button
                         Grid.Row="2"
-                        Click="FontSize_Button_Click"
-                        Content="Font size" />
+                        Click="FontSizeMenu_Button_Click"
+                        Content="Font size"
+                        Focusable="False" />
 
                 </Grid>
             </Grid>
@@ -187,19 +187,48 @@
             </Grid.RowDefinitions>
 
             <!--#region Font size panel-->
-            <Grid Grid.Row="3">
+            <Grid
+                x:Name="FontSizePanel"
+                Grid.Row="3"
+                Focusable="False">
                 <Grid.Effect>
-                    <DropShadowEffect BlurRadius="10" ShadowDepth="2"/>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
                 </Grid.Effect>
                 <Grid.RenderTransform>
-                    <ScaleTransform ScaleX="1" />
+                    <ScaleTransform ScaleX="0" />
                 </Grid.RenderTransform>
                 <Border
                     x:Name="border1"
                     Background="Transparent"
-                    CornerRadius="15" />
+                    CornerRadius="15"
+                    Focusable="False" />
                 <Grid Panel.ZIndex="1">
-                    <StackPanel VerticalAlignment="Center" />
+                    <StackPanel VerticalAlignment="Center">
+                        <Button
+                            Click="FontSize_Button_Click"
+                            Focusable="False"
+                            Tag="Mic">
+                            Mic
+                        </Button>
+                        <Button
+                            Click="FontSize_Button_Click"
+                            Focusable="False"
+                            Tag="Mediu">
+                            Mediu
+                        </Button>
+                        <Button
+                            Click="FontSize_Button_Click"
+                            Focusable="False"
+                            Tag="Mare">
+                            Mare
+                        </Button>
+                        <Button
+                            Click="FontSize_Button_Click"
+                            Focusable="False"
+                            Tag="Foarte Mare">
+                            Foarte Mare
+                        </Button>
+                    </StackPanel>
                 </Grid>
 
             </Grid>
@@ -210,7 +239,7 @@
                 Grid.Row="1"
                 Grid.RowSpan="2">
                 <Grid.RenderTransform>
-                    <ScaleTransform ScaleX="1" />
+                    <ScaleTransform ScaleX="0" />
                 </Grid.RenderTransform>
 
                 <StackPanel VerticalAlignment="Center">
@@ -221,7 +250,7 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         Height="30"
-                        Click="Color_Buton_Click"
+                        Click="Color_Button_Click"
                         Tag="Red">
                         <Image RenderOptions.BitmapScalingMode="Fant" Source="/Resources/Culori/rosu.png">
                             <Image.Effect>
@@ -233,7 +262,7 @@
                         Grid.Row="1"
                         Grid.Column="0"
                         Height="30"
-                        Click="Color_Buton_Click"
+                        Click="Color_Button_Click"
                         Tag="Yellow">
                         <Image RenderOptions.BitmapScalingMode="Fant" Source="/Resources/Culori/galben.png">
                             <Image.Effect>
@@ -245,7 +274,7 @@
                         Grid.Row="0"
                         Grid.Column="1"
                         Height="30"
-                        Click="Color_Buton_Click"
+                        Click="Color_Button_Click"
                         Tag="Green">
                         <Image RenderOptions.BitmapScalingMode="Fant" Source="/Resources/Culori/verde.png">
                             <Image.Effect>
@@ -257,7 +286,7 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         Height="30"
-                        Click="Color_Buton_Click"
+                        Click="Color_Button_Click"
                         Foreground="White"
                         Tag="Black">
                         <Image RenderOptions.BitmapScalingMode="Fant" Source="/Resources/Culori/negru.png">
@@ -296,25 +325,25 @@
                     <StackPanel VerticalAlignment="Center">
                         <Button
                             Height="20"
-                            Click="Grosime_Buton_Click"
+                            Click="BrushThickness_Button_Click"
                             Tag="Subtire">
                             <Image RenderOptions.BitmapScalingMode="Fant" Source="/Resources/Grosimi/subtire.png" />
                         </Button>
                         <Button
                             Height="20"
-                            Click="Grosime_Buton_Click"
+                            Click="BrushThickness_Button_Click"
                             Tag="Normal">
                             <Image RenderOptions.BitmapScalingMode="Fant" Source="/Resources/Grosimi/normal.png" />
                         </Button>
                         <Button
                             Height="20"
-                            Click="Grosime_Buton_Click"
+                            Click="BrushThickness_Button_Click"
                             Tag="Gros">
                             <Image RenderOptions.BitmapScalingMode="Fant" Source="/Resources/Grosimi/gros.png" />
                         </Button>
                         <Button
                             Height="20"
-                            Click="Grosime_Buton_Click"
+                            Click="BrushThickness_Button_Click"
                             Tag="Foarte gros">
                             <Image RenderOptions.BitmapScalingMode="Fant" Source="/Resources/Grosimi/foarteGros.png" />
                         </Button>

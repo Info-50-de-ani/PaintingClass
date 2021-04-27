@@ -41,7 +41,7 @@ namespace PaintingClass.PaintTools
             Window.GetWindow(whiteboard).KeyUp += Whiteboard_KeyUp;
             initialPos = position;
             ellipse = new EllipseGeometry(new Rect(position, position));
-            geometryDrawing = new GeometryDrawing(null, new Pen(this.owner.globalBrush, owner.thickness), ellipse);
+            geometryDrawing = new GeometryDrawing(null, new Pen(this.owner.globalBrush, owner.globalBrushThickness), ellipse);
             whiteboard.collection.Add(geometryDrawing);
         }
 

@@ -44,7 +44,7 @@ namespace PaintingClass.PaintTools
             Window.GetWindow(whiteboard).KeyUp += Whiteboard_KeyUp;
             initialPos = position;
             rectangle = new RectangleGeometry(new Rect(position,position));
-            geometryDrawing = new GeometryDrawing(null, new Pen(owner.globalBrush, owner.thickness), rectangle);
+            geometryDrawing = new GeometryDrawing(null, new Pen(owner.globalBrush, owner.globalBrushThickness), rectangle);
             whiteboard.collection.Add(geometryDrawing);
         }
 

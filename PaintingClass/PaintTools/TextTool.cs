@@ -207,16 +207,18 @@ namespace PaintingClass.PaintTools
 			var grid = GetResizableTextboxGrid("Scrie aici");
 			myWhiteboardCanvas.Children.Add(grid);
 			TextBox tb = grid.Children.OfType<TextBox>().First();
-			TextToolResize tbMsg = new TextToolResize(position,new Size(defaultTextBoxSize / owner.myWhiteboardViewBox.ActualWidth, defaultTextBoxSize / owner.myWhiteboardViewBox.ActualHeight))
+			TextToolResize tbResize = new TextToolResize(position,new Size(defaultTextBoxSize / owner.myWhiteboardViewBox.ActualWidth, defaultTextBoxSize / owner.myWhiteboardViewBox.ActualHeight))
 			{
 				owner = owner,
 				tb = tb,
 				textBoxGrid = grid,
 			};
-			owner.myWhiteboardGrid.SizeChanged += tbMsg.UpdateTextBoxSize;
+
+			owner.OnFontSizeChanged += tbResize.UpdateTextBoxFontsize;
+			owner.myWhiteboardGrid.SizeChanged += tbResize.UpdateTextBoxSize;
 			position = MainWindow.instance.myWhiteboard.whiteboard.DenormalizePosition(position);
 
-			owner.textToolResizeCollection.Add(tbMsg);
+			owner.textToolResizeCollection.Add(tbResize);
 
 			Point offset = CalculateOffset(owner);
 

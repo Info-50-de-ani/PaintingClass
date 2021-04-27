@@ -42,7 +42,7 @@ namespace PaintingClass.Tabs
         /// <summary>
         /// se produce atunci cand Userul schimba font-sizeul la text
         /// </summary>
-        Action<double> OnFontSizeChanged = (thickness) => { };
+        public Action<double> OnFontSizeChanged = (fontSize) => { };
 
 		#endregion
 
@@ -56,7 +56,19 @@ namespace PaintingClass.Tabs
         }//click stanga o sa foloseasca unealta selectata
 
         public SolidColorBrush globalBrush = Brushes.Black;
-        public double thickness = 0.3;
+        public double globalBrushThickness = 0.3;
+        private double _globalFontSize;
+        public double globalFontSize {
+			set
+			{
+                if(value != _globalFontSize)
+				{
+                    _globalFontSize = value;
+                    OnFontSizeChanged(value);
+				}
+			}
+            get => _globalFontSize;
+        }
 
         //lista uneltelor incarcate
         List<PaintTool> tools = new List<PaintTool>();
@@ -230,7 +242,62 @@ namespace PaintingClass.Tabs
             }
         }
 
-        #endregion
+		#endregion
+
+		#region Panel Animations
+
+        private void CloseOpenPanels()
+		{
+            if (ColorPanel.RenderTransform.Value.M11 == 1)
+                SlidingAnimation_Grid(ColorPanel);
+            if (ThicknessPanel.RenderTransform.Value.M11 == 1)
+                SlidingAnimation_Grid(ThicknessPanel);
+            if (FontSizePanel.RenderTransform.Value.M11 == 1)
+                SlidingAnimation_Grid(FontSizePanel);
+		}
+
+        /// <summary>
+        /// Animeaza un grid pus ca parametru
+        /// la a doua chemare va face animatia invers
+        /// </summary>
+        /// <param name="grid"></param>
+		private void SlidingAnimation_Grid(Grid grid)
+		{
+
+            DoubleAnimation panelAnimation = new DoubleAnimation()
+            {
+                Duration = new Duration(new TimeSpan(0, 0, 0, 0, 300)),
+                DecelerationRatio = 0.9f
+            };
+
+            // matricea normala(care face obiectul sa arate normal) de scaling arata asa 
+            // 1 0
+            // 0 1 
+            // Matricea cand este ascuns meniul arata asa 
+            // 0 0 
+            // 0 1 
+            // coloana 1 reprezinta i(final) in functie de i(linia 1) si j(linia 2)
+            // coloana 2 reprezinta j(final) in functie de i(linia 1) si j(linia 2)
+            // scaleX reprezinta nr din coloana 1 linia 1
+
+            //Daca este collapsed panelul... 
+            if (grid.RenderTransform.Value.M11 == 0)
+            {
+                // animam la matricea normala
+                panelAnimation.To = 1;
+            }
+            else
+            {
+                // amnimam la matricea care ascunde meniul
+                panelAnimation.To = 0;
+            }
+            Storyboard.SetTargetProperty(panelAnimation, new PropertyPath("(Grid.RenderTransform).(ScaleTransform.ScaleX)"));
+            Storyboard.SetTarget(panelAnimation, grid);
+
+            Storyboard storyboard = new Storyboard();
+            storyboard.Children.Add(panelAnimation);
+            storyboard.Begin(this);
+        }
 
         /// <summary>
         /// Animatie pentru meniul de culori
@@ -239,99 +306,26 @@ namespace PaintingClass.Tabs
         /// <param name="e"></param>
         private void ColorMenu_Button_Click(object sender, RoutedEventArgs e)
         {
-            if (ThicknessPanel.RenderTransform.Value.M11 == 1)
-            {
-                BrushThicknessMenu_Button_Click(null, null);
-            }
-
-            DoubleAnimation panelAnimation = new DoubleAnimation()
-            {
-                Duration = new Duration(new TimeSpan(0, 0, 0, 0, 300)),
-                DecelerationRatio = 0.9f
-            };
-
-            // matricea normala(care face obiectul sa arate normal) de scaling arata asa 
-            // 1 0
-            // 0 1 
-            // Matricea cand este ascuns meniul arata asa 
-            // 0 0 
-            // 0 1 
-            // coloana 1 reprezinta i(final) in functie de i(linia 1) si j(linia 2)
-            // coloana 2 reprezinta j(final) in functie de i(linia 1) si j(linia 2)
-            // scaleX reprezinta nr din coloana 1 linia 1
-
-            //Daca este collapsed panelul... 
-            if (ColorPanel.RenderTransform.Value.M11 == 0)
-            {
-                // animam la matricea normala
-                panelAnimation.From = 0;
-                panelAnimation.To = 1;
-            }
-            else
-            {
-                // amnimam la matricea care ascunde meniul
-                panelAnimation.From = 1;
-                panelAnimation.To = 0;
-            }
-            Storyboard.SetTargetProperty(panelAnimation, new PropertyPath("(Grid.RenderTransform).(ScaleTransform.ScaleX)"));
-            Storyboard.SetTarget(panelAnimation, ColorPanel);
-
-            Storyboard storyboard = new Storyboard();
-            storyboard.Children.Add(panelAnimation);
-            storyboard.Begin(this);
-
+            CloseOpenPanels();
+            SlidingAnimation_Grid(ColorPanel);
         }
 
         private void BrushThicknessMenu_Button_Click(object sender, RoutedEventArgs e)
         {
-            if (ColorPanel.RenderTransform.Value.M11 == 1)
-            {
-                ColorMenu_Button_Click(null, null);
-            }
-
-            DoubleAnimation panelAnimation = new DoubleAnimation()
-            {
-                Duration = new Duration(new TimeSpan(0, 0, 0, 0, 300)),
-                DecelerationRatio = 0.9f
-            };
-
-            // matricea normala(care face obiectul sa arate normal) de scaling arata asa 
-            // 1 0
-            // 0 1 
-            // Matricea cand este ascuns meniul arata asa 
-            // 0 0 
-            // 0 1 
-            // coloana 1 reprezinta i(final) in functie de i(linia 1) si j(linia 2)
-            // coloana 2 reprezinta j(final) in functie de i(linia 1) si j(linia 2)
-            // scaleX reprezinta nr din coloana 1 linia 1
-
-            //Daca este collapsed panelul... 
-            if (ThicknessPanel.RenderTransform.Value.M11 == 0)
-            {
-                // animam la matricea normala
-                panelAnimation.From = 0;
-                panelAnimation.To = 1;
-            }
-            else
-            {
-                // amnimam la matricea care ascunde meniul
-                panelAnimation.From = 1;
-                panelAnimation.To = 0;
-            }
-            Storyboard.SetTargetProperty(panelAnimation, new PropertyPath("(Grid.RenderTransform).(ScaleTransform.ScaleX)"));
-            Storyboard.SetTarget(panelAnimation, ThicknessPanel);
-
-            Storyboard storyboard = new Storyboard();
-            storyboard.Children.Add(panelAnimation);
-            storyboard.Begin(this);
+            CloseOpenPanels();
+            SlidingAnimation_Grid(ThicknessPanel);
         }
-
-        private void FontSize_Button_Click(object sender, RoutedEventArgs e)
+		private void FontSizeMenu_Button_Click(object sender, RoutedEventArgs e)
         {
-
+            CloseOpenPanels();
+            SlidingAnimation_Grid(FontSizePanel);
         }
 
-        private void Color_Buton_Click(object sender, RoutedEventArgs e)
+		#endregion
+
+		#region Settings Panels 
+
+        private void Color_Button_Click(object sender, RoutedEventArgs e)
         {
             var buton = (Button)sender;
 
@@ -351,49 +345,66 @@ namespace PaintingClass.Tabs
                     break;
             }
 
-            ColorMenu_Button_Click(null, null);
+            CloseOpenPanels();
         }
 
-        private void Grosime_Buton_Click(object sender, RoutedEventArgs e)
+        private void BrushThickness_Button_Click(object sender, RoutedEventArgs e)
         {
             var buton = (Button)sender;
 
             switch ((string)buton.Tag)
             {
                 case "Subtire":
-                    thickness = 0.1;
+                    globalBrushThickness = 0.1;
                     break;
                 case "Normal":
-                    thickness = 0.3;
+                    globalBrushThickness = 0.3;
                     break;
                 case "Gros":
-                    thickness = 0.5;
+                    globalBrushThickness = 0.5;
                     break;
                 case "Foarte gros":
-                    thickness = 0.8;
+                    globalBrushThickness = 0.8;
                     break;
             }
 
-            BrushThicknessMenu_Button_Click(null, null);
+            CloseOpenPanels();
         }
 
-        #endregion
-
-        private void whiteboard_Image_Drop(object sender, DragEventArgs e)
+        private void FontSize_Button_Click(object sender, RoutedEventArgs e)
 		{
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files.Count() > 1)
-                return;
-            MessageBox.Show(files[0]);
-        }   
+            var buton = (Button)sender;
+
+            switch ((string)buton.Tag)
+            {
+                case "Mic":
+                    globalFontSize = 12;
+                    break;
+                case "Mediu":
+                    globalFontSize = 14;
+                    break;
+                case "Mare":
+                    globalFontSize = 16;
+                    break;
+                case "Foarte Mare":
+                    globalFontSize = 20;
+                    break;
+            }
+
+            CloseOpenPanels();
+        }
 
 		private void ClrPcker_Background_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
 		{
             string s = MyWhiteboardUtils.InvertHex(e.NewValue.ToString());
             globalBrush = new SolidColorBrush((Color)e.NewValue);
             TB_Alege_Culoare.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(s));
-            ColorMenu_Button_Click(null, null);
             colorPicker.IsOpen = false;
+
+            CloseOpenPanels();
         }
+
+        #endregion
+		#endregion
 	}
 }
