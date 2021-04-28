@@ -4,16 +4,25 @@ using System.Web;
 
 namespace PaintingClassCommon
 {
-    /// <summary>
-    /// Aceasta clasa TREBUIE sa fie identica cu cealalta copie
-    /// </summary>
+    // Aceast fisier TREBUIE sa fie identic cu cealalta copie!!!
+
     public enum PacketType
     {
         none = 0,
-        WhiteboardMessage = 1,
-        UserListMessage = 2,
-        ShareRequestMessage = 3, 
+
+        UserListMessage = 1,
+        ShareRequestMessage = 2,
+
+        WBItemMessage = 10,
+        WBCollectionMessage = 11,
+        SyncRequestMessage = 12,
+
+        WhiteboardMessage = 999 // obsolete
     }
+
+    /// <summary>
+    /// Fiecare Message este trimis intrun Packet
+    /// </summary>
     [Serializable]
     public class Packet
     {
@@ -33,21 +42,10 @@ namespace PaintingClassCommon
         }
     }
 
-    //trimis de client si de server
-    [Serializable]
-    public class WhiteboardMessage
-    {
-        public enum ContentType
-        {
-            Drawing, Action, TextMessage
-        };
-
-        public int clientId { get; set; }
-        public ContentType type { get; set; }
-        public string content { get; set; }
-    }
-
-    //trimis de server
+    /// <summary>
+    /// Contine date despre toti utilizatorii, se trimite la toti cand o schimbare se petrece
+    /// Trimis de server
+    /// </summary>
     [Serializable]
     public class UserListMessage
     {
@@ -58,26 +56,84 @@ namespace PaintingClassCommon
             public string name { get; set; }
             public bool isConnected { get; set; }
             public bool isShared { get; set; }
+            public int wbItemIndex { get; set; }
         }
         public UserListItem[] list { get; set; }
     }
 
     /// <summary>
-    /// Contine informatie despre un textbox (TextTool)
+    /// Cere sa dai share la un user
+    /// Trims de client-ul profesorului
     /// </summary>
     [Serializable]
-	public class UserTextMessage
-	{
-        static private int newId = 0;
-        public static int NewId { get {newId++; return newId - 1; } } 
-        public string text { set; get; }
-        public int id { set; get; }
-    }
-
-    //trims de client-ul profesorului
     public class ShareRequestMessage
     {
         public int clientId { get; set; }
         public bool isShared { get; set; }
     }
+
+    /// <summary>
+    /// Poate transmite un drawing, userControl sau comanda de a goli tabla
+    /// Poata adauga acel element sau poate inlocui o versiune veche a lui
+    /// </summary>
+    [Serializable]
+    public class WBItemMessage
+    {
+        public enum ContentType
+        {
+            drawing,
+            userControl,
+            clearAll
+        }
+        public enum Operation
+        {
+            add,
+            edit,
+            delete
+        }
+
+        public int clientID { get; set; }
+        public int itemIndex { get; set; }
+        public int contentIndex { get; set; }
+        public ContentType type { get; set; }
+        public Operation op { get; set; }
+        public string content { get; set; }
+    }
+
+    /// <summary>
+    /// O colectie de iteme de tabla
+    /// Daca partial este false atunci mesajul contine *toata* si ce exista deja trebuie golit
+    /// </summary>
+    [Serializable]
+    public class WBCollectionMessage
+    {
+        public int clientID { get; set; }
+        public bool partial { get; set; } = true;
+        public WBItemMessage[] items { get; set; }
+    }
+
+    /// <summary>
+    /// Cere sa retrimita tabla folosind un WBCollectionMessage
+    /// </summary>
+    [Serializable]
+    public class SyncRequestMessage
+    {
+        public int clientID { get; set; }
+    }
+
+    //trimis de client si de server
+    [Serializable]
+    [Obsolete("Vechi", true)]
+    public class WhiteboardMessage
+    {
+        public enum ContentType
+        {
+            Drawing, Action
+        };
+
+        public int clientId { get; set; }
+        public ContentType type { get; set; }
+        public string content { get; set; }
+    }
+
 }

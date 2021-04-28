@@ -29,7 +29,7 @@ namespace PaintingClass.PaintTools
         }
 
 
-        GeometryDrawing geometryDrawing;
+        GeometryDrawing drawing;
         EllipseGeometry ellipse;
         Point initialPos;
         bool isControlPressed = false;
@@ -39,8 +39,8 @@ namespace PaintingClass.PaintTools
             Window.GetWindow(whiteboard).KeyUp += Whiteboard_KeyUp;
             initialPos = position;
             ellipse = new EllipseGeometry(new Rect(position, position));
-            geometryDrawing = new GeometryDrawing(null, new Pen(this.owner.globalBrush, owner.thickness), ellipse);
-            whiteboard.collection.Add(geometryDrawing);
+            drawing = new GeometryDrawing(null, new Pen(this.owner.globalBrush, owner.thickness), ellipse);
+            whiteboard.collection.Add(drawing);
         }
 
         private void Whiteboard_KeyDown(object sender, KeyEventArgs e)
@@ -102,8 +102,8 @@ namespace PaintingClass.PaintTools
         }
         public override void MouseUp()
         {
-            MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage, MessageUtils.SerialzieDrawing(geometryDrawing));
             ellipse.Freeze();//extra performanta
+            MessageUtils.SendNewDrawing(drawing, whiteboard.collection.Count - 1);
             ellipse = null;
         }
     }

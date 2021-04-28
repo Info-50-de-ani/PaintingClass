@@ -12,35 +12,25 @@ using System.Windows.Markup;
 using PaintingClass.Tabs;
 using System.Web;
 using PaintingClassCommon;
+using System.Windows.Controls;
 
 namespace PaintingClass.Networking
 {
     public static class MessageUtils
     {
-        public static WhiteboardMessage SerialzieDrawing(Drawing drawing)
+        /// <summary>
+        /// Creaza un WBItemMessage care este trimis
+        /// </summary>
+        public static void SendNewDrawing(Drawing drawing, int index)
         {
-            WhiteboardMessage msg = new WhiteboardMessage { clientId = MainWindow.userData.clientID, type = WhiteboardMessage.ContentType.Drawing };
-            msg.content = XamlWriter.Save(drawing);
-            return msg;
-        }
-
-        public static WhiteboardMessage SerializeAction(string str)
-        {
-            WhiteboardMessage msg = new WhiteboardMessage { clientId = MainWindow.userData.clientID, type = WhiteboardMessage.ContentType.Action };
-            msg.content = str;
-            return msg;
-        }
-
-        public static void ApplyWhiteboardMessage(WhiteboardMessage wm, DrawingCollection dc)
-        {
-            if (wm.type== WhiteboardMessage.ContentType.Drawing)
+            MainWindow.instance.roomManager?.SendWVBtem(new WBItemMessage
             {
-                dc.Dispatcher.Invoke(() => dc.Add((Drawing)XamlReader.Parse(wm.content)));
-            }
-            else //Action
-            {
-                throw new NotImplementedException();
-            }
+                clientID = MainWindow.userData.clientID,
+                contentIndex=index,
+                type=WBItemMessage.ContentType.drawing,
+                op=WBItemMessage.Operation.add,
+                content = XamlWriter.Save(drawing)
+            });
         }
     }
 }

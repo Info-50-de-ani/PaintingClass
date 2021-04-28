@@ -21,8 +21,10 @@ namespace PaintingClass
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
 			return; // todo: temporar
-			if (e.Args.Length > 0)
-			{
+#pragma warning disable CS0162 // Unreachable code detected
+            if (e.Args.Length > 0)
+#pragma warning restore CS0162 // Unreachable code detected
+            {
 				#region extragem roomId din event args
 				{
 					int startidx = e.Args[0].IndexOf("//");

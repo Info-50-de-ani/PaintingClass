@@ -14,6 +14,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;    
 using System.Collections.ObjectModel;
 using System.Threading;
+using System.Windows.Markup;
+using System.Diagnostics;
+using PaintingClassCommon;
+
 namespace PaintingClass
 {
     /// <summary>
@@ -72,6 +76,73 @@ namespace PaintingClass
         public Point DenormalizePosition(Point p)
         {   
             return new Point(p.X / sizeX , p.Y/ sizeY );
+        }
+
+        /// <summary>
+        /// returneaza true daca sa aplicat cu success WBItemMessage-ul
+        /// </summary>
+        public bool ApplyWBItem(WBItemMessage msg)
+        {
+            switch (msg.type)
+            {
+                case WBItemMessage.ContentType.drawing:
+                    return ApplyDrawing(msg);
+                case WBItemMessage.ContentType.userControl:
+                    return false;
+                case WBItemMessage.ContentType.clearAll:
+                    return ClearWhiteboard();
+            }
+            return false;
+        }
+
+        public bool ClearWhiteboard()
+        {
+            collection.Clear();
+            return true;
+        }
+
+        bool ApplyDrawing(WBItemMessage msg)
+        {
+            Drawing drawing=null;
+            
+            if (msg.op != WBItemMessage.Operation.delete)
+            {
+                drawing = XamlReader.Parse(msg.content) as Drawing;
+                if (drawing==null)
+                {
+                    Trace.WriteLine("XAML parser returned null from WBItemMessage.content");
+                    return false;
+                }
+            }    
+
+            switch (msg.op)
+            {
+                case WBItemMessage.Operation.add:
+                    if (msg.contentIndex!=collection.Count)
+                    {
+                        Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
+                        return false;
+                    }
+                    collection.Add(drawing);
+                    return true;
+                case WBItemMessage.Operation.edit:
+                    if (msg.contentIndex<0&&msg.contentIndex>=collection.Count)
+                    {
+                        Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
+                        return false;
+                    }
+                    collection[msg.contentIndex] = drawing;
+                    break;
+                case WBItemMessage.Operation.delete:
+                    if (msg.contentIndex < 0 && msg.contentIndex >= collection.Count)
+                    {
+                        Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
+                        return false;
+                    }
+                    collection[msg.contentIndex] = null;
+                    break;
+            }
+            return false;
         }
     }
 }

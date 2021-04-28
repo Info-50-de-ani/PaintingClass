@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using PaintingClass.Networking;
+using PaintingClassCommon;
 
 namespace PaintingClass.Tabs
 {
@@ -24,6 +26,9 @@ namespace PaintingClass.Tabs
     {
         //in viitor valoarea ar trb calculata
         const int whiteboardsPerLine = 4;
+    
+        //todo:solutie temporara
+        bool selfShared;
 
         /// <summary>
         /// trebuie adaugata o noua clasa ce cotine si informatia despre table
@@ -40,13 +45,6 @@ namespace PaintingClass.Tabs
                 else
                     rootItemsControl.Dispatcher.InvokeAsync(UpdateItemsSource);
             };
-
-            // PT TEST
-            //for (int i=0;i<=20;i++)
-            //{
-            //    MainWindow.instance.roomManager.userList.Add(100 + i, new NetworkUser { name = $"user{i}" });
-            //}
-            //MainWindow.instance.roomManager.onUserListUpdate?.Invoke();
         }
 
         void UpdateItemsSource()
@@ -70,6 +68,15 @@ namespace PaintingClass.Tabs
                     i++;
                 }
             }
+        }
+
+        private void SelfShareButton_Click(object sender, RoutedEventArgs e)
+        {
+            //todo:solutie temporara
+            selfShared = !selfShared;
+            selfShareButton.Content = selfShared ? "Stop sharing" : "Share";
+            ShareRequestMessage srm = new() { clientId = MainWindow.userData.clientID, isShared = selfShared };
+            MainWindow.instance.roomManager.SendMessage(Packet.Pack(PacketType.ShareRequestMessage, JsonSerializer.Serialize(srm)));
         }
     }
 }

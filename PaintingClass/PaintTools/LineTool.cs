@@ -52,7 +52,7 @@ namespace PaintingClass.PaintTools
 		public override void MouseUp()
 		{
 			drawing.Freeze();//extra performanta
-			MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage, MessageUtils.SerialzieDrawing(drawing));
+			MessageUtils.SendNewDrawing(drawing, whiteboard.collection.Count - 1);
 
 			drawing = null;
 			line = null;

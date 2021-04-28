@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,13 +32,23 @@ namespace PaintingClass.UserControls
                 shareButton = null;
             }
 
-            DataContextChanged += (sender,args) =>
+            DataContextChanged += (sender, args) =>
             {
                 nu = args.NewValue as NetworkUser;
-                if (nu!=null)
+                if (nu != null)
                 {
-                    whiteboard.collection = nu.collection;
+                    //
                 }
+            };
+
+            IsVisibleChanged += (sender, e) =>
+            {
+                if (nu==null || whiteboardSlot.Child!=null || (bool)e.NewValue == false || (bool)e.OldValue == true) return;
+
+                //fur copilul!
+                if (nu.whiteboard.Parent!=null)
+                ((Viewbox)nu.whiteboard.Parent).Child = null;
+                whiteboardSlot.Child = nu.whiteboard;
             };
         }
 
@@ -45,7 +56,7 @@ namespace PaintingClass.UserControls
         {
             if (nu==null) return;
             ShareRequestMessage srm = new() { clientId = nu.clientId, isShared = !nu.isShared };
-            MainWindow.instance.roomManager.PackAndSend<ShareRequestMessage>(PacketType.ShareRequestMessage, srm);
+            MainWindow.instance.roomManager.SendMessage(Packet.Pack(PacketType.ShareRequestMessage, JsonSerializer.Serialize(srm)));
         }
     }
 

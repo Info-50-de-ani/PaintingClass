@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using PaintingClassCommon;
 using PaintingClass.Tabs;
+using PaintingClass.UserControls;
+using System.Windows;
 
 namespace PaintingClass.Networking
 {
@@ -11,8 +13,11 @@ namespace PaintingClass.Networking
         int _clientId;
         string _name;
         bool _isConnected;
-        DrawingCollection _collection;
         bool _isShared;
+        SharedUserTab sharedUserTab;
+
+        int _wbItemIndex;
+        Whiteboard _whiteboard;
 
         #region properties
         public int clientId
@@ -42,16 +47,6 @@ namespace PaintingClass.Networking
                 OnPropertyChanged(nameof(isConnected));
             }
         }
-        // WARNING: Ca sal accesezi foloseste collection.Dispatcher.Invoke()
-        public DrawingCollection collection
-        {
-            get => _collection;
-            set
-            {
-                _collection = value;
-                OnPropertyChanged(nameof(collection));
-            }
-        }
         public bool isShared
         {
             get => _isShared;
@@ -59,19 +54,50 @@ namespace PaintingClass.Networking
             {
                 if (_isShared == value)
                     return;
-                if (value==true)
+                App.Current.Dispatcher.Invoke(() =>
                 {
-                    var tab = new SharedUserTab(this);
-                }
-                else
-                {
-
-                }
+                    if (value==true)
+                    {
+                        if (sharedUserTab==null)
+                        {
+                            sharedUserTab = new SharedUserTab(this);
+                            MainWindow.instance.AddTab(sharedUserTab,$"Tabla lui {name}");
+                        }
+                    }
+                    else
+                    {
+                        if (sharedUserTab!=null)
+                        {
+                            MainWindow.instance.RemoveTab(sharedUserTab);
+                            sharedUserTab = null;
+                        }
+                    }
+                });
                 _isShared = value;
                 OnPropertyChanged(nameof(isShared));
             }
         }
-        
+
+        public int wbItemIndex
+        {
+            get => _wbItemIndex;
+            set
+            {
+                _wbItemIndex = value;
+                OnPropertyChanged(nameof(wbItemIndex));
+            }
+        }
+        // foloseste App.Current.Dispatcher.Invoke pentru a folosi obiect-ul
+        public Whiteboard whiteboard
+        {
+            get => _whiteboard;
+            set
+            {
+                _whiteboard = value;
+                OnPropertyChanged(nameof(whiteboard));
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         // Create the OnPropertyChanged method to raise the event
         // The calling member's name will be used as the parameter.
@@ -80,9 +106,14 @@ namespace PaintingClass.Networking
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
         #endregion properties
+
         public NetworkUser()
         {
-            App.Current.Dispatcher.Invoke(() => _collection = new());
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                whiteboard = new();
+                whiteboard.Background = Brushes.White;
+            });
         }
     }
     

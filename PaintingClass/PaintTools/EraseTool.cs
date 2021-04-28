@@ -74,8 +74,8 @@ namespace PaintingClass.PaintTools
         public override void MouseUp()
 		{
 			drawing.Freeze();//extra performanta
-			MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage, MessageUtils.SerialzieDrawing(drawing));
-			drawing = null;
+            MessageUtils.SendNewDrawing(drawing, whiteboard.collection.Count - 1);
+            drawing = null;
 			figure = null;
 		}
 	}

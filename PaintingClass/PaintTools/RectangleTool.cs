@@ -87,7 +87,7 @@ namespace PaintingClass.PaintTools
         public override void MouseUp()
         {
             rectangle.Freeze();//extra performanta
-            MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage, MessageUtils.SerialzieDrawing(geometryDrawing));
+            MessageUtils.SendNewDrawing(geometryDrawing, whiteboard.collection.Count - 1);
             rectangle = null;
         }
     }

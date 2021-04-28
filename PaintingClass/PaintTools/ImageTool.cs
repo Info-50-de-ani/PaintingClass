@@ -169,7 +169,7 @@ namespace PaintingClass.PaintTools
 				{
                     // poza va fi trimisa la server 
                     image.Freeze();
-                    MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage, MessageUtils.SerialzieDrawing(image));
+                    //todo:MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage, MessageUtils.SerialzieDrawing(image));
                     image = null;
                     bmp = null;
                     mouseOffset = new Point(0, 0);
@@ -237,7 +237,7 @@ namespace PaintingClass.PaintTools
             if(image != null)
 			{
                 image.Freeze();
-                MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage, MessageUtils.SerialzieDrawing(image));
+                //todo:MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage, MessageUtils.SerialzieDrawing(image));
                 image = null;
                 bmp = null;
             }
@@ -312,7 +312,7 @@ namespace PaintingClass.PaintTools
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void Whiteboard_MouseMove(object sender, MouseEventArgs e)
-		{
+        {
             Point position = whiteboard.TransformPosition(e.GetPosition(whiteboard));
             
             if(image!=null)

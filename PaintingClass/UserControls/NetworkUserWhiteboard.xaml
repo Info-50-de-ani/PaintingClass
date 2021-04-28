@@ -27,7 +27,7 @@
         </Grid>
         <Viewbox Grid.Row="1" Stretch="Uniform">
             <Border BorderBrush="Black" BorderThickness="1">
-                <PaintingClass:Whiteboard x:Name="whiteboard" Height="90" Width="160" Background="White"/>
+                <Viewbox x:Name="whiteboardSlot" Height="90" Width="160" Stretch="Fill"/>
             </Border>
         </Viewbox>
     </Grid>

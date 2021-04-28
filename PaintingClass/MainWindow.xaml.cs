@@ -85,7 +85,6 @@ namespace PaintingClass
             myWhiteboard = new MyWhiteboard();
             AddTab(myWhiteboard, "Tabla mea");
             AddTab(new TestTab(), "test tab");
-            AddTab(new TestUI(), "test ui");
         }
 
         /// <summary>
