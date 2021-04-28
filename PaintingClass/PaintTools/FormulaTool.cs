@@ -61,6 +61,14 @@ namespace PaintingClass.PaintTools
 			Canvas.SetLeft(stackPanel, offset.X + positionDenormalized.X * owner.myWhiteboardViewBox.RenderSize.Width);
 			stackPanel.RenderTransform = new ScaleTransform(owner.myWhiteboardViewBox.ActualWidth / SystemParameters.PrimaryScreenWidth * 1d / (owner.ViewBoxToWindowSizeHeightRatio * SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth * 16d / 9d), owner.myWhiteboardViewBox.ActualHeight / SystemParameters.PrimaryScreenHeight * 1d / owner.ViewBoxToWindowSizeHeightRatio);
 		}
+
+		public void OnTranformChanged()
+		{
+			Point offset = TextTool.CalculateOffset(owner);
+			Canvas.SetTop(stackPanel, offset.Y + absPosition.Y / Whiteboard.sizeY * owner.myWhiteboardViewBox.RenderSize.Height * owner.myWhiteboardViewBox.RenderTransform.Value.M22);
+			Canvas.SetLeft(stackPanel, offset.X + absPosition.X / Whiteboard.sizeX * owner.myWhiteboardViewBox.RenderSize.Width * owner.myWhiteboardViewBox.RenderTransform.Value.M11);
+			stackPanel.RenderTransform = owner.myWhiteboardViewBox.RenderTransform;
+		}
 	}
 
 	public class FormulaTool : PaintTool, IToolSelected
@@ -321,15 +329,20 @@ namespace PaintingClass.PaintTools
 			{
 				absPosition = position,
 				owner = owner,
-				absSize = new Size(stackPanel.ActualWidth/owner.myWhiteboardViewBox.ActualWidth*100, stackPanel.ActualHeight / owner.myWhiteboardViewBox.ActualHeight * 100),
+				absSize = new Size(stackPanel.ActualWidth/owner.myWhiteboardViewBox.ActualWidth* Whiteboard.sizeX, stackPanel.ActualHeight / owner.myWhiteboardViewBox.ActualHeight * Whiteboard.sizeY),
 				stackPanel = stackPanel
 			};
+
+			owner.OnTransformChanged += formulaToolResize.OnTranformChanged;
 			owner.FormulaPanelParentGrid.SizeChanged += formulaToolResize.UpdateTextBoxSize;
 			owner.formulaToolResizeCollection.Add(formulaToolResize);
 			myWhiteboardCanvas.Children.Add(stackPanel);
 			position = MainWindow.instance.myWhiteboard.whiteboard.DenormalizePosition(position);
-			Canvas.SetTop(stackPanel, position.Y * myWhiteboardCanvas.ActualHeight);
-			Canvas.SetLeft(stackPanel, position.X * myWhiteboardCanvas.ActualWidth);
+
+			Point offset = TextTool.CalculateOffset(owner);
+			Canvas.SetTop(stackPanel, offset.Y + position.Y * owner.myWhiteboardViewBox.RenderSize.Height * owner.myWhiteboardViewBox.RenderTransform.Value.M22);
+			Canvas.SetLeft(stackPanel, offset.X + position.X * owner.myWhiteboardViewBox.RenderSize.Width * owner.myWhiteboardViewBox.RenderTransform.Value.M11);
+			stackPanel.RenderTransform = owner.myWhiteboardViewBox.RenderTransform;
 		}
 
 		private void StackPanel_MouseClick(object sender, MouseEventArgs e)

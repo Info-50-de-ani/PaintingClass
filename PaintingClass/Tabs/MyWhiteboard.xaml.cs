@@ -44,6 +44,10 @@ namespace PaintingClass.Tabs
         /// </summary>
         public Action<double> OnFontSizeChanged = (fontSize) => { };
 
+        /// <summary>
+        /// se produce cand <see cref="myWhiteboardViewBox"/> isi schimba tranformul
+        /// </summary>
+        public Action OnTransformChanged = () => { };
 		#endregion
 
 		private PaintTool _selectedTool;
@@ -134,6 +138,8 @@ namespace PaintingClass.Tabs
                 {
                     ImageTool t = (ImageTool)tool;
                     this.Drop += t.OnDropEventHandler;
+                    this.Loaded += (sender, e) => { Window.GetWindow(whiteboard).KeyDown += t.OnPasteEventHandler; };
+                    this.OnTransformChanged += () => { t.ImageResizer_SizeChanged(null, null); };
                 }
             }
 
@@ -168,11 +174,13 @@ namespace PaintingClass.Tabs
                 isDrawing = false;
                 selectedTool.MouseUp();
             };
-
+			MouseWheel += MyWhiteboard_OnScroll;
+			VerticalZoomScrollbar.Scroll += VerticalZoomScrollbar_Scroll;
+			HorizontalZoomScrollbar.Scroll += HorizontalZoomScrollbar_Scroll;
         }
 
-        //contine toate tipurile de PaintTool obitnute prin reflexie
-        static Type[] paintToolTypes;
+		//contine toate tipurile de PaintTool obitnute prin reflexie
+		static Type[] paintToolTypes;
 
         //constructor static, ruleaza o singura data, folosit pentru reflexie
         static MyWhiteboard()
@@ -185,11 +193,81 @@ namespace PaintingClass.Tabs
                               select type).ToArray();
         }
 
-        #region Event Handlere butoane
 
-        #region Pdf Viewer
+        #region Zoom
 
-        private void ClosePdfButton_Click(object sender, RoutedEventArgs e)
+        public Point ZoomTransformPosition(Point p) => new Point(p.X * myWhiteboardViewBox.RenderTransform.Value.M11, p.Y * myWhiteboardViewBox.RenderTransform.Value.M22);
+
+        private void HorizontalZoomScrollbar_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
+        {
+            Matrix mat = myWhiteboardViewBox.RenderTransform.Value;
+            mat.OffsetX = -(myWhiteboardViewBox.ActualWidth*mat.M11 - myWhiteboardViewBox.ActualWidth)*HorizontalZoomScrollbar.Value;
+            myWhiteboardViewBox.RenderTransform = new MatrixTransform(mat);
+            OnTransformChanged();
+        }
+
+        private void VerticalZoomScrollbar_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
+        {
+            Matrix mat = myWhiteboardViewBox.RenderTransform.Value;
+            mat.OffsetY = -(myWhiteboardViewBox.ActualHeight * mat.M22 - myWhiteboardViewBox.ActualHeight) * VerticalZoomScrollbar.Value;
+            myWhiteboardViewBox.RenderTransform = new MatrixTransform(mat);
+            OnTransformChanged();
+        }
+
+        private void MyWhiteboard_OnScroll(object sender, MouseWheelEventArgs e)
+		{
+			const double resolution = 1200d;
+			if (Keyboard.IsKeyDown(Key.LeftCtrl))
+			{
+				Matrix mat = myWhiteboardViewBox.RenderTransform.Value;
+				if (mat.M11 + e.Delta / resolution > 0.1) mat.M11 += e.Delta / resolution;
+				if (mat.M22 + e.Delta / resolution > 0.1) mat.M22 += e.Delta / resolution;
+
+				if (mat.M11 <= 1)
+				{
+					HorizontalZoomScrollbar.Visibility = Visibility.Hidden;
+					HorizontalZoomScrollbar.Value = 0;
+				}
+				else
+				{
+					HorizontalZoomScrollbar.ViewportSize = HorizontalZoomScrollbar.Maximum * 1 / (mat.M11 - 1);
+					HorizontalZoomScrollbar.Visibility = Visibility.Visible;
+				}
+
+				if (mat.M22 <= 1)
+				{
+					VerticalZoomScrollbar.Visibility = Visibility.Hidden;
+					VerticalZoomScrollbar.Value = 0;
+				}
+				else
+				{
+					VerticalZoomScrollbar.ViewportSize = VerticalZoomScrollbar.Maximum * 1 / (mat.M22 - 1);
+					VerticalZoomScrollbar.Visibility = Visibility.Visible;
+				}
+				mat.OffsetX = -(myWhiteboardViewBox.ActualWidth * mat.M11 - myWhiteboardViewBox.ActualWidth) * VerticalZoomScrollbar.Value;
+				mat.OffsetY = -(myWhiteboardViewBox.ActualHeight * mat.M22 - myWhiteboardViewBox.ActualHeight) * VerticalZoomScrollbar.Value;
+				myWhiteboardViewBox.RenderTransform = new MatrixTransform(mat);
+                OnTransformChanged();
+			}
+			if (Keyboard.IsKeyDown(Key.LeftShift))
+			{ 
+                HorizontalZoomScrollbar.Value -= e.Delta/ resolution;
+                HorizontalZoomScrollbar_Scroll(null,null);
+            }
+            else
+			{
+                VerticalZoomScrollbar.Value -= e.Delta / resolution;
+                VerticalZoomScrollbar_Scroll(null, null);
+            }
+		}
+
+		#endregion
+
+		#region Event Handlere butoane
+
+		#region Pdf Viewer
+
+		private void ClosePdfButton_Click(object sender, RoutedEventArgs e)
         {
             DoubleAnimation opacityAnimation = new DoubleAnimation()
             {

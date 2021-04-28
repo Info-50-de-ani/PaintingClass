@@ -77,12 +77,86 @@
             <ColumnDefinition Width="6*" />
         </Grid.ColumnDefinitions>
 
+
+        <!--#region Tabla-->
+        <!--  Scroll bar vertical pt zoom  -->
+        <ScrollBar
+            x:Name="VerticalZoomScrollbar"
+            Margin="0,20,5,20"
+            HorizontalAlignment="Right"
+            Panel.ZIndex="3"
+            Background="DarkCyan"
+            Maximum="1"
+            Minimum="0"
+            Visibility="Hidden">
+            <ScrollBar.ViewportSize>100000</ScrollBar.ViewportSize>
+            <ScrollBar.Resources>
+                <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">10</sys:Double>
+            </ScrollBar.Resources>
+            <ScrollBar.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
+            </ScrollBar.Effect>
+        </ScrollBar>
+        <!--  scroll bar orizontal  -->
+        <ScrollBar
+            x:Name="HorizontalZoomScrollbar"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            Margin="0,6,0,0"
+            VerticalAlignment="Top"
+            Panel.ZIndex="3"
+            Background="DarkCyan"
+            Maximum="1"
+            Minimum="0"
+            Orientation="Horizontal"
+            Visibility="Hidden">
+            <ScrollBar.ViewportSize>20</ScrollBar.ViewportSize>
+            <ScrollBar.Resources>
+                <sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">10</sys:Double>
+            </ScrollBar.Resources>
+            <ScrollBar.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="3" />
+            </ScrollBar.Effect>
+        </ScrollBar>
+        <Viewbox
+            x:Name="myWhiteboardViewBox"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            Stretch="Uniform">
+            <Viewbox.RenderTransform>
+                <ScaleTransform ScaleX="1" ScaleY="1" />
+            </Viewbox.RenderTransform>
+            <Border BorderBrush="Black" BorderThickness="1">
+                <PaintingClass:Whiteboard
+                    x:Name="whiteboard"
+                    Grid.ColumnSpan="2"
+                    Width="160"
+                    Height="90"
+                    AllowDrop="True"
+                    Background="Transparent">
+                    <PaintingClass:Whiteboard.OpacityMask>
+                        <VisualBrush Visual="{Binding ElementName=mask}" />
+                    </PaintingClass:Whiteboard.OpacityMask>
+                </PaintingClass:Whiteboard>
+            </Border>
+        </Viewbox>
+        <Canvas
+            x:Name="myWhiteboardCanvas"
+            Grid.Column="1"
+            Grid.ColumnSpan="2" />
+        <Border
+            x:Name="mask"
+            Grid.Column="0"
+            Margin="-172,0,20,-60"
+            Background="White" />
+        <!--#endregion-->
+
         <!--#region PDF Viewer-->
         <Grid
             x:Name="PdfViewerGrid"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Panel.ZIndex="2"
+            Panel.ZIndex="4"
             Visibility="Hidden">
             <Grid.Effect>
                 <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
@@ -190,6 +264,7 @@
             <Grid
                 x:Name="FontSizePanel"
                 Grid.Row="3"
+                Panel.ZIndex="4"
                 Focusable="False">
                 <Grid.Effect>
                     <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
@@ -237,7 +312,8 @@
             <Grid
                 x:Name="ColorPanel"
                 Grid.Row="1"
-                Grid.RowSpan="2">
+                Grid.RowSpan="2"
+                Panel.ZIndex="4">
                 <Grid.RenderTransform>
                     <ScaleTransform ScaleX="0" />
                 </Grid.RenderTransform>
@@ -313,7 +389,8 @@
                 x:Name="ThicknessPanel"
                 Grid.Row="2"
                 Grid.RowSpan="2"
-                Margin="0,0,0,106">
+                Margin="0,0,0,106"
+                Panel.ZIndex="4">
                 <Grid.Effect>
                     <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
                 </Grid.Effect>
@@ -359,7 +436,7 @@
             x:Name="FormulaPanelParentGrid"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Panel.ZIndex="2"
+            Panel.ZIndex="4"
             Visibility="Hidden">
             <Grid.Effect>
                 <DropShadowEffect
@@ -399,27 +476,7 @@
         </Grid>
         <!--#endregion-->
 
-        <!--#region Tabla-->
-        <Viewbox
-            x:Name="myWhiteboardViewBox"
-            Grid.Column="1"
-            Grid.ColumnSpan="2"
-            Stretch="Uniform">
-            <PaintingClass:Whiteboard
-                x:Name="whiteboard"
-                Grid.ColumnSpan="2"
-                Width="160"
-                Height="90"
-                AllowDrop="True"
-                Background="Transparent"
-                BorderBrush="Black"
-                BorderThickness="1" />
-        </Viewbox>
-        <Canvas
-            x:Name="myWhiteboardCanvas"
-            Grid.Column="1"
-            Grid.ColumnSpan="2" />
-        <!--#endregion-->
+
 
     </Grid>
 </UserControl>
