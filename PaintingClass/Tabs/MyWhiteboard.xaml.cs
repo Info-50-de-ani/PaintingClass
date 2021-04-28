@@ -249,7 +249,7 @@ namespace PaintingClass.Tabs
 				myWhiteboardViewBox.RenderTransform = new MatrixTransform(mat);
                 OnTransformChanged();
 			}
-			if (Keyboard.IsKeyDown(Key.LeftShift))
+			else if (Keyboard.IsKeyDown(Key.LeftShift))
 			{ 
                 HorizontalZoomScrollbar.Value -= e.Delta/ resolution;
                 HorizontalZoomScrollbar_Scroll(null,null);
