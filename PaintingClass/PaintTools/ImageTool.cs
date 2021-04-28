@@ -136,7 +136,7 @@ namespace PaintingClass.PaintTools
             {
                 // poza va fi trimisa la server 
                 image.Freeze();
-                //MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage, MessageUtils.SerialzieDrawing(image));
+                MessageUtils.SendNewDrawing(image, whiteboard.collection.Count - 1);
                 image = null;
                 bmp = null;
                 mouseOffset = new Point(0, 0);
@@ -290,7 +290,7 @@ namespace PaintingClass.PaintTools
                 if (image != null)
                 {
                     image.Freeze();
-                    //MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage, MessageUtils.SerialzieDrawing(image));
+                    MessageUtils.SendNewDrawing(image, whiteboard.collection.Count - 1); 
                     image = null;
                     bmp = null;
                 }
