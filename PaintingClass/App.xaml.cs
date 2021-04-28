@@ -38,27 +38,8 @@ namespace PaintingClass
 				
 				}
 				#endregion
+
 				Debug.Assert(startedAppFromBrowserroomId != 0);
-			}
-			else
-			{
-				var process = Process.GetCurrentProcess();
-				foreach (var reg in Registry.ClassesRoot.GetSubKeyNames())
-				{
-					if (reg == Networking.Constants.customProtocol)
-					{
-						return;
-					}
-				}
-				{
-					RegistryKey key = Registry.ClassesRoot.CreateSubKey(Networking.Constants.customProtocol, true);
-					key.SetValue("URL protocol", "");
-					RegistryKey shellkey = key.CreateSubKey("shell", true);
-					RegistryKey openkey = shellkey.CreateSubKey("open", true);
-					RegistryKey coomandkey = openkey.CreateSubKey("command", true);
-					string fullPath = process.MainModule.FileName;
-					coomandkey.SetValue("", fullPath + " \"%1\"");
-				}
 			}
 		}
 	}

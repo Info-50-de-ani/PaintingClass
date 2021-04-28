@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net5.0-windows10.0.19041.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <InternalsAssemblyNames>PresentationCore;</InternalsAssemblyNames>
@@ -14,6 +14,10 @@
 
   <ItemGroup>
     <None Remove="Networking\RoomManager" />
+    <None Remove="Resources\Culori\galben.png" />
+    <None Remove="Resources\Culori\negru.png" />
+    <None Remove="Resources\Culori\rosu.png" />
+    <None Remove="Resources\Culori\verde.png" />
     <None Remove="Resources\Fonts\Manrope-Bold.ttf" />
     <None Remove="Resources\Fonts\Manrope-ExtraBold.ttf" />
     <None Remove="Resources\Fonts\Manrope-ExtraLight.ttf" />
@@ -21,22 +25,38 @@
     <None Remove="Resources\Fonts\Manrope-Medium.ttf" />
     <None Remove="Resources\Fonts\Manrope-Regular.ttf" />
     <None Remove="Resources\Fonts\Manrope-SemiBold.ttf" />
+    <None Remove="Resources\Grosimi\foarte gros.png" />
+    <None Remove="Resources\Grosimi\foarteGros.png" />
+    <None Remove="Resources\Grosimi\gros.png" />
+    <None Remove="Resources\Grosimi\normal.png" />
+    <None Remove="Resources\Grosimi\subtire.png" />
     <None Remove="Resources\Login\Images\ButonElev.png" />
     <None Remove="Resources\Login\Images\ButonProfesor.png" />
     <None Remove="Resources\Login\Images\Clock.png" />
     <None Remove="Resources\Login\Images\CloseIcon.png" />
     <None Remove="Resources\Login\Images\Shadow.png" />
+    <None Remove="Resources\Tools\circle.png" />
+    <None Remove="Resources\Tools\erase.png" />
+    <None Remove="Resources\Tools\formula.png" />
+    <None Remove="Resources\Tools\image.png" />
+    <None Remove="Resources\Tools\line.png" />
+    <None Remove="Resources\Tools\PDF.png" />
+    <None Remove="Resources\Tools\pen.png" />
+    <None Remove="Resources\Tools\square.png" />
+    <None Remove="Resources\Tools\text.png" />
+    <None Remove="Resources\Whiteboard\Images\CloseButton.png" />
+    <None Remove="Resources\Whiteboard\Images\ShareButton.png" />
     <None Remove="Tabs\Images\DeleteIcon.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.0.2" />
     <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.5.0" />
     <PackageReference Include="Microsoft.Windows.Shell" Version="3.0.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.3.3" />
     <PackageReference Include="WebSocketSharpFork" Version="1.0.4" />
     <PackageReference Include="WpfMath" Version="0.9.0" />
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="Analytics">
       <HintPath>..\..\..\..\Downloads\FormulaDrawWPF\FormulaDrawWPF\DEVLIBNET.ACADEMIC\Libraries\Analytics.dll</HintPath>
@@ -75,6 +95,10 @@
 
   <ItemGroup>
     <Resource Include="Login\Images\LoginBackground.jpg" />
+    <Resource Include="Resources\Culori\galben.png" />
+    <Resource Include="Resources\Culori\negru.png" />
+    <Resource Include="Resources\Culori\rosu.png" />
+    <Resource Include="Resources\Culori\verde.png" />
     <Resource Include="Resources\Fonts\Manrope-Bold.ttf" />
     <Resource Include="Resources\Fonts\Manrope-ExtraBold.ttf" />
     <Resource Include="Resources\Fonts\Manrope-ExtraLight.ttf" />
@@ -82,13 +106,34 @@
     <Resource Include="Resources\Fonts\Manrope-Medium.ttf" />
     <Resource Include="Resources\Fonts\Manrope-Regular.ttf" />
     <Resource Include="Resources\Fonts\Manrope-SemiBold.ttf" />
+    <Resource Include="Resources\Grosimi\foarteGros.png" />
+    <Resource Include="Resources\Grosimi\gros.png" />
+    <Resource Include="Resources\Grosimi\normal.png" />
+    <Resource Include="Resources\Grosimi\subtire.png" />
     <Resource Include="Resources\Login\Images\ButonElev.png" />
     <Resource Include="Resources\Login\Images\ButonProfesor.png" />
     <Resource Include="Resources\Login\Images\Clock.png" />
     <Resource Include="Resources\Login\Images\CloseIcon.png" />
     <Resource Include="Resources\Login\Images\Shadow.png" />
     <Resource Include="Resources\Login\Images\Whiteboard.png" />
+    <Resource Include="Resources\Tools\PDF.png" />
+    <Resource Include="Resources\Whiteboard\Images\CloseButton.png" />
+    <Resource Include="Resources\Whiteboard\Images\ShareButton.png" />
+    <Resource Include="Resources\Tools\circle.png" />
+    <Resource Include="Resources\Tools\erase.png" />
+    <Resource Include="Resources\Tools\formula.png" />
+    <Resource Include="Resources\Tools\image.png" />
+    <Resource Include="Resources\Tools\line.png" />
+    <Resource Include="Resources\Tools\pen.png" />
+    <Resource Include="Resources\Tools\square.png" />
+    <Resource Include="Resources\Tools\text.png" />
     <Resource Include="Tabs\Images\DeleteIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="UserControls\PdfViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -27,9 +27,11 @@ namespace PaintingClass.PaintTools
 
         public override Control GetControl()
         {
-            Label label = new Label();
-            label.Content = "Draw";
-            return label;
+            var cc = new ContentControl() { Height = 40 };
+            Image image = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Tools/pen.png")) };
+            RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Fant);
+            cc.Content = image;
+            return cc;
         }
 
 
@@ -52,7 +54,7 @@ namespace PaintingClass.PaintTools
             
             // punem totul in drawing collection 
             drawing = new GeometryDrawing();
-            drawing.Pen = new Pen(owner.globalBrush, owner.thickness);
+            drawing.Pen = new Pen(owner.globalBrush, owner.globalBrushThickness);
             drawing.Geometry = geometry;
             whiteboard.collection.Add(drawing);
         }

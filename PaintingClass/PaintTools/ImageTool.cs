@@ -16,6 +16,11 @@ using PaintingClass.PaintTools;
 using PaintingClass.Networking;
 using Microsoft.Win32;
 using System.IO;
+using System.Diagnostics;
+using PaintingClass.PaintTools.Interfaces;
+using System.IO.Packaging;
+using System.Data;
+using System.Windows.Interop;
 
 namespace PaintingClass.PaintTools
 {
@@ -23,30 +28,32 @@ namespace PaintingClass.PaintTools
     /// Folosit pentru a afisa imagini pe tabla 
     /// si pentru ale trimite
     /// </summary>
-	public class ImageTool : PaintTool
-	{
+	public class ImageTool : PaintTool, IToolSelected
+    {
         const int defaultImageSize = 50;
 
         public override int priority => 3;
 
         public override Control GetControl()
         {
-            Label label = new Label();
-            label.Content = "Image";
-            return label;
+            var cc = new ContentControl() { Height = 40 };
+            Image image = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Tools/image.png")) };
+            RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Fant);
+            cc.Content = image;
+            return cc;
         }
 
-		#region Fields 
+        #region Fields 
 
-		ImageDrawing image;
+        ImageDrawing image;
         BitmapImage bmp;
-        
+
         /// <summary>
         /// Contine doua gridSplittere cu ajutorul carora userul poate da resize la imagine.
         /// Important: Este instanta o singura data in constructor 
         /// </summary>
         Grid resizeGrid;
-        
+
         Point mouseOffset;
         Size size;
 
@@ -55,8 +62,8 @@ namespace PaintingClass.PaintTools
         /// cand acesta apasa pe langa poza se va face false insa daca apasa pe poza 
         /// acesta ramane true
         /// </summary>
-        bool isMoving;
-
+        bool isMoving = false;
+        private int DragDropImagesCnt = 0;
         #endregion
 
         #region private Methods 
@@ -78,8 +85,8 @@ namespace PaintingClass.PaintTools
             grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(9) });
             grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(0) });
 
-            GridSplitter gsVert = new GridSplitter() { Height = 9, HorizontalAlignment = HorizontalAlignment.Stretch,Background = Brushes.Gray};
-            GridSplitter gsHorz = new GridSplitter() { Width = 9, HorizontalAlignment = HorizontalAlignment.Stretch ,Background = Brushes.Gray};
+            GridSplitter gsVert = new GridSplitter() { Height = 9, HorizontalAlignment = HorizontalAlignment.Stretch, Background = Brushes.Gray };
+            GridSplitter gsHorz = new GridSplitter() { Width = 9, HorizontalAlignment = HorizontalAlignment.Stretch, Background = Brushes.Gray };
             grid.SizeChanged += ImageResizer_SizeChanged;
 
             Canvas dummy = new Canvas() { MinWidth = 100, MinHeight = 100, };
@@ -99,22 +106,62 @@ namespace PaintingClass.PaintTools
             return grid;
         }
 
-		private void ImageResizer_SizeChanged(object sender, SizeChangedEventArgs e)
+        public void ImageResizer_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (image != null)
             {
                 Point offset = TextTool.CalculateOffset(owner);
                 Canvas canvas = resizeGrid.Children.OfType<Canvas>().First();
-                canvas.Height = image.Rect.Height / 100 * owner.myWhiteboardViewBox.ActualHeight;
-                canvas.Width = image.Rect.Width / 100 * owner.myWhiteboardViewBox.ActualWidth;
+                canvas.Height = image.Rect.Height / Whiteboard.sizeY * owner.myWhiteboardViewBox.ActualHeight;
+                canvas.Width = image.Rect.Width / Whiteboard.sizeX * owner.myWhiteboardViewBox.ActualWidth;
                 var gridPos = whiteboard.DenormalizePosition(image.Rect.TopLeft);
-                Canvas.SetTop(resizeGrid,gridPos.Y * owner.myWhiteboardViewBox.ActualHeight + offset.Y);
-                Canvas.SetLeft(resizeGrid,gridPos.X*owner.myWhiteboardViewBox.ActualWidth + offset.X);
+                
+                Canvas.SetTop(resizeGrid, gridPos.Y * owner.myWhiteboardViewBox.ActualHeight * owner.myWhiteboardViewBox.RenderTransform.Value.M22 + offset.Y);
+                Canvas.SetLeft(resizeGrid, gridPos.X * owner.myWhiteboardViewBox.ActualWidth * owner.myWhiteboardViewBox.RenderTransform.Value.M11 + offset.X);
+                resizeGrid.RenderTransform = owner.myWhiteboardViewBox.RenderTransform;
 
-                size = new Size(resizeGrid.ColumnDefinitions[0].Width.Value / owner.myWhiteboardViewBox.ActualWidth * 100, resizeGrid.RowDefinitions[0].Height.Value / owner.myWhiteboardViewBox.ActualHeight * 100);
-                image.Rect = new Rect(image.Rect.TopLeft,size );
+                size = new Size(resizeGrid.ColumnDefinitions[0].Width.Value / owner.myWhiteboardViewBox.ActualWidth * Whiteboard.sizeX, resizeGrid.RowDefinitions[0].Height.Value / owner.myWhiteboardViewBox.ActualHeight * Whiteboard.sizeY);
+                image.Rect = new Rect(image.Rect.TopLeft, size);
 
             }
+        }
+
+        /// <summary>
+        /// Verifica daca este vreo imagine netrimisa si o trimite 
+        /// </summary>
+        /// <returns>Daca a fost vreo imagine netrimisa returneaza True, altfel False</returns>
+        private bool CheckIfLastImageIsNotSent()
+		{
+            if (image != null)
+            {
+                // poza va fi trimisa la server 
+                image.Freeze();
+                //MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage, MessageUtils.SerialzieDrawing(image));
+                image = null;
+                bmp = null;
+                mouseOffset = new Point(0, 0);
+                size = new Size(0, 0);
+                resizeGrid.Visibility = Visibility.Hidden;
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Converteste Bmp-ul in image si il afiseaza pe tabla
+        /// </summary>
+        private void DisplayBmp(Point position)
+		{
+            isMoving = true;
+            resizeGrid.Visibility = Visibility.Visible;
+            size = new Size(defaultImageSize / bmp.Height * bmp.Width / 16 * 9f, defaultImageSize);
+            var rect = new Rect(position, size);
+            image = new ImageDrawing(bmp, rect);
+            whiteboard.collection.Add(image);
+            resizeGrid.RenderTransform = owner.myWhiteboardViewBox.RenderTransform;
+            resizeGrid.ColumnDefinitions[0].Width = new GridLength(size.Width / Whiteboard.sizeX * owner.myWhiteboardViewBox.ActualWidth);
+            resizeGrid.RowDefinitions[0].Height = new GridLength(size.Height / Whiteboard.sizeY * owner.myWhiteboardViewBox.ActualHeight);
+            ImageResizer_SizeChanged(null, null);
         }
 
         #endregion
@@ -126,33 +173,26 @@ namespace PaintingClass.PaintTools
         /// </summary>
         /// <param name="tool"></param>
         public void SelectToolEventHandler(PaintTool tool)
-		{
-            // dam unsubscribe la event atunci cand toolul este deselectat
-            if(tool is ImageTool)
-			{
-                if(resizeGrid==null) 
-				{
-					// are loc numai odata 
-					owner.myWhiteboardGrid.MouseRightButtonDown += Whiteboard_RightClick;
-					owner.myWhiteboardGrid.SizeChanged += MyWhiteboardViewBox_SizeChanged;
-                    resizeGrid = GetImageResizer();
-                    owner.myWhiteboardCanvas.Children.Add(resizeGrid);
-                    resizeGrid.Visibility = Visibility.Hidden;
-                }
+        {
+            if (resizeGrid == null)
+            {
+                owner.myWhiteboardGrid.MouseRightButtonDown += Whiteboard_RightClick;
+                owner.myWhiteboardGrid.SizeChanged += MyWhiteboardViewBox_SizeChanged;
+                resizeGrid = GetImageResizer();
+                owner.myWhiteboardCanvas.Children.Add(resizeGrid);
+                resizeGrid.Visibility = Visibility.Hidden;
                 owner.whiteboard.MouseMove += Whiteboard_MouseMove;
             }
-            else owner.whiteboard.MouseMove -= Whiteboard_MouseMove;
-
         }
 
-		#region Insert Image
+        #region Insert Image
 
-		/// <summary>
-		/// Deschide un open file dialog atunci cand userul apasa pe tabla cu toolul acesta selectat
-		/// </summary>
-		/// <param name="position"></param>
-		public override void MouseDown(Point position)
-		{
+        /// <summary>
+        /// Deschide un open file dialog atunci cand userul apasa pe tabla cu toolul acesta selectat
+        /// </summary>
+        /// <param name="position"></param>
+        public override void MouseDown(Point position)
+        {
             if (image != null) /// see <see cref="isMoving"/>
                 if ((position.X > image.Rect.X && position.X < image.Rect.X + image.Rect.Width) && (position.Y > image.Rect.Y && position.Y < image.Rect.Y + image.Rect.Height))
                 {
@@ -163,52 +203,47 @@ namespace PaintingClass.PaintTools
 
             // daca userul nu mai este in stadiul de mutare a pozei ...
             if (mouseOffset.X == 0 && mouseOffset.Y == 0 && !isMoving)
-			{
+            {
                 // daca imaginea exista 
-                if(image!=null )
-				{
-                    // poza va fi trimisa la server 
-                    image.Freeze();
-                    //todo:MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage, MessageUtils.SerialzieDrawing(image));
-                    image = null;
-                    bmp = null;
-                    mouseOffset = new Point(0, 0);
-                    size = new Size(0, 0);
-                    resizeGrid.Visibility = Visibility.Hidden;
+                if (CheckIfLastImageIsNotSent())
                     return;
-				}
 
                 // altfel se va deschide un dialog prin care userul poate alege
                 // o noua poza
                 OpenFileDialog dialog = new OpenFileDialog();
-                dialog.Filter = "Image files(*.bmp, *.jpg, *.png) | *.bmp; *.jpg; *.png" ;
+                dialog.Filter = "Image files(*.bmp, *.jpg, *.png) | *.bmp; *.jpg; *.png";
                 dialog.ShowDialog();
-                if(File.Exists(dialog.FileName) == true)
-			    {
+                if (File.Exists(dialog.FileName) == true)
+                {
                     try
-				    {
+                    {
                         bmp = new BitmapImage(new Uri(dialog.FileName));
-				    }
+                    }
                     catch // daca este vreo eroare informam userul
-				    {
-                        MessageBox.Show("Fisierul nu are un format valid","Eroare");
+                    {
+                        MessageBox.Show("Fisierul nu are un format valid", "Eroare");
                         return;
-				    }
-			    }
+                    }
+                }
 
                 // daca bitmapul a fost fct cu succes il afisam pe tabla 
-                if(bmp != null)
-			    {
-                    resizeGrid.Visibility = Visibility.Visible;
-                    size = new Size(defaultImageSize / bmp.Height * bmp.Width /16*9f, defaultImageSize) ;
-                    var rect = new Rect(position, size);
-                    image = new ImageDrawing(bmp,rect);
-                    whiteboard.collection.Add(image);
-                    resizeGrid.ColumnDefinitions[0].Width = new GridLength(size.Width / 100 * owner.myWhiteboardViewBox.ActualWidth);
-                    resizeGrid.RowDefinitions[0].Height = new GridLength(size.Height/100*owner.myWhiteboardViewBox.ActualHeight);
-                    ImageResizer_SizeChanged(null,null);
-			    }
+                if (bmp != null)
+                {
+                    DisplayBmp(position);
+                }
             }
+        }
+
+
+        Uri Create_Memory_Resource_Uri(MemoryStream ms)
+        {
+            if(DragDropImagesCnt == 0 && Directory.Exists(Directory.GetCurrentDirectory() + "\\ImageCache"))
+                Directory.Delete(Directory.GetCurrentDirectory() + "\\ImageCache",true);
+            Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\ImageCache");
+            string path = Directory.GetCurrentDirectory() + $"\\ImageCache\\ImageTransfer{DragDropImagesCnt++}";
+            using FileStream file = File.OpenWrite(path);
+            file.Write(ms.ToArray());
+            return new Uri(path);
         }
 
         /// <summary>
@@ -217,59 +252,88 @@ namespace PaintingClass.PaintTools
         /// <param name="sender"></param>
         /// <param name="e"></param>
         public void OnDropEventHandler(object sender, DragEventArgs e)
-		{
+        {
+            CheckIfLastImageIsNotSent();
             // normalizam pozitia
-            Point position = owner.whiteboard.TransformPosition(e.GetPosition(owner.whiteboard));
-
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-            if (files.Count() > 1)
-                return;
-
-            var ext = Path.GetExtension(files[0]);
-            
-            if (!(ext == ".png" || ext == ".bmp" || ext == ".jpg") || !File.Exists(files[0]))
-                return;
-            // selectam toolul de imagine 
+            Point position = whiteboard.TransformPosition(e.GetPosition(owner.whiteboard));
             owner.selectedTool = this;
-
-            // daca inainte a mai fost o imagine o trimitem 
-            if(image != null)
-			{
-                image.Freeze();
-                //todo:MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage, MessageUtils.SerialzieDrawing(image));
-                image = null;
-                bmp = null;
+            MemoryStream ms;
+            // daca imaginea este prim ita ca un fisier bitmap
+            if ((ms = (MemoryStream)e.Data.GetData("Object")) != null)
+            {
+                isMoving = true;
+                resizeGrid.Visibility = Visibility.Visible;
+                ms.Position = 0;
+                byte[] arr = ms.ToArray();
+                bmp = new BitmapImage(Create_Memory_Resource_Uri(ms));
+                DisplayBmp(position);
             }
+            else
+            { // daca imaginea este primita ca un path spre file 
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-            bmp = new BitmapImage(new Uri(files[0]));
-            // pentru a lasa userul sa mute poza dupa ce i-a dat drop
-            isMoving = true;
+                if (files.Count() > 1)
+                    return;
 
-            // introducem noua imagine in tabla
-            resizeGrid.Visibility = Visibility.Visible;
-            size = new Size(defaultImageSize / bmp.Height * bmp.Width / 16 * 9f, defaultImageSize);
-            var rect = new Rect(position, size);
-            image = new ImageDrawing(bmp, rect);
-            whiteboard.collection.Add(image);
-            resizeGrid.ColumnDefinitions[0].Width = new GridLength(bmp.Width);
-            resizeGrid.RowDefinitions[0].Height = new GridLength(bmp.Height);
-            ImageResizer_SizeChanged(null, null);
+                var ext = Path.GetExtension(files[0]);
+
+                if (ext == ".pdf" && File.Exists(files[0]))
+                {
+                    owner.ShowPdfViewer();
+                    owner.pdfViewer.SetPdfTo(files[0]);
+                }
+
+                if (!(ext == ".png" || ext == ".bmp" || ext == ".jpg") || !File.Exists(files[0]))
+                    return;
+
+                // daca inainte a mai fost o imagine o trimitem 
+                if (image != null)
+                {
+                    image.Freeze();
+                    //MainWindow.instance.roomManager.PackAndSend(PaintingClassCommon.PacketType.WhiteboardMessage, MessageUtils.SerialzieDrawing(image));
+                    image = null;
+                    bmp = null;
+                }
+
+                bmp = new BitmapImage(new Uri(files[0]));
+
+                DisplayBmp(position);
+            }
         }
 
-		#endregion
-
-		/// <summary>
-		/// Context menu pentru imagine 
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void Whiteboard_RightClick(object sender, MouseButtonEventArgs e)
+        public void OnPasteEventHandler(object sender, KeyEventArgs e)
 		{
+            if(e.Key == Key.V && Keyboard.IsKeyDown(Key.LeftCtrl))
+			{
+                CheckIfLastImageIsNotSent();
+                BitmapSource src = ((InteropBitmap)Clipboard.GetImage());
+                if (src == null)
+                    return;
+                owner.selectedTool = this;
+                BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(src));
+                MemoryStream ms = new MemoryStream();
+                encoder.Save(ms);
+                isMoving = true;
+                resizeGrid.Visibility = Visibility.Visible;
+                bmp = new BitmapImage(Create_Memory_Resource_Uri(ms));
+                DisplayBmp(new Point(0, 0));
+            }
+		}
+
+        #endregion
+
+        /// <summary>
+        /// Context menu pentru imagine 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Whiteboard_RightClick(object sender, MouseButtonEventArgs e)
+        {
             Point position = whiteboard.TransformPosition(e.GetPosition(whiteboard));
             if (image != null)
-				if ((position.X > image.Rect.X && position.X < image.Rect.X + image.Rect.Width) && (position.Y > image.Rect.Y && position.Y < image.Rect.Y + image.Rect.Height))
-				{
+                if ((position.X > image.Rect.X && position.X < image.Rect.X + image.Rect.Width) && (position.Y > image.Rect.Y && position.Y < image.Rect.Y + image.Rect.Height))
+                {
                     var cm = new ContextMenu();
                     var mi = new MenuItem() { Header = "Delete" };
                     mi.Click += (sender, e) =>
@@ -287,44 +351,44 @@ namespace PaintingClass.PaintTools
                     cm.Items.Add(mi);
                     cm.PlacementTarget = whiteboard;
                     cm.IsOpen = true;
-				}
-            
-		}
+                }
 
-		#region Movement
+        }
 
-		/// <summary>
-		/// Se produce atunci cand windowul isi ia resize
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void MyWhiteboardViewBox_SizeChanged(object sender, SizeChangedEventArgs e)
-		{
+        #region Movement
+
+        /// <summary>
+        /// Se produce atunci cand windowul isi ia resize
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MyWhiteboardViewBox_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
             // updatam de fiecre data cand windowul este resized 
-            resizeGrid.ColumnDefinitions[0].Width = new GridLength(size.Width / 100 * owner.myWhiteboardViewBox.ActualWidth);
-            resizeGrid.RowDefinitions[0].Height = new GridLength(size.Height / 100 * owner.myWhiteboardViewBox.ActualHeight);
+            resizeGrid.ColumnDefinitions[0].Width = new GridLength(size.Width / Whiteboard.sizeX * owner.myWhiteboardViewBox.ActualWidth);
+            resizeGrid.RowDefinitions[0].Height = new GridLength(size.Height / Whiteboard.sizeY * owner.myWhiteboardViewBox.ActualHeight);
             ImageResizer_SizeChanged(null, null);
         }
 
-		/// <summary>
-		/// Folosit pentru a da display la cursorul pt size 
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void Whiteboard_MouseMove(object sender, MouseEventArgs e)
+        /// <summary>
+        /// Folosit pentru a da display la cursorul pt size 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Whiteboard_MouseMove(object sender, MouseEventArgs e)
         {
             Point position = whiteboard.TransformPosition(e.GetPosition(whiteboard));
-            
-            if(image!=null)
-            if ((position.X > image.Rect.X && position.X < image.Rect.X + image.Rect.Width) && (position.Y > image.Rect.Y && position.Y < image.Rect.Y + image.Rect.Height) )
-            {
-                Mouse.OverrideCursor = Cursors.SizeAll;               
-            }
-            else 
-			{
-                Mouse.OverrideCursor = null;
-                mouseOffset = new Point(0,0);
-            }
+
+            if (image != null && owner.selectedTool == this)
+                if ((position.X > image.Rect.X && position.X < image.Rect.X + image.Rect.Width) && (position.Y > image.Rect.Y && position.Y < image.Rect.Y + image.Rect.Height))
+                {
+                    Mouse.OverrideCursor = Cursors.SizeAll;
+                }
+                else
+                {
+                    Mouse.OverrideCursor = null;
+                    mouseOffset = new Point(0, 0);
+                }
         }
 
         /// <summary>
@@ -334,17 +398,16 @@ namespace PaintingClass.PaintTools
         /// <param name="position"></param>
 		public override void MouseDrag(Point position)
         {
-            if(image != null)
-            if ((position.X > image.Rect.X && position.X < image.Rect.X + image.Rect.Width) && (position.Y > image.Rect.Y && position.Y < image.Rect.Y + image.Rect.Height))
-			{
-                image.Rect = new Rect(new Point(position.X + mouseOffset.X, position.Y + mouseOffset.Y), size);
-                ImageResizer_SizeChanged(null, null);
-            }          
+            if (image != null)
+                if ((position.X > image.Rect.X && position.X < image.Rect.X + image.Rect.Width) && (position.Y > image.Rect.Y && position.Y < image.Rect.Y + image.Rect.Height))
+                {
+                    image.Rect = new Rect(new Point(position.X + mouseOffset.X, position.Y + mouseOffset.Y), size);
+                    ImageResizer_SizeChanged(null, null);
+                }
         }
 
-		#endregion
+        #endregion
 
-		#endregion
-
-	}
+        #endregion
+    }
 }

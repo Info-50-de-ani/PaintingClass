@@ -27,7 +27,7 @@ namespace PaintingClass.Networking
             return true;
 		}
 
-        WebSocket ws;
+        public WebSocket ws;
 
         public Dictionary<int,NetworkUser> userList = new();
         public Action onUserListUpdate;

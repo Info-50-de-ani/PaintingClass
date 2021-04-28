@@ -27,9 +27,11 @@ namespace PaintingClass.PaintTools
 
         public override Control GetControl()
         {
-            Label label = new Label();
-            label.Content = "Rectangle";
-            return label;
+            var cc = new ContentControl() { Height = 40 };
+            Image image = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Tools/square.png")) };
+            RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Fant);
+            cc.Content = image;
+            return cc;
         }
 
         GeometryDrawing geometryDrawing;
@@ -42,7 +44,7 @@ namespace PaintingClass.PaintTools
             Window.GetWindow(whiteboard).KeyUp += Whiteboard_KeyUp;
             initialPos = position;
             rectangle = new RectangleGeometry(new Rect(position,position));
-            geometryDrawing = new GeometryDrawing(null, new Pen(owner.globalBrush, owner.thickness), rectangle);
+            geometryDrawing = new GeometryDrawing(null, new Pen(owner.globalBrush, owner.globalBrushThickness), rectangle);
             whiteboard.collection.Add(geometryDrawing);
         }
 

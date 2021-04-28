@@ -79,6 +79,29 @@ namespace PaintingClass.PaintTools
 			Canvas.SetLeft(textBoxGrid, offset.X + positionDenormalized.X * owner.myWhiteboardViewBox.RenderSize.Width);
 			textBoxGrid.RenderTransform = new ScaleTransform(owner.myWhiteboardViewBox.ActualWidth / SystemParameters.PrimaryScreenWidth * 1d / (owner.ViewBoxToWindowSizeHeightRatio * SystemParameters.PrimaryScreenHeight / SystemParameters.PrimaryScreenWidth * 16d / 9d), owner.myWhiteboardViewBox.ActualHeight / SystemParameters.PrimaryScreenHeight * 1d / owner.ViewBoxToWindowSizeHeightRatio);
 		}
+		
+		/// <summary>
+		/// Este chemat atunci cand Userul selecteaza un font size 
+		/// </summary>
+		public void UpdateTextBoxFontsize(double fontSize)
+		{
+			var tb = textBoxGrid.Children.OfType<TextBox>().First();
+			if (tb.IsKeyboardFocused)
+			{
+				tb.FontSize = fontSize;
+			}
+		}
+
+		/// <summary>
+		/// se updateaza cand userul da zoom
+		/// </summary>
+		public void OnTranformChanged()
+		{
+			Point offset = TextTool.CalculateOffset(owner);
+			Canvas.SetTop(textBoxGrid, offset.Y + absPosition.Y/Whiteboard.sizeY * owner.myWhiteboardViewBox.RenderSize.Height * owner.myWhiteboardViewBox.RenderTransform.Value.M22);
+			Canvas.SetLeft(textBoxGrid, offset.X + absPosition.X/Whiteboard.sizeX * owner.myWhiteboardViewBox.RenderSize.Width * owner.myWhiteboardViewBox.RenderTransform.Value.M11);
+			textBoxGrid.RenderTransform = owner.myWhiteboardViewBox.RenderTransform;
+		}
 		#endregion
 	}
 
@@ -88,9 +111,11 @@ namespace PaintingClass.PaintTools
 
 		public override Control GetControl()
 		{
-			Label label = new Label();
-			label.Content = "Text";
-			return label;
+			var cc = new ContentControl() { Height = 40 };
+			Image image = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Tools/text.png")) };
+			RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Fant);
+			cc.Content = image;
+			return cc;
 		}
 
 		#region Constants 
@@ -104,15 +129,6 @@ namespace PaintingClass.PaintTools
 		/// <returns>un <see cref="Point"/> cu Point.X = offsetX si Point.Y = offsetY</returns>
 		public static Point CalculateOffset(MyWhiteboard owner)
 		{
-			if (owner.myWhiteboardCanvas.ActualHeight == owner.myWhiteboardViewBox.ActualHeight)
-			{ // avem offset doar in width
-				return new Point((owner.myWhiteboardCanvas.ActualWidth - owner.myWhiteboardViewBox.ActualWidth) / 2, 0);
-			}
-			else if (owner.myWhiteboardCanvas.ActualWidth == owner.myWhiteboardViewBox.ActualWidth)
-			{ // avem offset doar in height 
-				return new Point(0, (owner.myWhiteboardCanvas.ActualHeight - owner.myWhiteboardViewBox.ActualHeight) / 2);
-			}
-			else
 				return new Point((owner.myWhiteboardCanvas.ActualWidth - owner.myWhiteboardViewBox.ActualWidth) / 2, (owner.myWhiteboardCanvas.ActualHeight - owner.myWhiteboardViewBox.ActualHeight) / 2);
 		}
 
@@ -192,22 +208,24 @@ namespace PaintingClass.PaintTools
 			var grid = GetResizableTextboxGrid("Scrie aici");
 			myWhiteboardCanvas.Children.Add(grid);
 			TextBox tb = grid.Children.OfType<TextBox>().First();
-			TextToolResize tbMsg = new TextToolResize(position,new Size(defaultTextBoxSize / owner.myWhiteboardViewBox.ActualWidth, defaultTextBoxSize / owner.myWhiteboardViewBox.ActualHeight))
+			TextToolResize tbResize = new TextToolResize(position,new Size(defaultTextBoxSize / owner.myWhiteboardViewBox.ActualWidth, defaultTextBoxSize / owner.myWhiteboardViewBox.ActualHeight))
 			{
 				owner = owner,
 				tb = tb,
 				textBoxGrid = grid,
 			};
 
-			owner.myWhiteboardGrid.SizeChanged += tbMsg.UpdateTextBoxSize;
-			position = MainWindow.instance.myWhiteboard.whiteboard.DenormalizePosition(position);
+			grid.RenderTransform = owner.myWhiteboardViewBox.RenderTransform;
+			owner.OnTransformChanged += tbResize.OnTranformChanged;
+			owner.OnFontSizeChanged += tbResize.UpdateTextBoxFontsize;
+			owner.myWhiteboardGrid.SizeChanged += tbResize.UpdateTextBoxSize;
 
-			owner.textToolResizeCollection.Add(tbMsg);
+			owner.textToolResizeCollection.Add(tbResize);
 
 			Point offset = CalculateOffset(owner);
-
-			Canvas.SetTop(grid, offset.Y + position.Y * owner.myWhiteboardViewBox.RenderSize.Height);
-			Canvas.SetLeft(grid, offset.X + position.X * owner.myWhiteboardViewBox.RenderSize.Width);
+			Window.GetWindow(whiteboard).Title = $"{position.X} {position.Y}";
+			Canvas.SetTop(grid,offset.Y+ position.Y / Whiteboard.sizeY * owner.myWhiteboardViewBox.ActualHeight * owner.myWhiteboardViewBox.RenderTransform.Value.M22);
+			Canvas.SetLeft(grid,offset.X+ position.X/  Whiteboard.sizeX * owner.myWhiteboardViewBox.ActualWidth * owner.myWhiteboardViewBox.RenderTransform.Value.M11);
 		}
 
 		private void CloseIcon_MouseDown(object sender, MouseButtonEventArgs e)

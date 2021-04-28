@@ -46,6 +46,7 @@ namespace PaintingClass
 		public static MainWindow instance;
         public static UserData userData;
         public RoomManager roomManager;
+        public Action<bool,MainWindow> OnConnect;
 
         //can be null
         public TeachersTab teachersTab;
@@ -54,10 +55,12 @@ namespace PaintingClass
         // trebuie sa folosim ObservableCollection<> in loc de List<> ca sa evitam bug-uri de UI
         ObservableCollection<TabItem> tabs = new ObservableCollection<TabItem>();
 
-        public MainWindow(UserData data)
+        public MainWindow(UserData data, Action<bool, MainWindow> OnConnectEventHandler = null)
         {
-            //UI
-            InitializeComponent();
+			//UI
+			InitializeComponent();
+            OnConnect = OnConnectEventHandler;
+            this.DataContext = this;
             instance = this;
             tabControl.ItemsSource = tabs;
             // maximizam window-ul cand se deschide
@@ -65,14 +68,13 @@ namespace PaintingClass
 
             //pagina de login va genera UserData si il va trimite prin constructor
             userData = data;
-
             if (userData==null)
             {
                 TestInit();
             }
             else
             {
-                Init();
+                Init(); 
             }
         }
 
@@ -111,6 +113,7 @@ namespace PaintingClass
             }
 
             roomManager = new RoomManager(userData);
+            OnConnect?.Invoke(roomManager.ws.IsAlive, this);
             roomManager.onUserListUpdate += UserListUpdate;
             roomManager.onUserListUpdate();//reparam bug
 
@@ -123,19 +126,12 @@ namespace PaintingClass
             }
             myWhiteboard = new();
             AddTab(myWhiteboard, "Tabla mea");
-        }
 
-        ObservableCollection<string> UserList;
+        }
 
         void UserListUpdate()
         {
-            UserList = new ObservableCollection<string>();
-            if(roomManager!=null)
-            foreach (var user in roomManager.userList)
-            {
-                UserList.Add($"Name: {user.Value.name} ClientID: {user.Value.clientId} Connected: {user.Value.isConnected} Sharing: {user.Value.isShared}");
-            }
-            Dispatcher.Invoke(()=>UserListBox.ItemsSource = UserList);
+            Dispatcher.Invoke(() => UserListBox.ItemsSource =new ObservableCollection<NetworkUser>(roomManager.userList.Values));
         }
 
 
@@ -162,5 +158,5 @@ namespace PaintingClass
                 }
             }
         }
-    }
+	}
 }

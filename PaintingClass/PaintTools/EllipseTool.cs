@@ -23,9 +23,11 @@ namespace PaintingClass.PaintTools
 
         public override Control GetControl()
         {
-            Label label = new Label();
-            label.Content = "Circle";
-            return label;
+            var cc = new ContentControl() { Height = 40 };
+            Image image = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Tools/circle.png")) };
+            RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Fant);
+            cc.Content = image;
+            return cc;
         }
 
 
@@ -39,7 +41,7 @@ namespace PaintingClass.PaintTools
             Window.GetWindow(whiteboard).KeyUp += Whiteboard_KeyUp;
             initialPos = position;
             ellipse = new EllipseGeometry(new Rect(position, position));
-            drawing = new GeometryDrawing(null, new Pen(this.owner.globalBrush, owner.thickness), ellipse);
+            drawing = new GeometryDrawing(null, new Pen(this.owner.globalBrush, owner.globalBrushThickness), ellipse);
             whiteboard.collection.Add(drawing);
         }
 

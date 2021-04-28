@@ -133,12 +133,12 @@ namespace PaintingClass.Login
 			// primeste raspunsul de la server
 			string[] response = (await SendLoginData(loginUserData)).Split();
 
-			// daca sunt doua segmente trimise de server inseamna ca a trimis si tokenul
+			// daca sunt trei segmente trimise de server inseamna ca a trimis si tokenul si numele 
 			// ce inseamna automat ca logarea a fost acceptata
 			if (response.Length > 1)
 			{
 				if ((ServerResponse)int.Parse(response[0]) != ServerResponse.Succes)
-					throw new Exception("Mesajul raspuns al serverului trebuie sa fie succes daca este trimis in doua segmente");
+					throw new Exception("Mesajul raspuns al serverului trebuie sa fie succes daca este trimis in trei segmente");
 				
 				// afisam ecranul de login succes
 				LoginMenu.Visibility = Visibility.Hidden;
@@ -153,7 +153,7 @@ namespace PaintingClass.Login
 				UserData userData = new UserData
 				{
 					// numele va fi schimbat cand este primit roomID-ul de la server 
-					name= "HOST",
+					name= response[2],
 					clientID = PaintingClass.Storage.Settings.instance.clientID,
 					profToken = profToken,
 					roomId = 0
@@ -406,6 +406,5 @@ namespace PaintingClass.Login
 
 		#endregion
 
-		
 	}
 }
