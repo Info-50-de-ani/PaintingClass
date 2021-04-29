@@ -112,6 +112,7 @@ namespace PaintingClass
                 }
             }
 
+            Clipboard.SetText(userData.roomId.ToString());
             roomManager = new RoomManager(userData);
             OnConnect?.Invoke(roomManager.ws.IsAlive, this);
             roomManager.onUserListUpdate += UserListUpdate;

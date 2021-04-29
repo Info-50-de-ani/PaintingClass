@@ -43,6 +43,7 @@ namespace PaintingClass.Networking
             ws.OnMessage += OnMessage;
             ws.Connect();
         }
+
         #region Send stuff
         public void SendMessage(string msg)
         {

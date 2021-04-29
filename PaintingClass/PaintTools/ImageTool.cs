@@ -136,7 +136,7 @@ namespace PaintingClass.PaintTools
             {
                 // poza va fi trimisa la server 
                 image.Freeze();
-                MessageUtils.SendNewDrawing(image, whiteboard.collection.Count - 1);
+                MessageUtils.SendNewDrawing(image, whiteboard.drawingCollection.Count - 1);
                 image = null;
                 bmp = null;
                 mouseOffset = new Point(0, 0);
@@ -157,7 +157,7 @@ namespace PaintingClass.PaintTools
             size = new Size(defaultImageSize / bmp.Height * bmp.Width / 16 * 9f, defaultImageSize);
             var rect = new Rect(position, size);
             image = new ImageDrawing(bmp, rect);
-            whiteboard.collection.Add(image);
+            whiteboard.drawingCollection.Add(image);
             resizeGrid.RenderTransform = owner.myWhiteboardViewBox.RenderTransform;
             resizeGrid.ColumnDefinitions[0].Width = new GridLength(size.Width / Whiteboard.sizeX * owner.myWhiteboardViewBox.ActualWidth);
             resizeGrid.RowDefinitions[0].Height = new GridLength(size.Height / Whiteboard.sizeY * owner.myWhiteboardViewBox.ActualHeight);
@@ -290,7 +290,7 @@ namespace PaintingClass.PaintTools
                 if (image != null)
                 {
                     image.Freeze();
-                    MessageUtils.SendNewDrawing(image, whiteboard.collection.Count - 1); 
+                    MessageUtils.SendNewDrawing(image, whiteboard.drawingCollection.Count - 1); 
                     image = null;
                     bmp = null;
                 }
@@ -340,7 +340,7 @@ namespace PaintingClass.PaintTools
                     {
                         // delete the foto
                         isMoving = false;
-                        whiteboard.collection.Remove(image);
+                        whiteboard.drawingCollection.Remove(image);
                         image = null;
                         bmp = null;
                         mouseOffset = new Point(0, 0);

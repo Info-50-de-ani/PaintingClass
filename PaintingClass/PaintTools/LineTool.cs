@@ -43,7 +43,7 @@ namespace PaintingClass.PaintTools
 			line = new LineGeometry(position, position);
 			drawing.Pen = new Pen(owner.globalBrush, owner.globalBrushThickness);
 			drawing.Geometry = line;
-			whiteboard.collection.Add(drawing);
+			whiteboard.drawingCollection.Add(drawing);
 		}
 
 		public override void MouseDrag(Point position)
@@ -54,7 +54,7 @@ namespace PaintingClass.PaintTools
 		public override void MouseUp()
 		{
 			drawing.Freeze();//extra performanta
-			MessageUtils.SendNewDrawing(drawing, whiteboard.collection.Count - 1);
+			MessageUtils.SendNewDrawing(drawing, whiteboard.drawingCollection.Count - 1);
 
 			drawing = null;
 			line = null;

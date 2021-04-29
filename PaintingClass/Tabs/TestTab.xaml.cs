@@ -28,9 +28,9 @@ namespace PaintingClass.Tabs
             //whiteboard.collection.Add(geometryDrawing);
 
             //adaugam niste simple chenare 
-            whiteboard.collection.Add(new GeometryDrawing(null, new Pen(Brushes.Black, 1), new RectangleGeometry(new Rect(new Point(10, 10), new Point( 20, 20)))));
-            whiteboard.collection.Add(new GeometryDrawing(null, new Pen(Brushes.Blue, 1), new RectangleGeometry(new Rect( new Point(40, 50), new Point(60, 70)))));
-            whiteboard.collection.Add(new GeometryDrawing(null, new Pen(Brushes.Green, 1), new RectangleGeometry(new Rect(new Point(80, 70), new Point(120, 130)))));
+            whiteboard.drawingCollection.Add(new GeometryDrawing(null, new Pen(Brushes.Black, 1), new RectangleGeometry(new Rect(new Point(10, 10), new Point( 20, 20)))));
+            whiteboard.drawingCollection.Add(new GeometryDrawing(null, new Pen(Brushes.Blue, 1), new RectangleGeometry(new Rect( new Point(40, 50), new Point(60, 70)))));
+            whiteboard.drawingCollection.Add(new GeometryDrawing(null, new Pen(Brushes.Green, 1), new RectangleGeometry(new Rect(new Point(80, 70), new Point(120, 130)))));
 
             //un GeometryGroup contine mai multe geometrii
             GeometryGroup geometryGroup = new GeometryGroup();
@@ -58,7 +58,7 @@ namespace PaintingClass.Tabs
                     new Point(1, 1));
                 
             //adaugam desenul
-            whiteboard.collection.Add(geometryDrawing);
+            whiteboard.drawingCollection.Add(geometryDrawing);
         }
 
         private void AddTab_Click(object sender, RoutedEventArgs e)
@@ -73,8 +73,8 @@ namespace PaintingClass.Tabs
 
         private void Undo_Click(object sender, RoutedEventArgs e)
         {
-            if (whiteboard.collection.Count > 0)
-                whiteboard.collection.RemoveAt(whiteboard.collection.Count - 1);
+            if (whiteboard.drawingCollection.Count > 0)
+                whiteboard.drawingCollection.RemoveAt(whiteboard.drawingCollection.Count - 1);
         }
     }
 }

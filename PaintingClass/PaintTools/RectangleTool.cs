@@ -37,33 +37,34 @@ namespace PaintingClass.PaintTools
         GeometryDrawing geometryDrawing;
         RectangleGeometry rectangle;
         Point initialPos;
-        bool isControlPressed = false;
+        bool isShiftPressed = false;
         public override void MouseDown(Point position)
         {
+            // TODO de reparat shiftu
             Window.GetWindow(whiteboard).KeyDown += Whiteboard_KeyDown;
             Window.GetWindow(whiteboard).KeyUp += Whiteboard_KeyUp;
             initialPos = position;
             rectangle = new RectangleGeometry(new Rect(position,position));
             geometryDrawing = new GeometryDrawing(null, new Pen(owner.globalBrush, owner.globalBrushThickness), rectangle);
-            whiteboard.collection.Add(geometryDrawing);
+            whiteboard.drawingCollection.Add(geometryDrawing);
         }
 
         private void Whiteboard_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.LeftShift)
-                isControlPressed = true;
+                isShiftPressed = true;
         }
 
         private void Whiteboard_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.LeftShift)
-                isControlPressed = false;
+                isShiftPressed = false;
         }
 
         public override void MouseDrag(Point position)
         {
             //patrat
-            if (isControlPressed)
+            if (isShiftPressed)
             {
                 double normx = position.X - initialPos.X;
                 double normy = (double)whiteboard.Height / whiteboard.Width*(position.Y - initialPos.Y);
@@ -89,7 +90,7 @@ namespace PaintingClass.PaintTools
         public override void MouseUp()
         {
             rectangle.Freeze();//extra performanta
-            MessageUtils.SendNewDrawing(geometryDrawing, whiteboard.collection.Count - 1);
+            MessageUtils.SendNewDrawing(geometryDrawing, whiteboard.drawingCollection.Count - 1);
             rectangle = null;
         }
     }

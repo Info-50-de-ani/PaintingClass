@@ -8,6 +8,10 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     Background="LightGray"
+    MouseMove="UserControl_MouseMove"
     mc:Ignorable="d">
-    <Image x:Name="image" />
+    <Grid>
+        <Image x:Name="image" />
+        <Canvas x:Name="canvas" Panel.ZIndex="1" />
+    </Grid>
 </UserControl>

@@ -19,6 +19,7 @@ using PaintingClass.Tabs;
 using System.Globalization;
 using System.IO;
 using System.Windows.Media.Animation;
+using System.Windows.Markup;
 
 namespace PaintingClass.PaintTools
 {
@@ -26,8 +27,12 @@ namespace PaintingClass.PaintTools
 	/// Fiecare textbox de pe <see cref="MyWhiteboard"/> va avea o instanta a acestei clase 
 	/// ea este folosita pentru a da resize acestuia in cazul in care userul da resize la <see cref="MainWindow"/>
 	/// </summary>
-	public class TextToolResize 
+	public class TextToolResize
 	{
+		/// <summary>
+		/// Indexul din userControl collection
+		/// </summary>
+		public int index { get; set; }
 
 		public TextToolResize(Point position,Size absSize)
 		{
@@ -67,7 +72,7 @@ namespace PaintingClass.PaintTools
 
 		/// <summary>
 		/// Este produs atunci cand windowul este resized si are rolul de a updata marimea si pozitie textboxului
-		/// relativ cu 
+		/// relativ cu tabla
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
@@ -151,6 +156,7 @@ namespace PaintingClass.PaintTools
 			// cream un textbox 
 			TextBox tb = new TextBox()
 			{
+				Name = nameof(TextToolResize),
 				Background = Brushes.Transparent,
 				Text = defaultText,
 				MinHeight = defaultTextBoxSize,
@@ -213,6 +219,7 @@ namespace PaintingClass.PaintTools
 				owner = owner,
 				tb = tb,
 				textBoxGrid = grid,
+				index = myWhiteboardCanvas.Children.Count-1
 			};
 
 			grid.RenderTransform = owner.myWhiteboardViewBox.RenderTransform;
@@ -221,6 +228,7 @@ namespace PaintingClass.PaintTools
 			owner.myWhiteboardGrid.SizeChanged += tbResize.UpdateTextBoxSize;
 
 			owner.textToolResizeCollection.Add(tbResize);
+			tb.TextChanged += (sender,e) => { TextChangedHandler(tbResize); };
 
 			Point offset = CalculateOffset(owner);
 			Window.GetWindow(whiteboard).Title = $"{position.X} {position.Y}";
@@ -228,9 +236,24 @@ namespace PaintingClass.PaintTools
 			Canvas.SetLeft(grid,offset.X+ position.X/  Whiteboard.sizeX * owner.myWhiteboardViewBox.ActualWidth * owner.myWhiteboardViewBox.RenderTransform.Value.M11);
 		}
 
+		/// <summary>
+		/// Are loc cand textul dintr-un TextBox este modificat
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void TextChangedHandler(TextToolResize textResize)
+		{
+			TextBox tb = (TextBox)XamlReader.Parse(XamlWriter.Save(textResize.tb));
+			tb.Height = textResize.textBoxGrid.RowDefinitions[0].ActualHeight;
+			tb.Width = textResize.textBoxGrid.ColumnDefinitions[0].ActualWidth;
+			MessageUtils.SendNewUserControl(new MessageUtils.UserControlWBMessage(textResize.absPosition,tb), whiteboard.userControlCollection.Count - 1);
+		}
+
+		#region Typing and Closing Related
 		private void CloseIcon_MouseDown(object sender, MouseButtonEventArgs e)
 		{
-			myWhiteboardCanvas.Children.Remove(((Grid)((Canvas)((Image)sender).Parent).Parent));
+			//todo
+			myWhiteboardCanvas.Children[myWhiteboardCanvas.Children.IndexOf(((Grid)((Canvas)((Image)sender).Parent).Parent))] = null;
 		}
 
 		private void Tb_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
@@ -251,12 +274,9 @@ namespace PaintingClass.PaintTools
 				tb.Foreground = Brushes.Black;
 				tb.Text = "";
 			}
-		} 
-
-		public override void MouseUp()
-		{
-			// TODO Transmitere la server
 		}
+
+		#endregion
 
 		#endregion
 	}

@@ -42,7 +42,7 @@ namespace PaintingClass.PaintTools
             initialPos = position;
             ellipse = new EllipseGeometry(new Rect(position, position));
             drawing = new GeometryDrawing(null, new Pen(this.owner.globalBrush, owner.globalBrushThickness), ellipse);
-            whiteboard.collection.Add(drawing);
+            whiteboard.drawingCollection.Add(drawing);
         }
 
         private void Whiteboard_KeyDown(object sender, KeyEventArgs e)
@@ -105,7 +105,7 @@ namespace PaintingClass.PaintTools
         public override void MouseUp()
         {
             ellipse.Freeze();//extra performanta
-            MessageUtils.SendNewDrawing(drawing, whiteboard.collection.Count - 1);
+            MessageUtils.SendNewDrawing(drawing, whiteboard.drawingCollection.Count - 1);
             ellipse = null;
         }
     }

@@ -17,6 +17,9 @@ using System.Threading;
 using System.Windows.Markup;
 using System.Diagnostics;
 using PaintingClassCommon;
+using PaintingClass.Networking;
+using System.Text.Json;
+using static PaintingClass.Networking.MessageUtils;
 
 namespace PaintingClass
 {
@@ -38,7 +41,10 @@ namespace PaintingClass
         public const double sizeX=100,sizeY=100;
 
         //aka List<Drawing>
-        public DrawingCollection collection { get => group.Children; set => group.Children = value; }
+        public DrawingCollection drawingCollection { get => group.Children; set => group.Children = value; }
+        
+        // lista de userControale
+        public UIElementCollection userControlCollection { get => canvas.Children; }
 
         DrawingGroup mainGroup;
         DrawingGroup group;
@@ -88,20 +94,82 @@ namespace PaintingClass
                 case WBItemMessage.ContentType.drawing:
                     return ApplyDrawing(msg);
                 case WBItemMessage.ContentType.userControl:
-                    return false;
+                    return ApplyUserControl(msg);
                 case WBItemMessage.ContentType.clearAll:
                     return ClearWhiteboard();
             }
             return false;
         }
 
-        public bool ClearWhiteboard()
+		private bool ApplyUserControl(WBItemMessage msg)
+		{
+            UserControlWBMessage ucMsg  = null;
+
+            if (msg.op != WBItemMessage.Operation.delete)
+            {
+                ucMsg = JsonSerializer.Deserialize<UserControlWBMessage>(msg.content);
+                if (ucMsg == null)
+                {
+                    Trace.WriteLine("JsonSerializer returned null from WBItemMessage.content");
+                    return false;
+                }
+            }
+
+            switch (msg.op)
+            {
+                // TODO Rezolvat indexarea la UserControale
+                case WBItemMessage.Operation.add:
+                    //if (msg.contentIndex != userControlCollection.Count)
+                    //{
+                    //    Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
+                    //    return false;
+                    //}
+                    userControlCollection.Add(ucMsg.Deserialize(this));
+                    return true;
+                case WBItemMessage.Operation.edit:
+                    //if (msg.contentIndex < 0 || msg.contentIndex >= userControlCollection.Count)
+                    //{
+                    //    Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
+                    //    return false;
+                    //}
+                    //TODO
+                    break;
+                case WBItemMessage.Operation.delete:
+                    //if (msg.contentIndex < 0 && msg.contentIndex >= userControlCollection.Count)
+                    //{
+                    //    Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
+                    //    return false;
+                    //}
+                    userControlCollection[msg.contentIndex] = null;
+                    break;
+            }
+            return false;
+        }
+
+		public bool ClearWhiteboard()
         {
-            collection.Clear();
+            drawingCollection.Clear();
             return true;
         }
 
-        bool ApplyDrawing(WBItemMessage msg)
+        //todo de deletat
+		private void UserControl_MouseMove(object sender, MouseEventArgs e)
+		{
+            Point p = e.GetPosition(canvas);
+            p.X /= canvas.ActualWidth;
+            p.Y /= canvas.ActualHeight;
+            Size whiteboardSizePix;
+            {
+                Vector psd = PointToScreen(new Point(ActualWidth, ActualHeight)) - PointToScreen(new Point(0, 0));
+                whiteboardSizePix = new Size(psd.X, psd.Y);
+            }
+            p.X *= whiteboardSizePix.Width;
+            p.Y *= whiteboardSizePix.Height;
+
+            Window.GetWindow(this).Title = p.ToString();
+        }
+
+		bool ApplyDrawing(WBItemMessage msg)
         {
             Drawing drawing=null;
             
@@ -118,28 +186,28 @@ namespace PaintingClass
             switch (msg.op)
             {
                 case WBItemMessage.Operation.add:
-                    if (msg.contentIndex!=collection.Count)
+                    if (msg.contentIndex!=drawingCollection.Count)
                     {
                         Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
                         return false;
                     }
-                    collection.Add(drawing);
+                    drawingCollection.Add(drawing);
                     return true;
                 case WBItemMessage.Operation.edit:
-                    if (msg.contentIndex<0&&msg.contentIndex>=collection.Count)
+                    if (msg.contentIndex<0 || msg.contentIndex>=drawingCollection.Count)
                     {
                         Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
                         return false;
                     }
-                    collection[msg.contentIndex] = drawing;
+                    drawingCollection[msg.contentIndex] = drawing;
                     break;
                 case WBItemMessage.Operation.delete:
-                    if (msg.contentIndex < 0 && msg.contentIndex >= collection.Count)
+                    if (msg.contentIndex < 0 && msg.contentIndex >= drawingCollection.Count)
                     {
                         Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
                         return false;
                     }
-                    collection[msg.contentIndex] = null;
+                    drawingCollection[msg.contentIndex] = null;
                     break;
             }
             return false;

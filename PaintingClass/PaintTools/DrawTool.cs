@@ -56,7 +56,7 @@ namespace PaintingClass.PaintTools
             drawing = new GeometryDrawing();
             drawing.Pen = new Pen(owner.globalBrush, owner.globalBrushThickness);
             drawing.Geometry = geometry;
-            whiteboard.collection.Add(drawing);
+            whiteboard.drawingCollection.Add(drawing);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace PaintingClass.PaintTools
         public override void MouseUp()
         {
             drawing.Freeze();//extra performanta
-            MessageUtils.SendNewDrawing(drawing, whiteboard.collection.Count-1);
+            MessageUtils.SendNewDrawing(drawing, whiteboard.drawingCollection.Count-1);
             drawing = null;
             figure = null;
         }
