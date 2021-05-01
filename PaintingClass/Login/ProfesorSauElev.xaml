@@ -44,10 +44,11 @@
             </Image.OpacityMask>
         </Image>
         <Image
+            Grid.RowSpan="2"
             Margin="257,1,-257,125"
             Panel.ZIndex="3"
             RenderTransformOrigin="1,0.5"
-            Source="/Resources/Login/Images/Clock.png" Grid.RowSpan="2">
+            Source="/Resources/Login/Images/Clock.png">
             <Image.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform />
@@ -193,5 +194,46 @@
             Margin="-165,126,265,153"
             Opacity="0.4"
             Source="/Resources/Login/Images/Shadow.png" />
+        <Canvas
+            Grid.RowSpan="2"
+            Width="2"
+            Height="30"
+            Margin="612,85,86,160"
+            Panel.ZIndex="4">
+            <Canvas.LayoutTransform>
+                <SkewTransform AngleX="13" AngleY="-9" />
+            </Canvas.LayoutTransform>
+            <Rectangle
+                Name="Secundar"
+                Grid.RowSpan="2"
+                Width="2"
+                Height="30"
+                Fill="red"
+                RenderTransformOrigin="0.561,0.013"
+                Visibility="Visible">
+                <Rectangle.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
+                </Rectangle.Effect>
+                <Rectangle.RenderTransform>
+                    <RotateTransform x:Name="noFreeze" Angle="180" />
+                </Rectangle.RenderTransform>
+            </Rectangle>
+
+            <Rectangle
+                Name="Minutar"
+                Grid.RowSpan="2"
+                Width="2"
+                Height="30"
+                Fill="Black"
+                RenderTransformOrigin="0.561,0.013"
+                Visibility="Visible">
+                <Rectangle.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
+                </Rectangle.Effect>
+                <Rectangle.RenderTransform>
+                    <RotateTransform x:Name="noFreeze2" Angle="180" />
+                </Rectangle.RenderTransform>
+            </Rectangle>
+        </Canvas>
     </Grid>
 </Page>

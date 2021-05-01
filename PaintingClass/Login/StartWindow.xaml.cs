@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -21,6 +22,14 @@ namespace PaintingClass
     /// </summary>
     public partial class StartWindow : Window
     {
+        public static void FadeAnimateElement(FrameworkElement element, Duration duration, bool reversed, EventHandler completedAnimation = null )
+		{
+            element.Opacity = reversed ?  1 : 0;
+            DoubleAnimation anim = new DoubleAnimation(reversed ? 0 : 1, duration) {DecelerationRatio=0.9f };
+            if(completedAnimation != null)
+            anim.Completed += completedAnimation;
+            element.BeginAnimation(OpacityProperty, anim);
+        }
 
         public StartWindow()
         {
@@ -59,7 +68,7 @@ namespace PaintingClass
 
         private void Back_Button_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.GoBack();
+            FadeAnimateElement((Page)MainFrame.Content, new Duration(new TimeSpan(0, 0, 0, 0, 400)), true, (sender, e) => { MainFrame.GoBack(); });
         }
 
 		private void CloseApplication_MouseDown(object sender, MouseButtonEventArgs e)

@@ -11,7 +11,6 @@
     mc:Ignorable="d">
 
     <Grid x:Name="MainGrid">
-
         <!--#region Select Registration Option-->
         <Grid.RowDefinitions>
             <RowDefinition Height="2*" />
@@ -19,7 +18,16 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <!--  Login sau Register  -->
+
+        <!--  Folosite pentru animatie  -->
+        <Image
+            x:Name="LoginBackground"
+            Grid.RowSpan="4"
+            Stretch="Fill" />
+        <Image
+            x:Name="RegisterBackground"
+            Grid.RowSpan="4"
+            Stretch="Fill" />
 
         <!--  Injector  -->
         <StackPanel
@@ -158,24 +166,31 @@
             <StackPanel Margin="0,40,0,0">
                 <!--  Title  -->
                 <Border
-                    CornerRadius="15"
                     Padding="20,10"
-                    BorderThickness="3"
-                    Opacity="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="#1D3557"
                     BorderBrush="#31587A"
-                    Background="#1D3557" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    BorderThickness="3"
+                    CornerRadius="15"
+                    Opacity="1">
                     <Border.Effect>
-                        <DropShadowEffect BlurRadius="10" ShadowDepth="2"/>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
                     </Border.Effect>
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{StaticResource FontSizeLarge}" Foreground="White" Text="Register" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource FontSizeLarge}"
+                        Foreground="White"
+                        Text="Register" />
                 </Border>
                 <!--  Name  -->
-                <local:FormTextbox    
+                <local:FormTextbox
                     x:Name="TB_Register_Name"
                     Grid.Row="0"
                     Grid.Column="1"
                     Width="200"
-                    Margin="10"
+                    Margin="0,30,0,10"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     FontSize="{StaticResource FontSizeMedium}"
@@ -226,21 +241,27 @@
                     defaultText="Confirmare Parola"
                     isSyntaxCorrect="{x:Null}" />
                 <!--  Register button  -->
+                <StackPanel x:Name="RegisterButtonInnerStackpanel">
+                    
                 <TextBlock
                     x:Name="TB_Register_Error"
-                    Margin="0,0,0,10"
+                    MaxWidth="{Binding ElementName=InnerBorder, Path=ActualWidth}"
                     HorizontalAlignment="Center"
                     Foreground="Red"
                     Text="Idasiodha"
-                    Visibility="Hidden" />
+                    TextAlignment="Center"
+                    TextWrapping="WrapWithOverflow"
+                    Visibility="Collapsed" />
                 <Button
                     Padding="10,0"
+                    Margin="0,10,0,0"
                     HorizontalAlignment="Center"
                     Click="EnterINFO_Register_Button_Click"
                     Content="Register"
                     FontSize="{StaticResource FontSizeMedium}"
                     Opacity="0.8"
                     Style="{StaticResource SlidingAnimatedButtonStyle}" />
+                </StackPanel>
             </StackPanel>
         </Grid>
         <!--#endregion-->

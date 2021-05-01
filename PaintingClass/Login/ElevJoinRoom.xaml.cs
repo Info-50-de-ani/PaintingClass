@@ -25,6 +25,7 @@ namespace PaintingClass.Login
         {
             InitializeComponent();
             CurrentFrame = frame;
+            StartWindow.FadeAnimateElement(this, new Duration(new TimeSpan(0, 0, 0, 0, 400)),false);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

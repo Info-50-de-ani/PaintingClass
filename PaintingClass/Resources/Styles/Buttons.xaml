@@ -16,7 +16,11 @@
             <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5" />
             <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383" />
         </Style.Resources>
-
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
+            </Setter.Value>
+        </Setter>
         <Setter Property="BorderThickness" Value="4" />
         <Setter Property="Opacity" Value="0.5" />
         <Setter Property="Background" Value="{DynamicResource Button.Static.Background}" />
@@ -247,4 +251,81 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <!--  toolbarButtonStyle  -->
+    <Style x:Key="toolbarButtonStyle" TargetType="{x:Type Button}">
+        <Style.Resources>
+            <Brush x:Key="BackgroundStartBrush">#2B2D42</Brush>
+            <Brush x:Key="ForegroundStartBrush">#D3C0D2</Brush>
+            <Color x:Key="BackgroundStartColor">#2B2D42</Color>
+            <Color x:Key="ForegroundStartColor">#D3C0D2</Color>
+        </Style.Resources>
+        <Setter Property="Width" Value="160" />
+        <Setter Property="Height" Value="60" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="{StaticResource BackgroundStartBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource ForegroundStartBrush}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        x:Name="border"
+                        Padding="4"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="10"
+                        SnapsToDevicePixels="true">
+                        <ContentPresenter
+                            x:Name="contentPresenter"
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Focusable="False"
+                            RecognizesAccessKey="True"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation
+                                        Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                        To="{StaticResource ForegroundStartColor}"
+                                        Duration="0:0:0.3" />
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="Width"
+                                        To="170"
+                                        Duration="0:0:0.3" />
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="Height"
+                                        To="70"
+                                        Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation
+                                        Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                        To="{StaticResource BackgroundStartColor}"
+                                        Duration="0:0:0.3" />
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="Width"
+                                        To="160"
+                                        Duration="0:0:0.3" />
+                                    <DoubleAnimation
+                                        Storyboard.TargetProperty="Height"
+                                        To="60"
+                                        Duration="0:0:0.3" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

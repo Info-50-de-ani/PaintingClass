@@ -34,33 +34,19 @@ namespace PaintingClass.PaintTools
         GeometryDrawing drawing;
         EllipseGeometry ellipse;
         Point initialPos;
-        bool isControlPressed = false;
         public override void MouseDown(Point position)
         {
-            Window.GetWindow(whiteboard).KeyDown += Whiteboard_KeyDown;
-            Window.GetWindow(whiteboard).KeyUp += Whiteboard_KeyUp;
             initialPos = position;
             ellipse = new EllipseGeometry(new Rect(position, position));
             drawing = new GeometryDrawing(null, new Pen(this.owner.globalBrush, owner.globalBrushThickness), ellipse);
             whiteboard.drawingCollection.Add(drawing);
         }
 
-        private void Whiteboard_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.LeftShift)
-                isControlPressed = true;
-        }
-
-        private void Whiteboard_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.LeftShift)
-                isControlPressed = false;
-        }
 
         public override void MouseDrag(Point position)
         {
             //cerc
-            if (isControlPressed)
+            if (Keyboard.IsKeyDown(Key.LeftShift))
             {
                 double normx = position.X - initialPos.X;
                 double normy = (double)whiteboard.Height / whiteboard.Width * (position.Y - initialPos.Y);

@@ -121,12 +121,13 @@ namespace PaintingClass.Tabs
             //le sortam folosind proprietate priority
             tools.Sort((a,b) => { return a.priority.CompareTo(b.priority); } );
 
+            var toolbarButtonStyle = (Style)Application.Current.Resources["toolbarButtonStyle"];
             //generaza controalele pt ToolBar
             foreach (PaintTool tool in tools)
             {
                 Control toolControl = tool.GetControl();
                 //incapsulam controlul intr-un buton
-                Button button = new Button();
+                Button button = new Button() {Style= toolbarButtonStyle,Margin= new Thickness(20,3,20,3) };
                 button.Content = toolControl;
                 //adaugam butonul la toolbar
                 toolbar.Children.Add(button); 
@@ -148,7 +149,7 @@ namespace PaintingClass.Tabs
             selectedTool = tools[0];
 
             //adauga eventuri
-            whiteboard.MouseLeftButtonDown += (sender,args) =>
+            whiteboard.MouseDown += (sender,args) =>
             {
                 if (isDrawing) return;
                 isDrawing = true;
@@ -168,7 +169,7 @@ namespace PaintingClass.Tabs
                 selectedTool.MouseUp();
             };
 
-            whiteboard.MouseLeftButtonUp += (sender,args) =>
+            whiteboard.MouseUp += (sender,args) =>
             {
                 if (!isDrawing) return;
                 isDrawing = false;

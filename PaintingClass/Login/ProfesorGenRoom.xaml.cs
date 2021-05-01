@@ -29,6 +29,7 @@ namespace PaintingClass.Login
             InitializeComponent();
             this.userData = userData;
             currentFrame = frame;
+            StartWindow.FadeAnimateElement(this, new Duration(new TimeSpan(0, 0, 0, 0, 400)), false);
         }
 
         private void GenRoom_Button_Click(object sender, RoutedEventArgs e)

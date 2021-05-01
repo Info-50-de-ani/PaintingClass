@@ -72,7 +72,6 @@ namespace PaintingClass.UserControls
                         dr = md - 1;
                 }
                 
-                MainWindow.instance.Title = $"{MainScrollViewer.VerticalOffset} -> res:[{res}]={PDFPages[res].verticalOffset}";
                 var items = PagesContainer.Items;
                 for (int i = res-1; i >res- backwardPageBuffer && i>-1; i--)
 				{

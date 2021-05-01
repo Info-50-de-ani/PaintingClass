@@ -14,6 +14,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -62,8 +63,8 @@ namespace PaintingClass.Login
 			InitializeComponent();
 			CurrentFrame = frame;
 			ShowLoginMenu();
+			StartWindow.FadeAnimateElement(this, new Duration(new TimeSpan(0, 0, 0, 0, 400)), false);
 		}
-
 
 		private void RegisterButton_Click(object sender, RoutedEventArgs e)
 		{
@@ -103,7 +104,7 @@ namespace PaintingClass.Login
 			LoginMenuTitle.Visibility = Visibility.Visible;
 			LoginMenu.Visibility = Visibility.Visible;
 			RegisterMenu.Visibility = Visibility.Hidden;
-			MainGrid.Background = new ImageBrush(new BitmapImage(new Uri(Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory.ToString()).Parent.Parent.Parent+ "/Login/Images/LoginBackground.jpg")));
+			LoginBackground.Source = new BitmapImage(new Uri("pack://application:,,,/Login/Images/LoginBackground.jpg"));
 		}
 
 		/// <summary>
@@ -209,18 +210,20 @@ namespace PaintingClass.Login
 		}
 		#endregion
 
-		#region Register
+		#region Register)G
 
 		/// <summary>
 		/// Afiseaza meniul de inregistrare
 		/// </summary>
 		private void ShowRegisterMenu()
 		{
-			InnerBorder.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#251351")); 
+			InnerBorder.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#251351"));
+			StartWindow.FadeAnimateElement(LoginBackground, new Duration(new TimeSpan(0, 0, 0, 0, 300)),true);;
+			StartWindow.FadeAnimateElement(RegisterBackground, new Duration(new TimeSpan(0, 0, 0, 0, 300)),false);;
 			LoginMenuTitle.Visibility = Visibility.Hidden;
 			LoginMenu.Visibility = Visibility.Hidden;
 			RegisterMenu.Visibility = Visibility.Visible;
-			MainGrid.Background = new ImageBrush(new BitmapImage(new Uri(Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory.ToString()).Parent.Parent.Parent + "/Login/Images/RegisterBackground.jpg")));
+			RegisterBackground.Source = new BitmapImage(new Uri("pack://application:,,,/Login/Images/RegisterBackground.jpg"));
 		}
 
 		/// <summary>
@@ -406,5 +409,22 @@ namespace PaintingClass.Login
 
 		#endregion
 
+		#region Animations 
+	
+		private void LoginToRegisterAnimation(bool reveresed, Duration duration)
+		{
+			Storyboard sb = new Storyboard();
+			DoubleAnimation loginAnim = new DoubleAnimation() { From = reveresed ? 1 : 0, To = reveresed ? 0 : 1, Duration = duration };
+			DoubleAnimation registerAnim = new DoubleAnimation() { From = reveresed ? 0 : 1, To = reveresed ? 1 : 0, Duration = duration };
+			Storyboard.SetTarget(loginAnim, LoginBackground);
+			Storyboard.SetTarget(registerAnim, RegisterBackground);
+			Storyboard.SetTargetProperty(loginAnim, new PropertyPath(OpacityProperty));
+			Storyboard.SetTargetProperty(registerAnim, new PropertyPath(OpacityProperty));
+			sb.Children.Add(loginAnim);
+			sb.Children.Add(registerAnim);
+			sb.Begin(this);
+		}
+		
+		#endregion
 	}
 }

@@ -37,34 +37,18 @@ namespace PaintingClass.PaintTools
         GeometryDrawing geometryDrawing;
         RectangleGeometry rectangle;
         Point initialPos;
-        bool isShiftPressed = false;
         public override void MouseDown(Point position)
         {
-            // TODO de reparat shiftu
-            Window.GetWindow(whiteboard).KeyDown += Whiteboard_KeyDown;
-            Window.GetWindow(whiteboard).KeyUp += Whiteboard_KeyUp;
             initialPos = position;
             rectangle = new RectangleGeometry(new Rect(position,position));
             geometryDrawing = new GeometryDrawing(null, new Pen(owner.globalBrush, owner.globalBrushThickness), rectangle);
             whiteboard.drawingCollection.Add(geometryDrawing);
         }
 
-        private void Whiteboard_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.LeftShift)
-                isShiftPressed = true;
-        }
-
-        private void Whiteboard_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.LeftShift)
-                isShiftPressed = false;
-        }
-
         public override void MouseDrag(Point position)
         {
             //patrat
-            if (isShiftPressed)
+            if (Keyboard.IsKeyDown(Key.LeftShift))
             {
                 double normx = position.X - initialPos.X;
                 double normy = (double)whiteboard.Height / whiteboard.Width*(position.Y - initialPos.Y);

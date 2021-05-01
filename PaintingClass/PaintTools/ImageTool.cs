@@ -268,6 +268,15 @@ namespace PaintingClass.PaintTools
                 bmp = new BitmapImage(Create_Memory_Resource_Uri(ms));
                 DisplayBmp(position);
             }
+            else if((ms = ((MemoryStream[])e.Data.GetData("FileContents"))[0]) != null)
+			{
+                isMoving = true;
+                resizeGrid.Visibility = Visibility.Visible;
+                ms.Position = 0;
+                byte[] arr = ms.ToArray();
+                bmp = new BitmapImage(Create_Memory_Resource_Uri(ms));
+                DisplayBmp(position);
+            }
             else
             { // daca imaginea este primita ca un path spre file 
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);

@@ -54,7 +54,14 @@ namespace PaintingClass.PaintTools
             
             // punem totul in drawing collection 
             drawing = new GeometryDrawing();
-            drawing.Pen = new Pen(owner.globalBrush, owner.globalBrushThickness);
+            if(Mouse.LeftButton == MouseButtonState.Pressed)
+			{// daca dam draw normal
+                drawing.Pen = new Pen(owner.globalBrush, owner.globalBrushThickness);
+			}
+            else
+			{// dam erase cand userul apasa click dreapta si punem un cerc sa aratam cat dam erase 
+                drawing.Pen = new Pen(Brushes.White, owner.globalBrushThickness*4);
+            }
             drawing.Geometry = geometry;
             whiteboard.drawingCollection.Add(drawing);
         }

@@ -166,7 +166,6 @@ namespace PaintingClass
             p.X *= whiteboardSizePix.Width;
             p.Y *= whiteboardSizePix.Height;
 
-            Window.GetWindow(this).Title = p.ToString();
         }
 
 		bool ApplyDrawing(WBItemMessage msg)

@@ -23,8 +23,9 @@
                 <ListBoxItem>cineva</ListBoxItem>
             </ListBox>
             <Button Margin="10"
-                    Content="Create Room"
-                    Width="100"
+                    Padding="2"
+                    Content="Creeaza o camera noua"
+                    HorizontalAlignment="Center"
                     Height="30"
                     Click="GenRoom_Button_Click"/>
         </StackPanel>

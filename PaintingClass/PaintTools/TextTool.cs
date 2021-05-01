@@ -231,7 +231,6 @@ namespace PaintingClass.PaintTools
 			tb.TextChanged += (sender,e) => { TextChangedHandler(tbResize); };
 
 			Point offset = CalculateOffset(owner);
-			Window.GetWindow(whiteboard).Title = $"{position.X} {position.Y}";
 			Canvas.SetTop(grid,offset.Y+ position.Y / Whiteboard.sizeY * owner.myWhiteboardViewBox.ActualHeight * owner.myWhiteboardViewBox.RenderTransform.Value.M22);
 			Canvas.SetLeft(grid,offset.X+ position.X/  Whiteboard.sizeX * owner.myWhiteboardViewBox.ActualWidth * owner.myWhiteboardViewBox.RenderTransform.Value.M11);
 		}
@@ -252,8 +251,12 @@ namespace PaintingClass.PaintTools
 		#region Typing and Closing Related
 		private void CloseIcon_MouseDown(object sender, MouseButtonEventArgs e)
 		{
-			//todo
-			myWhiteboardCanvas.Children[myWhiteboardCanvas.Children.IndexOf(((Grid)((Canvas)((Image)sender).Parent).Parent))] = null;
+			//todo de facut astfel incat indexul sa nu fie afectat
+			var x = myWhiteboardCanvas.Children.OfType<object>().ToList();
+			MessageBox.Show(x.Count.ToString());
+			myWhiteboardCanvas.Children.Remove(((Grid)((Canvas)((Image)sender).Parent).Parent));
+			x = myWhiteboardCanvas.Children.OfType<object>().ToList();
+			MessageBox.Show(x.Count.ToString());
 		}
 
 		private void Tb_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
