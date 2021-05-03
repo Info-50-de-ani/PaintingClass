@@ -5,7 +5,6 @@
     <TargetFramework>net5.0-windows10.0.19041.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <InternalsAssemblyNames>PresentationCore;</InternalsAssemblyNames>
   </PropertyGroup>
 
   <ItemGroup>
@@ -53,7 +52,6 @@
 
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.0.2" />
-    <PackageReference Include="IgnoresAccessChecksToGenerator" Version="0.5.0" />
     <PackageReference Include="Microsoft.Windows.Shell" Version="3.0.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.3.3" />
     <PackageReference Include="WebSocketSharpFork" Version="1.0.4" />
