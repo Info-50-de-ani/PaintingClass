@@ -26,9 +26,6 @@ namespace PaintingClass.Tabs
     {
         //in viitor valoarea ar trb calculata
         const int whiteboardsPerLine = 4;
-    
-        //todo:solutie temporara
-        bool selfShared;
 
         /// <summary>
         /// trebuie adaugata o noua clasa ce cotine si informatia despre table
@@ -68,15 +65,6 @@ namespace PaintingClass.Tabs
                     i++;
                 }
             }
-        }
-
-        private void SelfShareButton_Click(object sender, RoutedEventArgs e)
-        {
-            //todo:solutie temporara
-            selfShared = !selfShared;
-            selfShareButton.Content = selfShared ? "Stop sharing" : "Share";
-            ShareRequestMessage srm = new() { clientId = MainWindow.userData.clientID, isShared = selfShared };
-            MainWindow.instance.roomManager.SendMessage(Packet.Pack(PacketType.ShareRequestMessage, JsonSerializer.Serialize(srm)));
         }
     }
 }
