@@ -127,8 +127,16 @@ namespace PaintingClass.Tabs
             {
                 Control toolControl = tool.GetControl();
                 //incapsulam controlul intr-un buton
-                Button button = new Button() {Style= toolbarButtonStyle,Margin= new Thickness(20,3,20,3) };
+                Button button = new Button();//{Style= toolbarButtonStyle,Margin= new Thickness(20,3,20,3) };
                 button.Content = toolControl;
+
+                //pt animatii 
+                button.Margin = new Thickness(2);
+                button.MouseEnter += (sender, e) => { Button_Hover(sender, 300, 0.9); };
+                button.MouseLeave += (sender, e) => { Button_Hover(sender, 300, 0.9); };
+                button.Loaded += (sender, e) => { Button_Loaded(sender, 0.9); };
+                button.SizeChanged += (sender, e) => { Button_Loaded(sender, 0.9); };
+                
                 //adaugam butonul la toolbar
                 toolbar.Children.Add(button); 
                 //cand butonul este apasat o sa selecteze unealta corecta
@@ -175,6 +183,7 @@ namespace PaintingClass.Tabs
                 isDrawing = false;
                 selectedTool.MouseUp();
             };
+
 			MouseWheel += MyWhiteboard_OnScroll;
 			VerticalZoomScrollbar.Scroll += VerticalZoomScrollbar_Scroll;
 			HorizontalZoomScrollbar.Scroll += HorizontalZoomScrollbar_Scroll;
@@ -262,13 +271,52 @@ namespace PaintingClass.Tabs
             }
 		}
 
-		#endregion
+        #endregion
 
-		#region Event Handlere butoane
+        #region Animatii Butoane
 
-		#region Pdf Viewer
+        private void Button_Hover(object sender, int milliSeconds, double initialSize = 0.9)
+        {
+            Duration dur = new Duration(new System.TimeSpan(0, 0, 0, 0, milliSeconds));
+            var but = (Button)sender;
+            var tg = but.RenderTransform as TransformGroup;
 
-		private void ClosePdfButton_Click(object sender, RoutedEventArgs e)
+            DoubleAnimation animScaleX = new DoubleAnimation() { To = but.IsMouseOver ? 1 : initialSize, Duration = dur };
+            DoubleAnimation animScaleY = new DoubleAnimation() { To = but.IsMouseOver ? 1 : initialSize, Duration = dur };
+            DoubleAnimation offsetX = new DoubleAnimation()
+            {
+                To = but.IsMouseOver ? 0 : (but.ActualWidth - but.ActualWidth * initialSize) / 2d,
+                Duration = dur
+            };
+            DoubleAnimation offsetY = new DoubleAnimation()
+            {
+                To = IsMouseOver ? 0 : (but.ActualHeight - but.ActualHeight * initialSize) / 2d,
+                Duration = dur
+            };
+            tg.Children[0].BeginAnimation(ScaleTransform.ScaleXProperty, animScaleX);
+            tg.Children[0].BeginAnimation(ScaleTransform.ScaleYProperty, animScaleY);
+            tg.Children[1].BeginAnimation(TranslateTransform.XProperty, offsetX);
+        }
+
+        private void Button_Loaded(object sender, double initialSize)
+        {
+            var but = (Button)sender;
+            var tg = new TransformGroup();
+            tg.Children.Add(new ScaleTransform(0.9, 0.9));
+            tg.Children.Add(new TranslateTransform((but.ActualWidth - but.ActualWidth * initialSize) / 2d, (but.ActualHeight - but.ActualHeight * initialSize) / 2d));
+            tg.Children.Add(new SkewTransform(1.0, 1.0));
+            tg.Children.Add(new RotateTransform());
+            but.RenderTransform = tg;
+
+        }
+
+        #endregion
+
+        #region Event Handlere butoane
+
+        #region Pdf Viewer
+
+        private void ClosePdfButton_Click(object sender, RoutedEventArgs e)
         {
             DoubleAnimation opacityAnimation = new DoubleAnimation()
             {

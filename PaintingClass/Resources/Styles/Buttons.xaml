@@ -16,11 +16,6 @@
             <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5" />
             <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383" />
         </Style.Resources>
-        <Setter Property="Effect">
-            <Setter.Value>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="2" />
-            </Setter.Value>
-        </Setter>
         <Setter Property="BorderThickness" Value="4" />
         <Setter Property="Opacity" Value="0.5" />
         <Setter Property="Background" Value="{DynamicResource Button.Static.Background}" />

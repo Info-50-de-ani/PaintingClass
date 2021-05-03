@@ -128,6 +128,8 @@ namespace PaintingClass
             myWhiteboard = new();
             AddTab(myWhiteboard, "Tabla mea");
 
+            // afisare lista participanti 
+            MainTabControl.Visibility = Visibility.Visible;
         }
 
         void UserListUpdate()

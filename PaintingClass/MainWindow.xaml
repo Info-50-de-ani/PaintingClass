@@ -142,7 +142,8 @@
             Padding="15"
             HorizontalAlignment="Right"
             Panel.ZIndex="1"
-            TabStripPlacement="Left">
+            TabStripPlacement="Left"
+            Visibility="Collapsed">
             <TabControl.Effect>
                 <DropShadowEffect BlurRadius="2" ShadowDepth="3" />
             </TabControl.Effect>
@@ -560,6 +561,7 @@
             </TabItem>
         </TabControl>
         <!--#endregion-->
+
         <TabControl x:Name="tabControl" Style="{DynamicResource MainTabControlTemplate}" />
     </Grid>
 </Window>
