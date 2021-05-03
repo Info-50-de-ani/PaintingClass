@@ -296,6 +296,7 @@ namespace PaintingClass.Tabs
             tg.Children[0].BeginAnimation(ScaleTransform.ScaleXProperty, animScaleX);
             tg.Children[0].BeginAnimation(ScaleTransform.ScaleYProperty, animScaleY);
             tg.Children[1].BeginAnimation(TranslateTransform.XProperty, offsetX);
+            tg.Children[1].BeginAnimation(TranslateTransform.YProperty, offsetY);
         }
 
         private void Button_Loaded(object sender, double initialSize)
