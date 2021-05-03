@@ -55,20 +55,7 @@
             <Border Background="LightGray" CornerRadius="20">
                 <StackPanel>
                     <TextBlock Margin="20,20,20,5" FontSize="30">Invită alții folosind acest link</TextBlock>
-                    <TextBox
-                        x:Name="inviteLink"
-                        Margin="20,5,20,5"
-                        FontSize="30"
-                        IsReadOnly="True" />
-                    <Button
-                        x:Name="selfShareButton"
-                        MinWidth="80"
-                        Margin="20,5,20,20"
-                        HorizontalAlignment="Center"
-                        Click="SelfShareButton_Click"
-                        FontSize="30">
-                        Share
-                    </Button>
+                    <TextBox x:Name="inviteLink" Margin="20,5,20,5" FontSize="30" IsReadOnly="True"></TextBox>
                 </StackPanel>
             </Border>
 
