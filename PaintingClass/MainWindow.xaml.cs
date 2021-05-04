@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using PaintingClass.Tabs;
 using PaintingClass.Networking;
 using PaintingClass.PaintTools;
+using System.ComponentModel;
 
 namespace PaintingClass
 {
@@ -114,6 +115,7 @@ namespace PaintingClass
 
             Clipboard.SetText(userData.roomId.ToString());
             roomManager = new RoomManager(userData);
+            Closing+=(sender,args)=> roomManager?.ws.Close();
             OnConnect?.Invoke(roomManager.ws.IsAlive, this);
             roomManager.onUserListUpdate += UserListUpdate;
             roomManager.onUserListUpdate();//reparam bug
@@ -161,5 +163,5 @@ namespace PaintingClass
                 }
             }
         }
-	}
+    }
 }

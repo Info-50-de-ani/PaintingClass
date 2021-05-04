@@ -74,13 +74,16 @@ namespace PaintingClass
 
 		void WriteKey(string path)
         {
-			var key = Registry.ClassesRoot.CreateSubKey(Networking.Constants.customProtocol, true)
+			var key = Registry.ClassesRoot.CreateSubKey(Networking.Constants.customProtocol, true);
+			key.SetValue("URL Protocol", "");
+
+			var key2 = key
 				?.CreateSubKey("shell", true)
 				?.CreateSubKey("open", true)
 				?.CreateSubKey("command", true);
 			Debug.Assert(key != null);
 
-			key.SetValue("", path);
+			key2.SetValue("", path);
 		}
 
 		void Elevate()
