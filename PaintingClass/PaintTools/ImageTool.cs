@@ -32,7 +32,7 @@ namespace PaintingClass.PaintTools
     {
         const int defaultImageSize = 50;
 
-        public override int priority => 3;
+        public override int priority => 5;
 
         public override Control GetControl()
         {

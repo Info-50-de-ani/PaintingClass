@@ -22,7 +22,7 @@ namespace PaintingClass.PaintTools
 {
 	public class PdfTool : PaintTool, IToolSelected
 	{
-        public override int priority => 3;
+        public override int priority => 6;
 
         public override Control GetControl()
         {

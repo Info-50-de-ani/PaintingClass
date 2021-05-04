@@ -19,7 +19,7 @@ namespace PaintingClass.PaintTools
 {
     class EllipseTool : PaintTool
     {
-        public override int priority => 3;
+        public override int priority => 4;
 
         public override Control GetControl()
         {

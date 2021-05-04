@@ -23,7 +23,7 @@ namespace PaintingClass.PaintTools
     class RectangleTool : PaintTool
     {
 
-        public override int priority => 2;
+        public override int priority => 3;
 
         public override Control GetControl()
         {

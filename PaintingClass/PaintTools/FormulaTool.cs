@@ -81,7 +81,7 @@ namespace PaintingClass.PaintTools
 
 		#region Properities & fields
 
-		public override int priority => 3;
+		public override int priority => 8;
 		private static AnalyticsTeXConverter converter;
 		private static Translator translator;
 

@@ -112,7 +112,7 @@ namespace PaintingClass.PaintTools
 
 	class TextTool : PaintTool
 	{
-		public override int priority => 3;
+		public override int priority => 7;
 
 		public override Control GetControl()
 		{
