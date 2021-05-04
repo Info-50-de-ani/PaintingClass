@@ -255,6 +255,7 @@
 
                     <Button Grid.Column="1"
                             Content="Clear all"
+                            Click="ClearAll_Click"
                             Focusable="False"/>
                 </Grid>
                 

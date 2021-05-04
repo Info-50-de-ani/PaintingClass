@@ -531,8 +531,18 @@ namespace PaintingClass.Tabs
 
             CloseOpenPanels();
         }
+        private void ClearAll_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Esti sigur ca vrei să golești toată tabla? Această acțiune nu poate fi anulata", "PaintingClass", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK)
+                return;
+
+            whiteboard.ClearWhiteboard();
+            MessageUtils.SendClearAll();
+        }
 
         #endregion
-		#endregion
-	}
+
+        #endregion
+
+    }
 }

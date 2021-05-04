@@ -67,5 +67,14 @@ namespace PaintingClass.Networking
                 content = JsonSerializer.Serialize(cwp)
             });
 		}
+
+        public static void SendClearAll()
+        {
+            MainWindow.instance.roomManager?.SendWVBtem(new WBItemMessage
+            {
+                clientID = MainWindow.userData.clientID,
+                type = WBItemMessage.ContentType.clearAll
+            });
+        }
     }
 }
