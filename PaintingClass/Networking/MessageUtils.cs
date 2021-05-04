@@ -38,70 +38,33 @@ namespace PaintingClass.Networking
         /// Coordonatele sunt in coordonatele tablei 0-100,0-100
         /// </summary>
         [Serializable]
-		public class UserControlWBMessage
+		public class ControlWithPosition
 		{
-			#region Props
 			public double X { get; set; }
             public double Y { get; set; }
-            public double width { get; set; }
-            public double height { get; set; }
 
             /// <summary>
-            /// Contine UserControlul serializat
+            /// Contine control-ul serializat
             /// </summary>
-            public string serializedUserControl { get; set; }
-            #endregion
-
-            public UserControlWBMessage()
-			{
-
-			}
-
-            /// <summary>
-            /// Este utilizat cand doresti sa trimiti la server un control
-            /// </summary>
-            /// <param name="pos">poz in coord tabla</param>
-            /// <param name="size">marimea in coord tabla</param>
-            /// <param name="control">controlul de serializat</param>
-			public UserControlWBMessage(Point pos, FrameworkElement control)
-			{
-                X = pos.X;
-                Y = pos.Y;
-                width = control.Width / MainWindow.instance.myWhiteboard.myWhiteboardCanvas.ActualWidth * Whiteboard.sizeX;
-                height = control.Height / MainWindow.instance.myWhiteboard.myWhiteboardCanvas.ActualHeight * Whiteboard.sizeY;
-                serializedUserControl = XamlWriter.Save(control);
-			}
-
-            public FrameworkElement Deserialize(Whiteboard wb)
-			{
-                // obtinem usercontrolul trimis 
-                FrameworkElement control = (FrameworkElement)XamlReader.Parse(serializedUserControl);
-                FrameworkElement output = null;
-
-                // daca controlul este un TextBox il facem readonly 
-                if (control is TextBox)
-				{
-                    output = new TextBox() { IsReadOnly = true, Text = ((TextBox)control).Text};
-				}
-
-                output.Width = control.Width;
-                output.Height = control.Height;
-                output.RenderTransform = new ScaleTransform(width/ control.Width, height/control.Height) ;
-                Canvas.SetLeft(output, X);
-                Canvas.SetTop(output, Y);
-                return output;
-			}
+            public string serializedControl { get; set; }
         }
 
-        public static void SendNewUserControl(UserControlWBMessage userControl,int index)
+        public static void SendNewUserControl(Control control, Point pos ,int index)
 		{
+            ControlWithPosition cwp = new()
+            {
+                X = pos.X,
+                Y = pos.Y,
+                serializedControl = XamlWriter.Save(control)
+            };
+
             MainWindow.instance.roomManager?.SendWVBtem(new WBItemMessage
             {
                 clientID = MainWindow.userData.clientID,
                 contentIndex = index,
-                type = WBItemMessage.ContentType.userControl,
+                type = WBItemMessage.ContentType.control,
                 op = WBItemMessage.Operation.add,
-                content = JsonSerializer.Serialize(userControl)
+                content = JsonSerializer.Serialize(cwp)
             });
 		}
     }

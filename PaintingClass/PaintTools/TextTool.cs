@@ -245,7 +245,7 @@ namespace PaintingClass.PaintTools
 			TextBox tb = (TextBox)XamlReader.Parse(XamlWriter.Save(textResize.tb));
 			tb.Height = textResize.textBoxGrid.RowDefinitions[0].ActualHeight;
 			tb.Width = textResize.textBoxGrid.ColumnDefinitions[0].ActualWidth;
-			MessageUtils.SendNewUserControl(new MessageUtils.UserControlWBMessage(textResize.absPosition,tb), whiteboard.userControlCollection.Count - 1);
+			MessageUtils.SendNewUserControl(tb,textResize.absPosition, whiteboard.controlCollection.Count - 1);
 		}
 
 		#region Typing and Closing Related

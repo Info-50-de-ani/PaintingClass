@@ -34,7 +34,7 @@ namespace PaintingClass
     ///   ◸   ◹
     ///            
     ///   ◺   ◿
-    ///        ⇧ (size,size)
+    ///        ⇧ (sizeX,sizeY)
     /// </summary>
     public partial class Whiteboard : UserControl
     {
@@ -44,7 +44,7 @@ namespace PaintingClass
         public DrawingCollection drawingCollection { get => group.Children; set => group.Children = value; }
         
         // lista de userControale
-        public UIElementCollection userControlCollection { get => canvas.Children; }
+        public UIElementCollection controlCollection { get => canvas.Children; }
 
         DrawingGroup mainGroup;
         DrawingGroup group;
@@ -93,81 +93,13 @@ namespace PaintingClass
             {
                 case WBItemMessage.ContentType.drawing:
                     return ApplyDrawing(msg);
-                case WBItemMessage.ContentType.userControl:
+                case WBItemMessage.ContentType.control:
                     return ApplyUserControl(msg);
                 case WBItemMessage.ContentType.clearAll:
                     return ClearWhiteboard();
             }
             return false;
         }
-
-		private bool ApplyUserControl(WBItemMessage msg)
-		{
-            UserControlWBMessage ucMsg  = null;
-
-            if (msg.op != WBItemMessage.Operation.delete)
-            {
-                ucMsg = JsonSerializer.Deserialize<UserControlWBMessage>(msg.content);
-                if (ucMsg == null)
-                {
-                    Trace.WriteLine("JsonSerializer returned null from WBItemMessage.content");
-                    return false;
-                }
-            }
-
-            switch (msg.op)
-            {
-                // TODO Rezolvat indexarea la UserControale
-                case WBItemMessage.Operation.add:
-                    //if (msg.contentIndex != userControlCollection.Count)
-                    //{
-                    //    Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
-                    //    return false;
-                    //}
-                    userControlCollection.Add(ucMsg.Deserialize(this));
-                    return true;
-                case WBItemMessage.Operation.edit:
-                    //if (msg.contentIndex < 0 || msg.contentIndex >= userControlCollection.Count)
-                    //{
-                    //    Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
-                    //    return false;
-                    //}
-                    //TODO
-                    break;
-                case WBItemMessage.Operation.delete:
-                    //if (msg.contentIndex < 0 && msg.contentIndex >= userControlCollection.Count)
-                    //{
-                    //    Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
-                    //    return false;
-                    //}
-                    userControlCollection[msg.contentIndex] = null;
-                    break;
-            }
-            return false;
-        }
-
-		public bool ClearWhiteboard()
-        {
-            drawingCollection.Clear();
-            return true;
-        }
-
-        //todo de deletat
-		private void UserControl_MouseMove(object sender, MouseEventArgs e)
-		{
-            Point p = e.GetPosition(canvas);
-            p.X /= canvas.ActualWidth;
-            p.Y /= canvas.ActualHeight;
-            Size whiteboardSizePix;
-            {
-                Vector psd = PointToScreen(new Point(ActualWidth, ActualHeight)) - PointToScreen(new Point(0, 0));
-                whiteboardSizePix = new Size(psd.X, psd.Y);
-            }
-            p.X *= whiteboardSizePix.Width;
-            p.Y *= whiteboardSizePix.Height;
-
-        }
-
 		bool ApplyDrawing(WBItemMessage msg)
         {
             Drawing drawing=null;
@@ -199,7 +131,7 @@ namespace PaintingClass
                         return false;
                     }
                     drawingCollection[msg.contentIndex] = drawing;
-                    break;
+                    return true;
                 case WBItemMessage.Operation.delete:
                     if (msg.contentIndex < 0 && msg.contentIndex >= drawingCollection.Count)
                     {
@@ -207,9 +139,88 @@ namespace PaintingClass
                         return false;
                     }
                     drawingCollection[msg.contentIndex] = null;
-                    break;
+                    return true;
             }
             return false;
         }
+
+		private bool ApplyUserControl(WBItemMessage msg)
+		{
+            ControlWithPosition cwp  = null;
+            Control control = null;
+
+            if (msg.op != WBItemMessage.Operation.delete)
+            {
+                cwp = JsonSerializer.Deserialize<ControlWithPosition>(msg.content);
+                if (cwp == null)
+                {
+                    Trace.WriteLine("JsonSerializer returned null from WBItemMessage.content");
+                    return false;
+                }
+
+                control = XamlReader.Parse(cwp.serializedControl) as Control;
+                if (control == null)
+                {
+                    Trace.WriteLine("XAML parser returned null from WBItemMessage.content");
+                    return false;
+                }
+                //setting up attached proprierties
+                Canvas.SetLeft(control,cwp.X);
+                Canvas.SetTop(control, cwp.Y);
+            }
+
+            switch (msg.op)
+            {
+                case WBItemMessage.Operation.add:
+                    if (msg.contentIndex != controlCollection.Count)
+                    {
+                        Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
+                        return false;
+                    }
+                    controlCollection.Add(control);
+                    return true;
+                case WBItemMessage.Operation.edit:
+                    if (msg.contentIndex < 0 || msg.contentIndex >= controlCollection.Count)
+                    {
+                        Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
+                        return false;
+                    }
+                    controlCollection[msg.contentIndex] = control;
+                    return true;
+                case WBItemMessage.Operation.delete:
+                    if (msg.contentIndex < 0 && msg.contentIndex >= controlCollection.Count)
+                    {
+                        Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
+                        return false;
+                    }
+                    controlCollection[msg.contentIndex] = null;
+                    return true;
+            }
+            return false;
+        }
+
+		public bool ClearWhiteboard()
+        {
+            drawingCollection.Clear();
+            controlCollection.Clear();
+            return true;
+        }
+
+        //todo de deletat
+		private void UserControl_MouseMove(object sender, MouseEventArgs e)
+		{
+            Point p = e.GetPosition(canvas);
+            p.X /= canvas.ActualWidth;
+            p.Y /= canvas.ActualHeight;
+            Size whiteboardSizePix;
+            {
+                Vector psd = PointToScreen(new Point(ActualWidth, ActualHeight)) - PointToScreen(new Point(0, 0));
+                whiteboardSizePix = new Size(psd.X, psd.Y);
+            }
+            p.X *= whiteboardSizePix.Width;
+            p.Y *= whiteboardSizePix.Height;
+
+        }
+
     }
 }
