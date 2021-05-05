@@ -170,7 +170,7 @@ namespace PaintingClass.UserControls
         private void IntiateDragAndDrop(object sender, MouseButtonEventArgs e)
         {
             var bitmapImage = ((Image)sender).Source;
-            BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create((BitmapSource)bitmapImage));
             MemoryStream ms = new MemoryStream();
             encoder.Save(ms);

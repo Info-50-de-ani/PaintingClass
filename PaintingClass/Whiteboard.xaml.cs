@@ -20,6 +20,7 @@ using PaintingClassCommon;
 using PaintingClass.Networking;
 using System.Text.Json;
 using static PaintingClass.Networking.MessageUtils;
+using System.Xml.Serialization;
 
 namespace PaintingClass
 {
@@ -106,7 +107,21 @@ namespace PaintingClass
             
             if (msg.op != WBItemMessage.Operation.delete)
             {
-                drawing = XamlReader.Parse(msg.content) as Drawing;
+                try
+				{
+                    var wbImage = JsonSerializer.Deserialize<WBImage>(msg.content);
+                    if (wbImage == null)
+                    {
+                        Trace.WriteLine("JSON Serializer returned null from WBItemMessage.content");
+                        return false;
+                    }
+                    drawingCollection.Add(wbImage.Deserialize());
+                    return true;
+                }
+                catch
+                {
+                    drawing = XamlReader.Parse(msg.content) as Drawing;
+                }
                 if (drawing==null)
                 {
                     Trace.WriteLine("XAML parser returned null from WBItemMessage.content");

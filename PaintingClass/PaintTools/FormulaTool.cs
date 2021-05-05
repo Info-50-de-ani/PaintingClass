@@ -105,6 +105,7 @@ namespace PaintingClass.PaintTools
 			Image image = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Tools/formula.png")) };
 			RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Fant);
 			cc.Content = image;
+			cc.ToolTip = "Apasa pe tabla pentru a introduce o formula";
 			return cc;
 		}
 

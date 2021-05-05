@@ -30,6 +30,7 @@ namespace PaintingClass.PaintTools
             Image image = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Tools/PDF.png")) };
             RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Fant);
             cc.Content = image;
+            cc.ToolTip = "Cu acesta unealta poti introduce pagini dintr-un PDF pe tabla";
             return cc;
         }
 

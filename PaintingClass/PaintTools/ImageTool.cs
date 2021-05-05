@@ -21,6 +21,7 @@ using PaintingClass.PaintTools.Interfaces;
 using System.IO.Packaging;
 using System.Data;
 using System.Windows.Interop;
+using static PaintingClass.Networking.MessageUtils;
 
 namespace PaintingClass.PaintTools
 {
@@ -40,6 +41,7 @@ namespace PaintingClass.PaintTools
             Image image = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Tools/image.png")) };
             RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Fant);
             cc.Content = image;
+            cc.ToolTip = "Apasa pe tabla pentru a introduce o imagine";
             return cc;
         }
 
@@ -136,7 +138,8 @@ namespace PaintingClass.PaintTools
             {
                 // poza va fi trimisa la server 
                 image.Freeze();
-                MessageUtils.SendNewDrawing(image, whiteboard.drawingCollection.Count - 1);
+                WBImage img = new WBImage(image);
+                MessageUtils.SendNewWBImage(img, whiteboard.drawingCollection.Count - 1);
                 image = null;
                 bmp = null;
                 mouseOffset = new Point(0, 0);
@@ -321,7 +324,7 @@ namespace PaintingClass.PaintTools
                 owner.selectedTool = this;
                 BmpBitmapEncoder encoder = new BmpBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(src));
-                MemoryStream ms = new MemoryStream();
+                using MemoryStream ms = new MemoryStream();
                 encoder.Save(ms);
                 isMoving = true;
                 resizeGrid.Visibility = Visibility.Visible;

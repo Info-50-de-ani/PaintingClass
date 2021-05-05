@@ -31,6 +31,7 @@ namespace PaintingClass.PaintTools
             Image image = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Tools/pen.png")) };
             RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Fant);
             cc.Content = image;
+            cc.ToolTip = "Tine apasat click stanga pentru a scrie si click dreapta pentru a sterge";
             return cc;
         }
 

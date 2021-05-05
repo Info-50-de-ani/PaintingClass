@@ -31,6 +31,7 @@ namespace PaintingClass.PaintTools
             Image image = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Tools/square.png")) };
             RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Fant);
             cc.Content = image;
+            cc.ToolTip = "Tine apasat SHIFT pentru a desena un patrat";
             return cc;
         }
 

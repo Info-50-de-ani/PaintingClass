@@ -136,11 +136,20 @@ namespace PaintingClass.Tabs
                 button.MouseLeave += (sender, e) => { Button_Hover(sender, 300, 0.9); };
                 button.Loaded += (sender, e) => { Button_Loaded(sender, 0.9); };
                 button.SizeChanged += (sender, e) => { Button_Loaded(sender, 0.9); };
-                
                 //adaugam butonul la toolbar
-                toolbar.Children.Add(button); 
+                toolbar.Children.Add(button);
                 //cand butonul este apasat o sa selecteze unealta corecta
-                button.Click+=(sender,e) => selectedTool = tools[toolbar.Children.IndexOf(sender as UIElement) ];
+                button.Click += (sender, e) => selectedTool = tools[toolbar.Children.IndexOf(sender as UIElement)];
+                OnToolSelect += (_tool) =>
+                {
+                    if (tool == _tool)
+                    {
+                        Button_Select(button, 300, Colors.White, (Color)ColorConverter.ConvertFromString("#BEEE62"));
+                    }
+                    else
+                        Button_DeSelect(button, 300, Colors.White, (Color)ColorConverter.ConvertFromString("#BEEE62"));
+
+                };
                 if (tool is IToolSelected)
                     OnToolSelect += ((IToolSelected)tool).SelectToolEventHandler;
                 if (tool is ImageTool)
@@ -275,6 +284,20 @@ namespace PaintingClass.Tabs
 
         #region Animatii Butoane
 
+        private void Button_Select(Button but, int milliSeconds, Color defaultColor, Color selectedColor)
+		{
+            but.Background = new SolidColorBrush(((SolidColorBrush)but.Background).Color);
+            ColorAnimation anim = new ColorAnimation(selectedColor, new Duration( new TimeSpan(0, 0, 0, 0, milliSeconds)));
+            but.Background.BeginAnimation(SolidColorBrush.ColorProperty, anim);
+		}
+
+        private void Button_DeSelect(Button but, int milliSeconds, Color defaultColor, Color selectedColor)
+        {
+            but.Background = new SolidColorBrush(((SolidColorBrush)but.Background).Color);
+            ColorAnimation anim = new ColorAnimation(defaultColor, new Duration(new TimeSpan(0, 0, 0, 0, milliSeconds)));
+            but.Background.BeginAnimation(SolidColorBrush.ColorProperty, anim);
+        }
+
         private void Button_Hover(object sender, int milliSeconds, double initialSize = 0.9)
         {
             Duration dur = new Duration(new System.TimeSpan(0, 0, 0, 0, milliSeconds));
@@ -305,8 +328,6 @@ namespace PaintingClass.Tabs
             var tg = new TransformGroup();
             tg.Children.Add(new ScaleTransform(0.9, 0.9));
             tg.Children.Add(new TranslateTransform((but.ActualWidth - but.ActualWidth * initialSize) / 2d, (but.ActualHeight - but.ActualHeight * initialSize) / 2d));
-            tg.Children.Add(new SkewTransform(1.0, 1.0));
-            tg.Children.Add(new RotateTransform());
             but.RenderTransform = tg;
 
         }

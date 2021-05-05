@@ -68,7 +68,16 @@ namespace PaintingClass
 
         private void Back_Button_Click(object sender, RoutedEventArgs e)
         {
-            FadeAnimateElement((Page)MainFrame.Content, new Duration(new TimeSpan(0, 0, 0, 0, 400)), true, (sender, e) => { MainFrame.GoBack(); });
+            FadeAnimateElement((Page)MainFrame.Content, new Duration(new TimeSpan(0, 0, 0, 0, 400)), true, (sender, e) => { 
+            try
+			{
+               MainFrame.GoBack();
+		    }   
+            catch
+			{
+
+			}
+            });
         }
 
 		private void CloseApplication_MouseDown(object sender, MouseButtonEventArgs e)

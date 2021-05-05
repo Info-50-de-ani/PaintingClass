@@ -120,6 +120,7 @@ namespace PaintingClass.PaintTools
 			Image image = new Image() { Source = new BitmapImage(new Uri("pack://application:,,,/Resources/Tools/text.png")) };
 			RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.Fant);
 			cc.Content = image;
+			cc.ToolTip = "Unealta cu care introduci text de la tastatura";
 			return cc;
 		}
 
