@@ -12,6 +12,60 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="47*"/>
+            <RowDefinition Height="47*"/>
+            <RowDefinition Height="428*"/>
+            <RowDefinition Height="47*"/>
+            <RowDefinition Height="47*"/>
+        </Grid.RowDefinitions>
+
+        <Viewbox Grid.Row="1" Grid.RowSpan="3" Stretch="Uniform">
+            <Border BorderBrush="Black" BorderThickness="1" Background="White">
+                <Viewbox x:Name="whiteboardSlot" Height="90" Width="160" Stretch="Fill"/>
+            </Border>
+        </Viewbox>
+
+        <Grid Grid.Row="0" Grid.RowSpan="2" Margin="20,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <Border Grid.Column="1"
+                Background="White" BorderBrush="Black" BorderThickness="2">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="4" ShadowDepth="1" Direction="270"/>
+                </Border.Effect>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" FontSize="20" Margin="5,0,5,0" Text="{Binding name}"/>
+                    
+                    <Button x:Name="shareButton" Grid.Column="1" Click="shareButton_Click"
+                            Content="{Binding isShared, Converter={StaticResource ShareTextConverter} }"/>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="3" Grid.RowSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="534*"/>
+                <ColumnDefinition Width="190*"/>
+                <ColumnDefinition Width="80*"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="1"
+                Background="White" BorderBrush="Black" BorderThickness="2">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="4" ShadowDepth="1" Direction="270"/>
+                </Border.Effect>
+            </Border>
+        </Grid>
+    </Grid>
+    <!--<Grid>
+        <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
@@ -30,5 +84,5 @@
                 <Viewbox x:Name="whiteboardSlot" Height="90" Width="160" Stretch="Fill"/>
             </Border>
         </Viewbox>
-    </Grid>
+    </Grid>-->
 </UserControl>

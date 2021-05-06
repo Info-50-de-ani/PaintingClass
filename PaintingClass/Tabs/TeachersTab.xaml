@@ -9,7 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="800"
     d:DesignWidth="1536"
-    mc:Ignorable="d">
+    mc:Ignorable="d" Background="#F3F3F3">
     <UserControl.Resources>
         <Style x:Key="LeftScrollViewer" TargetType="{x:Type ScrollViewer}">
             <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -50,15 +50,33 @@
         </Style>
     </UserControl.Resources>
     <ScrollViewer Style="{StaticResource LeftScrollViewer}" VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="40,40,40,0" Background="White">
-            <!--  Informatii utile  -->
-            <Border Background="LightGray" CornerRadius="20">
-                <StackPanel>
-                    <TextBlock Margin="20,20,20,5" FontSize="30">Invită alții folosind acest link</TextBlock>
-                    <TextBox x:Name="inviteLink" Margin="20,5,20,5" FontSize="30" IsReadOnly="True"></TextBox>
-                </StackPanel>
-            </Border>
+        <StackPanel Margin="40,40,40,0">
+            
+            <!-- Invite link -->
+            <Grid HorizontalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <Border BorderBrush="Black" BorderThickness="2" Background="White">
+                    <Border.RenderTransform>
+                        <TranslateTransform X="-20" Y="-20"/>
+                    </Border.RenderTransform>
+                </Border>
+                
+                <Border BorderBrush="Black" BorderThickness="2" Background="White">
+                    <TextBlock Margin="10" FontSize="30">Invită alții folosind acest link</TextBlock>
+                </Border>
+            </Grid>
+            <TextBox x:Name="inviteLink" MinWidth="420" MinHeight="70" Margin="30" 
+                     HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                     BorderBrush="Black" BorderThickness="2" Background="#E2E2E2"
+                     FontSize="30" IsReadOnly="True"/>
 
+            <!-- NetworkUserWhiteboard-uri -->
             <ItemsControl x:Name="rootItemsControl" Margin="0,20,0,0">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
