@@ -22,6 +22,7 @@ namespace PaintingClass
 
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
+			Storage.Settings.Init();
 			//check for roomId
             if (e.Args.Length > 0)
             {

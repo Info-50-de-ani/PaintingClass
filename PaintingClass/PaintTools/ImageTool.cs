@@ -270,47 +270,52 @@ namespace PaintingClass.PaintTools
                 byte[] arr = ms.ToArray();
                 bmp = new BitmapImage(Create_Memory_Resource_Uri(ms));
                 DisplayBmp(position);
+                return;
             }
-            else if((ms = ((MemoryStream[])e.Data.GetData("FileContents"))[0]) != null)
+			try
 			{
+                ms = ((MemoryStream[])e.Data.GetData("FileContents"))[0];
                 isMoving = true;
                 resizeGrid.Visibility = Visibility.Visible;
                 ms.Position = 0;
                 byte[] arr = ms.ToArray();
                 bmp = new BitmapImage(Create_Memory_Resource_Uri(ms));
                 DisplayBmp(position);
+                return;
+			}
+            catch
+			{
+
+			}
+            // daca imaginea este primita ca un path spre file 
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            if (files.Count() > 1)
+                return;
+
+            var ext = Path.GetExtension(files[0]);
+
+            if (ext == ".pdf" && File.Exists(files[0]))
+            {
+                owner.ShowPdfViewer();
+                owner.pdfViewer.SetPdfTo(files[0]);
             }
-            else
-            { // daca imaginea este primita ca un path spre file 
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-                if (files.Count() > 1)
-                    return;
+            if (!(ext == ".png" || ext == ".bmp" || ext == ".jpg") || !File.Exists(files[0]))
+                return;
 
-                var ext = Path.GetExtension(files[0]);
-
-                if (ext == ".pdf" && File.Exists(files[0]))
-                {
-                    owner.ShowPdfViewer();
-                    owner.pdfViewer.SetPdfTo(files[0]);
-                }
-
-                if (!(ext == ".png" || ext == ".bmp" || ext == ".jpg") || !File.Exists(files[0]))
-                    return;
-
-                // daca inainte a mai fost o imagine o trimitem 
-                if (image != null)
-                {
-                    image.Freeze();
-                    MessageUtils.SendNewDrawing(image, whiteboard.drawingCollection.Count - 1); 
-                    image = null;
-                    bmp = null;
-                }
-
-                bmp = new BitmapImage(new Uri(files[0]));
-
-                DisplayBmp(position);
+            // daca inainte a mai fost o imagine o trimitem 
+            if (image != null)
+            {
+                image.Freeze();
+                MessageUtils.SendNewDrawing(image, whiteboard.drawingCollection.Count - 1); 
+                image = null;
+                bmp = null;
             }
+
+            bmp = new BitmapImage(new Uri(files[0]));
+
+            DisplayBmp(position);
         }
 
         public void OnPasteEventHandler(object sender, KeyEventArgs e)

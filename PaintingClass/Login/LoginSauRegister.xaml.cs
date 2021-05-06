@@ -160,6 +160,8 @@ namespace PaintingClass.Login
 					roomId = 0
 				};
 
+				Storage.Settings.instance.profToken = profToken;
+
 				CurrentFrame.Content = new ProfesorGenRoom(CurrentFrame,userData);
 				return;
 			}
@@ -409,22 +411,5 @@ namespace PaintingClass.Login
 
 		#endregion
 
-		#region Animations 
-	
-		private void LoginToRegisterAnimation(bool reveresed, Duration duration)
-		{
-			Storyboard sb = new Storyboard();
-			DoubleAnimation loginAnim = new DoubleAnimation() { From = reveresed ? 1 : 0, To = reveresed ? 0 : 1, Duration = duration };
-			DoubleAnimation registerAnim = new DoubleAnimation() { From = reveresed ? 0 : 1, To = reveresed ? 1 : 0, Duration = duration };
-			Storyboard.SetTarget(loginAnim, LoginBackground);
-			Storyboard.SetTarget(registerAnim, RegisterBackground);
-			Storyboard.SetTargetProperty(loginAnim, new PropertyPath(OpacityProperty));
-			Storyboard.SetTargetProperty(registerAnim, new PropertyPath(OpacityProperty));
-			sb.Children.Add(loginAnim);
-			sb.Children.Add(registerAnim);
-			sb.Begin(this);
-		}
-		
-		#endregion
 	}
 }

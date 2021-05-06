@@ -161,27 +161,13 @@ namespace PaintingClass
 
 		private bool ApplyUserControl(WBItemMessage msg)
 		{
-            ControlWithPosition cwp  = null;
-            Control control = null;
+            UserControlWBMessage ucMsg = null;
 
-            if (msg.op != WBItemMessage.Operation.delete)
+            ucMsg = JsonSerializer.Deserialize<UserControlWBMessage>(msg.content);
+            if (ucMsg == null)
             {
-                cwp = JsonSerializer.Deserialize<ControlWithPosition>(msg.content);
-                if (cwp == null)
-                {
-                    Trace.WriteLine("JsonSerializer returned null from WBItemMessage.content");
-                    return false;
-                }
-
-                control = XamlReader.Parse(cwp.serializedControl) as Control;
-                if (control == null)
-                {
-                    Trace.WriteLine("XAML parser returned null from WBItemMessage.content");
-                    return false;
-                }
-                //setting up attached proprierties
-                Canvas.SetLeft(control,cwp.X);
-                Canvas.SetTop(control, cwp.Y);
+                Trace.WriteLine("JsonSerializer returned null from WBItemMessage.content");
+                return false;
             }
 
             switch (msg.op)
@@ -192,7 +178,7 @@ namespace PaintingClass
                         Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
                         return false;
                     }
-                    controlCollection.Add(control);
+                    controlCollection.Add(ucMsg.Deserialize(this));
                     return true;
                 case WBItemMessage.Operation.edit:
                     if (msg.contentIndex < 0 || msg.contentIndex >= controlCollection.Count)
@@ -200,7 +186,15 @@ namespace PaintingClass
                         Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
                         return false;
                     }
-                    controlCollection[msg.contentIndex] = control;
+                    for(int i =0;i<controlCollection.Count;i++)
+					{
+                        if ((int)((Control)controlCollection[i]).Tag == ucMsg.uniqueControlId)
+						{
+                            controlCollection.RemoveAt(i);
+                            controlCollection.Insert(i,ucMsg.Deserialize(this));
+						}
+
+					}
                     return true;
                 case WBItemMessage.Operation.delete:
                     if (msg.contentIndex < 0 && msg.contentIndex >= controlCollection.Count)
@@ -208,7 +202,14 @@ namespace PaintingClass
                         Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
                         return false;
                     }
-                    controlCollection[msg.contentIndex] = null;
+                    for (int i=0;i< controlCollection.Count;i++)
+                    {
+                        if ((int)((Control)controlCollection[i]).Tag == ucMsg.uniqueControlId)
+                        {
+                            controlCollection.RemoveAt(i);
+                            break;
+                        }
+                    }
                     return true;
             }
             return false;

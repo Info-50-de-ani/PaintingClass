@@ -39,7 +39,7 @@ namespace PaintingClass.Networking
         {
 			ws = new WebSocket($"{Constants.urlWebSocket}/room/{userData.roomId}?name={userData.name}&clientID={userData.clientID}&profToken={userData.profToken}");
             ws.SslConfiguration.ServerCertificateValidationCallback = CertificateValidation;
-            ws.OnError += (sender, e) => { MessageBox.Show(e.Message); };
+            ws.OnError += (sender, e) => { Trace.WriteLine(e.Message); };
             ws.OnMessage += OnMessage;
             ws.Connect();
         }

@@ -48,29 +48,29 @@ namespace PaintingClass.Tabs
         /// se produce cand <see cref="myWhiteboardViewBox"/> isi schimba tranformul
         /// </summary>
         public Action OnTransformChanged = () => { };
-		#endregion
+        #endregion
 
-		private PaintTool _selectedTool;
+        private PaintTool _selectedTool;
         public PaintTool selectedTool {
-            get { return _selectedTool; } 
+            get { return _selectedTool; }
             set {
                 _selectedTool = value;
                 OnToolSelect(_selectedTool);
-            } 
+            }
         }//click stanga o sa foloseasca unealta selectata
 
         public SolidColorBrush globalBrush = Brushes.Black;
         public double globalBrushThickness = 0.3;
         private double _globalFontSize;
         public double globalFontSize {
-			set
-			{
-                if(value != _globalFontSize)
-				{
+            set
+            {
+                if (value != _globalFontSize)
+                {
                     _globalFontSize = value;
                     OnFontSizeChanged(value);
-				}
-			}
+                }
+            }
             get => _globalFontSize;
         }
 
@@ -87,6 +87,14 @@ namespace PaintingClass.Tabs
         /// updata dimensiunea dinamic cu usurinta
         /// </summary>
         public List<TextToolResize> textToolResizeCollection = new List<TextToolResize>();
+        private int _newUserControlId = 0;
+        /// <summary>
+        /// Utilizat pentru a identifica fiecare control
+        /// (din cauza deletarii elementelor sterse, size-ul nu poate fi folosit)
+        /// va fi stocat in tag-ul elementului 
+        /// este independent de <see cref="PaintingClassCommon.WBItemMessage.contentIndex"/>
+        /// </summary>
+        public int GetUserControlID { get { _newUserControlId++; return _newUserControlId-1; } }
         public List<FormulaToolResize> formulaToolResizeCollection = new List<FormulaToolResize>();
 
         //daca suntem in procesul de a scrie pe tabla
@@ -196,6 +204,7 @@ namespace PaintingClass.Tabs
 			MouseWheel += MyWhiteboard_OnScroll;
 			VerticalZoomScrollbar.Scroll += VerticalZoomScrollbar_Scroll;
 			HorizontalZoomScrollbar.Scroll += HorizontalZoomScrollbar_Scroll;
+            whiteboard.canvas.Visibility = Visibility.Hidden;
         }
 
 		//contine toate tipurile de PaintTool obitnute prin reflexie

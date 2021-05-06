@@ -23,6 +23,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Animation;
 using System.Threading;
 using PaintingClass.PaintTools.Interfaces;
+using System.Windows.Markup;
 
 namespace PaintingClass.PaintTools
 {
@@ -32,21 +33,26 @@ namespace PaintingClass.PaintTools
 	public class FormulaToolResize
 	{
 		/// <summary>
+		/// id unic pentru acest control
+		/// </summary>
+		public int index { get; set; } = -1;
+
+		/// <summary>
 		/// Marimea normalizata in coordonatele tablei
 		/// </summary>
-		public Size absSize;
+		public Size absSize { get; set; }
 
 		/// <summary>
 		/// Pozitia normalizata in coordonatele tablei
 		/// </summary>
-		public Point absPosition;
+		public Point absPosition { get; set; }
 
 		/// <summary>
 		/// Stackpanelul ce contine <see cref="FormulaControl"/>ul
 		/// </summary>
-		public StackPanel stackPanel;
+		public StackPanel stackPanel { get; set; }
 
-		public MyWhiteboard owner;
+		public MyWhiteboard owner { get; set; }
 
 		/// <summary>
 		/// Este produs cand windowul isi ia resize de catre user
@@ -306,7 +312,29 @@ namespace PaintingClass.PaintTools
 
 		private void CloseIcon_MouseDown(object sender, MouseButtonEventArgs e)
 		{
-			myWhiteboardCanvas.Children.Remove((StackPanel)((Grid)((Canvas)((Image)sender).Parent).Parent).Parent);
+			var sp = (StackPanel)((Grid)((Canvas)((Image)sender).Parent).Parent).Parent;
+			FormulaToolResize ftr = null;
+			for (int i = 0; i < owner.formulaToolResizeCollection.Count; i++)
+			{
+				if (owner.formulaToolResizeCollection[i].stackPanel == sp)
+				{
+					ftr = owner.formulaToolResizeCollection[i];
+					owner.formulaToolResizeCollection.RemoveAt(i);
+					break;
+				}
+			}
+			if (ftr == null)
+				return;
+			for (int i = 0; i < whiteboard.canvas.Children.Count; i++)
+			{
+				if ((int)((Control)whiteboard.canvas.Children[i]).Tag == ftr.index)
+				{
+					whiteboard.canvas.Children.RemoveAt(i);
+					break;
+				}
+			}
+			myWhiteboardCanvas.Children.Remove(sp);
+			MessageUtils.DeleteUserControl(whiteboard.controlCollection.Count - 1, ftr.index);
 		}
 
 		public override void MouseDown(Point position)
@@ -356,7 +384,8 @@ namespace PaintingClass.PaintTools
 		private void Tb_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			string crudeText = ((TextBox)sender).Text;
-			FormulaControl formulaControl = ((StackPanel)((Grid)((TextBox)sender).Parent).Parent).Children.OfType<FormulaControl>().First();
+			StackPanel stackPanel = ((StackPanel)((Grid)((TextBox)sender).Parent).Parent);
+			FormulaControl formulaControl = stackPanel.Children.OfType<FormulaControl>().First();
 			crudeText = crudeText.Replace("=", "+equal+").Replace(" ", "");
 			try
 			{
@@ -365,6 +394,32 @@ namespace PaintingClass.PaintTools
 					// convertim in LaTeX
 					string texf = converter.Convert(crudeText);
 					formulaControl.Formula = texf.Replace("+{equal}+", "=");
+
+					/// aici vom trimite mesajul catre server 
+					/// trimitem un <see cref="TextBox"/> deoarece <see cref="FormulaControl"/> nu merge serializat
+					var fc = new TextBox { Text = formulaControl.Formula, Height = stackPanel.RenderSize.Height - stackPanel.Children[0].RenderSize.Height,Width = formulaControl.RenderSize.Width};
+
+					foreach (var resize in owner.formulaToolResizeCollection) // obtinem formulaToolResize-ul pt acest control
+					{
+						if(resize.stackPanel.Children.OfType<FormulaControl>().First() == formulaControl)
+						{
+							if(resize.index == -1)
+							{
+								whiteboard.canvas.Children.Add(fc);
+								resize.index = owner.GetUserControlID;
+								fc.Tag = resize.index;
+								fc.Name = nameof(FormulaControl);
+								MessageUtils.SendNewUserControl(new MessageUtils.UserControlWBMessage(resize.absPosition, fc, resize.index), whiteboard.controlCollection.Count - 1);
+							}
+							else
+							{
+								fc.Tag = resize.index;
+								fc.Name = nameof(FormulaControl);
+								MessageUtils.EditUserControl(new MessageUtils.UserControlWBMessage(resize.absPosition, fc, resize.index), whiteboard.controlCollection.Count - 1);
+							}
+							
+						}
+					}
 				}
 			}
 			catch (Exception ex)

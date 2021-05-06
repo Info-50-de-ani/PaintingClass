@@ -11,21 +11,14 @@ namespace PaintingClass.Storage
 		//daca sa genereze un nou ClientId la fiecare start al programului si sa ignore cel din fisier 
 		//daca este false atunci clientul se poate reconecta la acelasi room chiar daca da crash
 		const bool regenerateClientIdAtStart = true;
-
-		static Settings _instance;
-		public static Settings instance
-        {
-            get
-            {
-                if (_instance==null)
-                {
-                    _instance = AppdataIO.Load<Settings>("Settings.xml");
-                    if (_instance == null) _instance = new Settings();
-                    _instance.deserializationFinished = true;
-                }
-                return _instance;
-            }
+        public static void Init()
+		{
+            instance = AppdataIO.Load<Settings>("Settings.xml");
+            if (instance == null)
+                instance = new Settings();
+            instance.deserializationFinished = true;
         }
+		public static Settings instance{ get;set; }
 
         //ne asiguram ca nu salvam cand deserializer-ul seteaza variabilele
         bool deserializationFinished;
@@ -47,21 +40,40 @@ namespace PaintingClass.Storage
 
             set
             {
-                if (deserializationFinished || regenerateClientIdAtStart==false)
-                    _clientID = value;
-                Save();
+                _clientID = value;
+                if (deserializationFinished) 
+                    Save();
+                else if (regenerateClientIdAtStart)
+				{
+                    _clientID = 0;
+				}
+
             }
         }
+
+        string _elevName;
+        public string elevName
+		{
+            get => _elevName;
+            set
+			{
+                _elevName = value;
+                if (deserializationFinished)
+                    Save();
+			}
+        }
+
 
         int _profToken;
         public int profToken
 		{
-            get => _profToken;
+            // TODO de terminat ProfToken storing
+            get => 0;
 			set
 			{
+                _profToken = value;
                 if (deserializationFinished)
-                    _profToken = value;
-                Save();
+                    Save();
             }
         }
 
