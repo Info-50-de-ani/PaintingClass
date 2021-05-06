@@ -167,11 +167,11 @@
                 </EventTrigger>
             </TabControl.Triggers>
             <TabControl.Resources>
-                <Brush x:Key="InnerBackground">#D9C9AB</Brush>
-                <Brush x:Key="InnerBorderBrush">#8B786D</Brush>
+                <Brush x:Key="InnerBackground">#FFFFFF</Brush>
+                <Brush x:Key="InnerBorderBrush">#FFFFFF</Brush>
                 <Style TargetType="TabControl">
-                    <Setter Property="Background" Value="#C1B1AC" />
-                    <Setter Property="BorderBrush" Value="#A77D6C" />
+                    <Setter Property="Background" Value="#FFFFFF" />
+                    <Setter Property="BorderBrush" Value="#FFFFFF" />
                     <Setter Property="BorderThickness" Value="3" />
                     <Setter Property="Template">
                         <Setter.Value>
@@ -280,9 +280,19 @@
             <!--  List de participanti  -->
             <TabItem
                 Name="TI_Participanti"
-                Background="#EEEBD3"
-                BorderThickness="0"
-                Header="Participanti">
+                Background="#EEEBD3">
+                <HeaderedContentControl.Header>
+                    <Image  Width="30"
+                            RenderOptions.BitmapScalingMode= "Fant"
+                            Source="/Resources/Whiteboard/Images/Group_1.png">
+                            <!--<Image.Effect>
+                                <DropShadowEffect BlurRadius="1" ShadowDepth="2" />
+                            </Image.Effect>-->
+                        <Image.LayoutTransform>
+                            <RotateTransform Angle="-90"/>
+                        </Image.LayoutTransform>
+                    </Image>
+                </HeaderedContentControl.Header>
                 <TabItem.Triggers>
                     <EventTrigger RoutedEvent="PreviewMouseDown">
                         <BeginStoryboard>
@@ -328,7 +338,7 @@
                         <GradientStop Offset="1.0" Color="#DCECFC" />
                     </LinearGradientBrush>
                     <SolidColorBrush x:Key="TabItem.MouseOver.Border" Color="#7EB4EA" />
-                    <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#CDC5B4" />
+                    <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#FFFFFF" />
                     <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#494947" />
                     <SolidColorBrush x:Key="TabItem.Disabled.Background" Color="#F0F0F0" />
                     <SolidColorBrush x:Key="TabItem.Disabled.Border" Color="#D9D9D9" />
@@ -533,14 +543,14 @@
                                     BorderBrush="Gray"
                                     BorderThickness="1"
                                     CornerRadius="10">
-                                    <StackPanel Height="20" Orientation="Horizontal">
+                                    <StackPanel MinWidth="100" Height="20" Orientation="Horizontal">
                                         <TextBlock
                                             Margin="2,0"
                                             FontFamily="{StaticResource ManropeBold}"
                                             FontSize="{StaticResource FontSizeNormal}"
                                             Foreground="Black"
                                             Text="{Binding Path=name}" />
-                                        <Image
+                                        <!--<Image
                                             Margin="6,0"
                                             RenderOptions.BitmapScalingMode="Fant"
                                             Source="/Resources/Whiteboard/Images/CloseButton.png">
@@ -551,7 +561,7 @@
                                         <Image
                                             Margin="6,0"
                                             RenderOptions.BitmapScalingMode="Fant"
-                                            Source="/Resources/Whiteboard/Images/ShareButton.png" />
+                                            Source="/Resources/Whiteboard/Images/ShareButton.png" />-->
                                     </StackPanel>
                                 </Border>
                             </DataTemplate>

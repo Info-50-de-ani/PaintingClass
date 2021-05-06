@@ -54,6 +54,7 @@
     <None Remove="Resources\Tools\square.png" />
     <None Remove="Resources\Tools\text.png" />
     <None Remove="Resources\Whiteboard\Images\CloseButton.png" />
+    <None Remove="Resources\Whiteboard\Images\Group_1.png" />
     <None Remove="Resources\Whiteboard\Images\ShareButton.png" />
     <None Remove="Tabs\Images\DeleteIcon.png" />
   </ItemGroup>
@@ -128,6 +129,7 @@
     <Resource Include="Resources\Login\Images\Whiteboard.png" />
     <Resource Include="Resources\Tools\PDF.png" />
     <Resource Include="Resources\Whiteboard\Images\CloseButton.png" />
+    <Resource Include="Resources\Whiteboard\Images\Group_1.png" />
     <Resource Include="Resources\Whiteboard\Images\ShareButton.png" />
     <Resource Include="Resources\Tools\circle.png" />
     <Resource Include="Resources\Tools\erase.png" />
