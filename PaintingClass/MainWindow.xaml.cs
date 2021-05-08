@@ -13,10 +13,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 using PaintingClass.Tabs;
 using PaintingClass.Networking;
 using PaintingClass.PaintTools;
-using System.ComponentModel;
+using PaintingClassCommon;
+using System.Text.Json;
 
 namespace PaintingClass
 {
@@ -136,7 +138,13 @@ namespace PaintingClass
 
         void UserListUpdate()
         {
-            Dispatcher.Invoke(() => UserListBox.ItemsSource =new ObservableCollection<NetworkUser>(roomManager.userList.Values));
+            Dispatcher.Invoke(() =>
+            {
+                UserListBox.ItemsSource = new ObservableCollection<NetworkUser>(
+                    from nu in roomManager.userList.Values
+                    where nu.isConnected
+                    select nu);
+            });
         }
 
 
@@ -161,6 +169,22 @@ namespace PaintingClass
                     tabs.RemoveAt(i);
                     break;
                 }
+            }
+        }
+
+        private void Kick_MouseDown(object sender, RoutedEventArgs e)
+        {
+            if (userData.isTeacher==false)
+            {
+                MessageBox.Show("Nu ai voie!","PaintingClass",MessageBoxButton.OK);
+                return;
+            }
+
+            NetworkUser nu = (sender as FrameworkElement)?.DataContext as NetworkUser;
+            if (nu!=null)
+            {
+                string request = JsonSerializer.Serialize(new KickRequestMessage { clientId = nu.clientId });
+                MainWindow.instance.roomManager.SendMessage(Packet.Pack(PacketType.KickRequestMessage,request));
             }
         }
     }
