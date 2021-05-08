@@ -32,7 +32,7 @@ namespace PaintingClass.PaintTools
 		/// <summary>
 		/// Indexul din userControl collection
 		/// </summary>
-		public int index { get; set; }
+		public int index { get; set; } = -1;
 
 		public TextToolResize(Point position,Size absSize)
 		{
@@ -113,6 +113,7 @@ namespace PaintingClass.PaintTools
 	class TextTool : PaintTool
 	{
 		public override int priority => 7;
+
 
 		public override Control GetControl()
 		{
@@ -220,7 +221,6 @@ namespace PaintingClass.PaintTools
 				owner = owner,
 				tb = tb,
 				textBoxGrid = grid,
-				index = myWhiteboardCanvas.Children.Count-1
 			};
 
 			grid.RenderTransform = owner.myWhiteboardViewBox.RenderTransform;
@@ -246,18 +246,48 @@ namespace PaintingClass.PaintTools
 			TextBox tb = (TextBox)XamlReader.Parse(XamlWriter.Save(textResize.tb));
 			tb.Height = textResize.textBoxGrid.RowDefinitions[0].ActualHeight;
 			tb.Width = textResize.textBoxGrid.ColumnDefinitions[0].ActualWidth;
-			MessageUtils.SendNewUserControl(tb,textResize.absPosition, whiteboard.controlCollection.Count - 1);
+			if(textResize.index == -1)
+			{
+				whiteboard.controlCollection.Add(tb);
+				textResize.index = owner.GetUserControlID;
+				tb.Tag = textResize.index;
+				MessageUtils.SendNewUserControl(new MessageUtils.UserControlWBMessage(textResize.absPosition, tb,textResize.index),whiteboard.controlCollection.Count - 1 );
+			}
+			else
+			{
+				tb.Tag = textResize.index;
+				MessageUtils.EditUserControl(new MessageUtils.UserControlWBMessage(textResize.absPosition, tb, textResize.index), whiteboard.controlCollection.Count - 1);
+			}
 		}
+		
 
 		#region Typing and Closing Related
 		private void CloseIcon_MouseDown(object sender, MouseButtonEventArgs e)
 		{
-			//todo de facut astfel incat indexul sa nu fie afectat
-			var x = myWhiteboardCanvas.Children.OfType<object>().ToList();
-			MessageBox.Show(x.Count.ToString());
-			myWhiteboardCanvas.Children.Remove(((Grid)((Canvas)((Image)sender).Parent).Parent));
-			x = myWhiteboardCanvas.Children.OfType<object>().ToList();
-			MessageBox.Show(x.Count.ToString());
+			var tbGrid = (Grid)((Canvas)((Image)sender).Parent).Parent;
+			var tb = tbGrid.Children.OfType<TextBox>().First();
+			TextToolResize ttr = null;
+			for (int i = 0; i < owner.textToolResizeCollection.Count; i++) 
+			{
+				if(owner.textToolResizeCollection[i].tb == tb)
+				{
+					ttr = owner.textToolResizeCollection[i];
+					owner.textToolResizeCollection.RemoveAt(i);
+					break;
+				}
+			}
+			if (ttr == null)
+				return;
+			for(int i=0;i<whiteboard.canvas.Children.Count;i++)
+			{
+				if ((int)((Control)whiteboard.canvas.Children[i]).Tag == ttr.index)
+				{
+					whiteboard.canvas.Children.RemoveAt(i);
+					break;
+				}
+			}
+			myWhiteboardCanvas.Children.Remove(tbGrid);
+			MessageUtils.DeleteUserControl(whiteboard.controlCollection.Count - 1,ttr.index);
 		}
 
 		private void Tb_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PaintingClass.Storage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,7 @@ namespace PaintingClass.Login
         {
             InitializeComponent();
             CurrentFrame = frame;
+            name.Text = Settings.instance.elevName;
             StartWindow.FadeAnimateElement(this, new Duration(new TimeSpan(0, 0, 0, 0, 400)),false);
         }
 
@@ -44,6 +46,8 @@ namespace PaintingClass.Login
                 clientID = PaintingClass.Storage.Settings.instance.clientID,
                 profToken = 0
             };
+
+            Settings.instance.elevName = ud.name;
 
             new MainWindow(ud, (result, mw) =>
             {

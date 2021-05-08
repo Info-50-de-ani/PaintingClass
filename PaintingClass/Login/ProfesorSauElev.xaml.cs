@@ -76,6 +76,15 @@ namespace PaintingClass.Login
 
         private void BT_Profesor_Click(object sender, RoutedEventArgs e)
         {
+            if(Storage.Settings.instance.profToken != 0)
+			{
+                UserData userData = new UserData
+                {
+                    profToken = Storage.Settings.instance.profToken,
+                };
+                new MainWindow(userData);
+                CurrentFrame.Content = new ProfesorGenRoom(CurrentFrame, userData);
+            }
             CurrentFrame.Content = new LoginSauRegister(CurrentFrame);
         }
 
