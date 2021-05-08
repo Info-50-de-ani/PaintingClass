@@ -172,11 +172,58 @@
             Source="" />
         <Button
             x:Name="BackButton"
-            Width="100"
-            Height="auto"
+            Width="30"
+            Height="30"
+            Margin="10"
             VerticalAlignment="Bottom"
+            Panel.ZIndex="10"
             Click="Back_Button_Click"
-            Content="Back" />
+            Template="{DynamicResource BackButtonTemplate}">
+            <Button.Resources>
+                <ControlTemplate x:Key="BackButtonTemplate" TargetType="{x:Type ButtonBase}">
+                    <Border
+                        x:Name="border"
+                        Background="Transparent"
+                        SnapsToDevicePixels="true">
+                        <ContentPresenter
+                            x:Name="contentPresenter"
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Focusable="False"
+                            RecognizesAccessKey="True"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                    <ControlTemplate.Triggers />
+                </ControlTemplate>
+            </Button.Resources>
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="2" ShadowDepth="1" />
+            </Button.Effect>
+            <Image RenderOptions.BitmapScalingMode="fant" Source="/Resources/Login/Images/backButton.png" />
+            <Button.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="Opacity"
+                                To="0.7"
+                                Duration="0:0:0.3" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="Opacity"
+                                To="1"
+                                Duration="0:0:0.3" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Button.Triggers>
+        </Button>
         <Button
             Width="80"
             Height="30"

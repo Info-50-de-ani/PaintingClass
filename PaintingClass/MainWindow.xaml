@@ -189,15 +189,19 @@
                                         <RowDefinition x:Name="RowDefinition0" Height="Auto" />
                                         <RowDefinition x:Name="RowDefinition1" Height="*" />
                                     </Grid.RowDefinitions>
+
                                     <TabPanel
                                         x:Name="headerPanel"
                                         Grid.Row="0"
                                         Grid.Column="0"
+                                        Height="100"
                                         Margin="2,2,2,0"
+                                        VerticalAlignment="Top"
                                         Panel.ZIndex="1"
                                         Background="Transparent"
                                         IsItemsHost="true"
                                         KeyboardNavigation.TabIndex="1" />
+
                                     <Border
                                         x:Name="contentPanel"
                                         Grid.Row="1"
@@ -278,18 +282,17 @@
             </TabControl.Resources>
             <!--  tabitemi  -->
             <!--  List de participanti  -->
-            <TabItem
-                Name="TI_Participanti"
-                Background="#EEEBD3">
+            <TabItem Name="TI_Participanti" Background="#EEEBD3">
                 <HeaderedContentControl.Header>
-                    <Image  Width="30"
-                            RenderOptions.BitmapScalingMode= "Fant"
-                            Source="/Resources/Whiteboard/Images/Group_1.png">
-                            <!--<Image.Effect>
+                    <Image
+                        Width="30"
+                        RenderOptions.BitmapScalingMode="Fant"
+                        Source="/Resources/Whiteboard/Images/Group_1.png">
+                        <!--<Image.Effect>
                                 <DropShadowEffect BlurRadius="1" ShadowDepth="2" />
                             </Image.Effect>-->
                         <Image.LayoutTransform>
-                            <RotateTransform Angle="-90"/>
+                            <RotateTransform Angle="-90" />
                         </Image.LayoutTransform>
                     </Image>
                 </HeaderedContentControl.Header>
@@ -543,7 +546,10 @@
                                     BorderBrush="Gray"
                                     BorderThickness="1"
                                     CornerRadius="10">
-                                    <StackPanel MinWidth="100" Height="20" Orientation="Horizontal">
+                                    <StackPanel
+                                        Height="20"
+                                        MinWidth="100"
+                                        Orientation="Horizontal">
                                         <TextBlock
                                             Margin="2,0"
                                             FontFamily="{StaticResource ManropeBold}"

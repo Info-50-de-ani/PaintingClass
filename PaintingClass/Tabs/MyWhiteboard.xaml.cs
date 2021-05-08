@@ -129,19 +129,29 @@ namespace PaintingClass.Tabs
             //le sortam folosind proprietate priority
             tools.Sort((a,b) => { return a.priority.CompareTo(b.priority); } );
 
-            var toolbarButtonStyle = (Style)Application.Current.Resources["toolbarButtonStyle"];
+            var toolbarButtonStyle = (Style)Application.Current.Resources["ToolBarButtonStyle"];
             //generaza controalele pt ToolBar
             foreach (PaintTool tool in tools)
             {
                 Control toolControl = tool.GetControl();
                 //incapsulam controlul intr-un buton
-                Button button = new Button();//{Style= toolbarButtonStyle,Margin= new Thickness(20,3,20,3) };
+                Button button = new Button{Style= toolbarButtonStyle,Margin= new Thickness(20,3,20,3) };
                 button.Content = toolControl;
 
                 //pt animatii 
                 button.Margin = new Thickness(2);
-                button.MouseEnter += (sender, e) => { Button_Hover(sender, 300, 0.9); };
-                button.MouseLeave += (sender, e) => { Button_Hover(sender, 300, 0.9); };
+                button.MouseEnter += (sender, e) => { Button_Hover(sender, 300, 0.9); 
+                    if(selectedTool != tool)
+					{
+                        Button_Select(button, 300, Colors.White, (Color)ColorConverter.ConvertFromString("#FCF995"));
+                    }
+                };
+                button.MouseLeave += (sender, e) => { Button_Hover(sender, 300, 0.9);
+                    if (selectedTool != tool)
+                    {
+                        Button_DeSelect(button, 300, Colors.White, (Color)ColorConverter.ConvertFromString("#FCF995"));
+                    }
+                };
                 button.Loaded += (sender, e) => { Button_Loaded(sender, 0.9); };
                 button.SizeChanged += (sender, e) => { Button_Loaded(sender, 0.9); };
                 //adaugam butonul la toolbar

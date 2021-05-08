@@ -118,6 +118,121 @@
         </Setter>
     </Style>
 
+    <!--  Sliding button style  -->
+    <Style x:Key="SlidingAnimatedButtonStyleBlack" TargetType="{x:Type Button}">
+
+        <Style.Resources>
+            <SolidColorBrush x:Key="Button.Static.Background" Color="Black" />
+            <SolidColorBrush x:Key="Button.Static.Border" Color="White" />
+            <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD" />
+            <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1" />
+            <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6" />
+            <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B" />
+            <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4" />
+            <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5" />
+            <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383" />
+        </Style.Resources>
+        <Setter Property="BorderThickness" Value="4" />
+        <Setter Property="Opacity" Value="0.5" />
+        <Setter Property="Background" Value="{DynamicResource Button.Static.Background}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Button.Static.Border}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid>
+                        <Border
+                            x:Name="border"
+                            Padding="5"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Opacity="1"
+                            SnapsToDevicePixels="true">
+                            <ContentPresenter
+                                x:Name="contentPresenter"
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Focusable="False"
+                                RecognizesAccessKey="True"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                TextBlock.Foreground="White" />
+                            <Border.Effect>
+                                <DropShadowEffect
+                                    Opacity="0.7"
+                                    ShadowDepth="0"
+                                    Color="White" />
+                            </Border.Effect>
+                        </Border>
+                        <Border
+                            x:Name="SlidingBorder"
+                            Panel.ZIndex="1"
+                            Background="White"
+                            Visibility="Visible">
+                            <Border.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="RenderTransform">
+                                        <Setter.Value>
+                                            <ScaleTransform ScaleX="0" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Border.Resources>
+                        </Border>
+                        <ContentPresenter
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Panel.ZIndex="2"
+                            TextBlock.Foreground="Black">
+                            <ContentPresenter.OpacityMask>
+                                <VisualBrush Visual="{Binding ElementName=SlidingBorder}" />
+                            </ContentPresenter.OpacityMask>
+                        </ContentPresenter>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation
+                                        Storyboard.TargetName="SlidingBorder"
+                                        Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                        From="0"
+                                        To="1"
+                                        Duration="0:00:0.2" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation
+                                        Storyboard.TargetName="SlidingBorder"
+                                        Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                        From="1"
+                                        To="0"
+                                        Duration="0:00:0.2" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <Trigger Property="IsDefaulted" Value="true">
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true" />
+
+                        <Trigger Property="IsPressed" Value="true">
+                            <!--  TODO Animatie  -->
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false" />
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <!--  Style pentru buton cu background transparent si foreground animat  -->
     <Style x:Key="AnimatedButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="Transparent" />
@@ -247,29 +362,58 @@
         </Setter>
     </Style>
     <!--  toolbarButtonStyle  -->
-    <Style x:Key="toolbarButtonStyle" TargetType="{x:Type Button}">
+    <Style x:Key="ToolBarButtonStyle" TargetType="{x:Type Button}">
         <Style.Resources>
-            <Brush x:Key="BackgroundStartBrush">#2B2D42</Brush>
-            <Brush x:Key="ForegroundStartBrush">#D3C0D2</Brush>
-            <Color x:Key="BackgroundStartColor">#2B2D42</Color>
-            <Color x:Key="ForegroundStartColor">#D3C0D2</Color>
+            <Brush x:Key="BackgroundStartBrush">white</Brush>
+            <Color x:Key="BackgroundStartColor">white</Color>
+            <Color x:Key="BackgroundEndColor">#FCF995</Color>
         </Style.Resources>
-        <Setter Property="Width" Value="160" />
-        <Setter Property="Height" Value="60" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="Background" Value="{StaticResource BackgroundStartBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource ForegroundStartBrush}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border
                         x:Name="border"
-                        Padding="4"
+                        Padding="1"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="10"
+                        CornerRadius="7"
+                        SnapsToDevicePixels="true">
+                        <ContentPresenter
+                            x:Name="contentPresenter"
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Focusable="False"
+                            RecognizesAccessKey="True"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ToolSettingsButtonStyle" TargetType="{x:Type Button}">
+        <Style.Resources>
+            <Brush x:Key="BackgroundStartBrush">white</Brush>
+            <Color x:Key="BackgroundStartColor">white</Color>
+            <Color x:Key="BackgroundEndColor">#FCF995</Color>
+        </Style.Resources>
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="{StaticResource BackgroundStartBrush}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        x:Name="border"
+                        Padding="1"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="7"
                         SnapsToDevicePixels="true">
                         <ContentPresenter
                             x:Name="contentPresenter"
@@ -286,15 +430,7 @@
                                 <Storyboard>
                                     <ColorAnimation
                                         Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
-                                        To="{StaticResource ForegroundStartColor}"
-                                        Duration="0:0:0.3" />
-                                    <DoubleAnimation
-                                        Storyboard.TargetProperty="Width"
-                                        To="170"
-                                        Duration="0:0:0.3" />
-                                    <DoubleAnimation
-                                        Storyboard.TargetProperty="Height"
-                                        To="70"
+                                        To="{StaticResource BackgroundEndColor}"
                                         Duration="0:0:0.3" />
                                 </Storyboard>
                             </BeginStoryboard>
@@ -305,14 +441,6 @@
                                     <ColorAnimation
                                         Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
                                         To="{StaticResource BackgroundStartColor}"
-                                        Duration="0:0:0.3" />
-                                    <DoubleAnimation
-                                        Storyboard.TargetProperty="Width"
-                                        To="160"
-                                        Duration="0:0:0.3" />
-                                    <DoubleAnimation
-                                        Storyboard.TargetProperty="Height"
-                                        To="60"
                                         Duration="0:0:0.3" />
                                 </Storyboard>
                             </BeginStoryboard>

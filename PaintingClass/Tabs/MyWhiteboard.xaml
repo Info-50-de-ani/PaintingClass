@@ -14,6 +14,10 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
+        <!--  Panel button Style  -->
+        <Style TargetType="Button" >
+            <Setter Property="Background" Value="#FFF8F0"/>
+        </Style>
         <!--  ControlTemplate pentru Toolbar  -->
         <ControlTemplate x:Key="ToolScrollViewer" TargetType="{x:Type ScrollViewer}">
             <Grid x:Name="Grid" Background="{TemplateBinding Background}">
@@ -204,16 +208,16 @@
 
             <!--  ToolBar  -->
             <ScrollViewer
-                    HorizontalScrollBarVisibility="Auto"
-                    Template="{StaticResource ResourceKey=ToolScrollViewer}"
-                    VerticalScrollBarVisibility="Auto">
+                HorizontalScrollBarVisibility="Auto"
+                Template="{StaticResource ResourceKey=ToolScrollViewer}"
+                VerticalScrollBarVisibility="Auto">
                 <ScrollViewer.Resources>
                     <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">10</sys:Double>
                 </ScrollViewer.Resources>
                 <StackPanel
-                        x:Name="toolbar"
-                        Grid.Row="0"
-                        Orientation="Vertical" />
+                    x:Name="toolbar"
+                    Grid.Row="0"
+                    Orientation="Vertical" />
             </ScrollViewer>
             <!--  Grid cu setari pt tooluri  -->
             <Grid Grid.Row="1">
@@ -225,40 +229,62 @@
                 </Grid.RowDefinitions>
                 <!--  buton pentru culori  -->
                 <Button
-                        Grid.Row="0"
-                        Click="ColorMenu_Button_Click"
-                        Content="Culori" />
+                    Grid.Row="0"
+                    Margin="5"
+                    Click="ColorMenu_Button_Click"
+                    Content="Culori"
+                    FontFamily="{StaticResource ManropeBold}"
+                    FontSize="{StaticResource FontSizeMedium}"
+                    Style="{StaticResource ToolSettingsButtonStyle}" />
 
                 <!--  buton pentru grosime  -->
                 <Button
-                        Grid.Row="1"
-                        Click="BrushThicknessMenu_Button_Click"
-                        Content="Grosimi linii" />
+                    Grid.Row="1"
+                    Margin="5"
+                    Click="BrushThicknessMenu_Button_Click"
+                    Content="Grosimi linii"
+                    FontFamily="{StaticResource ManropeBold}"
+                    FontSize="{StaticResource FontSizeMedium}"
+                    Style="{StaticResource ToolSettingsButtonStyle}" />
 
                 <!--  buton marime font  -->
                 <Button
-                        Grid.Row="2"
-                        Click="FontSizeMenu_Button_Click"
-                        Content="Font size"
-                        Focusable="False" />
-                
-                <!-- Undo & Clear all-->
+                    Grid.Row="2"
+                    Margin="5"
+                    Click="FontSizeMenu_Button_Click"
+                    Content="Marime text"
+                    Focusable="False"
+                    FontFamily="{StaticResource ManropeBold}"
+                    FontSize="{StaticResource FontSizeMedium}"
+                    Style="{StaticResource ToolSettingsButtonStyle}" />
+
+                <!--  Undo & Clear all  -->
                 <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    
-                    <Button Grid.Column="0"
-                            Content="Undo"
-                            Focusable="False"/>
 
-                    <Button Grid.Column="1"
-                            Content="Clear all"
-                            Click="ClearAll_Click"
-                            Focusable="False"/>
+                    <Button
+                        Grid.Column="0"
+                        Margin="5"
+                        Content="Undo"
+                        Focusable="False"
+                        FontFamily="{StaticResource ManropeBold}"
+                        FontSize="{StaticResource FontSizeMedium}"
+                        Style="{StaticResource ToolSettingsButtonStyle}" />
+
+                    <Button
+                        Grid.Column="1"
+                        Margin="5"
+                        Click="ClearAll_Click"
+                        Content="Clear all"
+                        Focusable="False"
+                        FontFamily="{StaticResource ManropeBold}"
+                        FontSize="{StaticResource FontSizeMedium}"
+                        Style="{StaticResource ToolSettingsButtonStyle}" />
                 </Grid>
-                
+
             </Grid>
         </Grid>
         <!--#endregion-->

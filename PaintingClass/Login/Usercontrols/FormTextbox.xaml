@@ -14,8 +14,8 @@
         <!--  Style pentru textbox custom  -->
         <Style x:Key="FormTextBox" TargetType="{x:Type TextBox}">
             <Style.Resources>
-                <sys:Double x:Key="defaultOpacity">0.7</sys:Double>
-                <sys:Double x:Key="focusOpacity">0.9</sys:Double>
+                <sys:Double x:Key="defaultOpacity">0.8</sys:Double>
+                <sys:Double x:Key="focusOpacity">0.95</sys:Double>
             </Style.Resources>
             <Setter Property="Background" Value="Black" />
             <Setter Property="Foreground" Value="White" />
@@ -90,7 +90,7 @@
         <TextBox
             MaxLength="{Binding MaxLength}"
             Style="{StaticResource FormTextBox}"
-            Text="{Binding Text,UpdateSourceTrigger=PropertyChanged}"
+            Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
             TextChanged="TextBox_TextChanged" />
         <Border
             Margin="0,0,0,-5"
@@ -106,9 +106,9 @@
             <Border.BorderBrush>
                 <LinearGradientBrush>
                     <LinearGradientBrush.GradientStops>
-                        <GradientStop Offset="0" Color="{Binding instance, Converter={StaticResource ResourceKey=BoolToColorConverter},UpdateSourceTrigger=PropertyChanged}" />
+                        <GradientStop Offset="0" Color="{Binding instance, Converter={StaticResource ResourceKey=BoolToColorConverter}, UpdateSourceTrigger=PropertyChanged}" />
                         <GradientStop Offset="0.5" Color="Gray" />
-                        <GradientStop Offset="1" Color="{Binding instance, Converter={StaticResource ResourceKey=BoolToColorConverter},UpdateSourceTrigger=PropertyChanged}" />
+                        <GradientStop Offset="1" Color="{Binding instance, Converter={StaticResource ResourceKey=BoolToColorConverter}, UpdateSourceTrigger=PropertyChanged}" />
                     </LinearGradientBrush.GradientStops>
                 </LinearGradientBrush>
             </Border.BorderBrush>

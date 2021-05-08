@@ -58,9 +58,21 @@ namespace PaintingClass.UserControls
             ShareRequestMessage srm = new() { clientId = nu.clientId, isShared = !nu.isShared };
             MainWindow.instance.roomManager.SendMessage(Packet.Pack(PacketType.ShareRequestMessage, JsonSerializer.Serialize(srm)));
         }
+
+		private void MenuItem_Click(object sender, RoutedEventArgs e)
+		{
+            whiteboardSlot.Measure(new Size(whiteboardSlot.ActualWidth, whiteboardSlot.ActualHeight));
+            whiteboardSlot.Arrange(new Rect(new Point(whiteboardSlotBorder.BorderThickness.Left, whiteboardSlotBorder.BorderThickness.Top),new Size(whiteboardSlot.ActualWidth, whiteboardSlot.ActualHeight)));
+            whiteboardSlot.RenderTransform = new ScaleTransform(1080d/ whiteboardSlot.ActualWidth, 608d/ whiteboardSlot.ActualHeight);
+            whiteboardSlot.UpdateLayout();
+            RenderTargetBitmap bmp = new RenderTargetBitmap(1080, 608, 96, 96, PixelFormats.Pbgra32);
+            bmp.Render(whiteboardSlot);
+            Clipboard.SetImage(bmp);
+            whiteboardSlot.RenderTransform = new ScaleTransform(1, 1);
+        }
     }
 
-    public class ShareTextConverter : IValueConverter
+	public class ShareTextConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

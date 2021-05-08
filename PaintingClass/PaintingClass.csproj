@@ -38,10 +38,12 @@
     <None Remove="Resources\Grosimi\gros.png" />
     <None Remove="Resources\Grosimi\normal.png" />
     <None Remove="Resources\Grosimi\subtire.png" />
+    <None Remove="Resources\Login\Images\backButton.png" />
     <None Remove="Resources\Login\Images\ButonElev.png" />
     <None Remove="Resources\Login\Images\ButonProfesor.png" />
     <None Remove="Resources\Login\Images\Clock.png" />
     <None Remove="Resources\Login\Images\CloseIcon.png" />
+    <None Remove="Resources\Login\Images\elevJoin.jpg" />
     <None Remove="Resources\Login\Images\pointer.png" />
     <None Remove="Resources\Login\Images\Shadow.png" />
     <None Remove="Resources\Tools\circle.png" />
@@ -57,6 +59,15 @@
     <None Remove="Resources\Whiteboard\Images\Group_1.png" />
     <None Remove="Resources\Whiteboard\Images\ShareButton.png" />
     <None Remove="Tabs\Images\DeleteIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <COMReference Include="{d37e2a3e-8545-3a39-9f4f-31827c9124ab}">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>4</VersionMinor>
+      <VersionMajor>2</VersionMajor>
+      <Guid>d37e2a3e-8545-3a39-9f4f-31827c9124ab</Guid>
+    </COMReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -120,10 +131,12 @@
     <Resource Include="Resources\Grosimi\gros.png" />
     <Resource Include="Resources\Grosimi\normal.png" />
     <Resource Include="Resources\Grosimi\subtire.png" />
+    <Resource Include="Resources\Login\Images\backButton.png" />
     <Resource Include="Resources\Login\Images\ButonElev.png" />
     <Resource Include="Resources\Login\Images\ButonProfesor.png" />
     <Resource Include="Resources\Login\Images\Clock.png" />
     <Resource Include="Resources\Login\Images\CloseIcon.png" />
+    <Resource Include="Resources\Login\Images\elevJoin.jpg" />
     <Resource Include="Resources\Login\Images\pointer.png" />
     <Resource Include="Resources\Login\Images\Shadow.png" />
     <Resource Include="Resources\Login\Images\Whiteboard.png" />
