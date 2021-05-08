@@ -535,7 +535,7 @@
                     <ListBox x:Name="UserListBox" BorderThickness="0">
                         <ListBox.Resources>
                             <Style TargetType="ListBoxItem">
-                                <Setter Property="IsEnabled" Value="False" />
+                                <Setter Property="Focusable" Value="False" />
                             </Style>
                         </ListBox.Resources>
                         <ListBox.ItemTemplate>
@@ -546,29 +546,22 @@
                                     BorderBrush="Gray"
                                     BorderThickness="1"
                                     CornerRadius="10">
-                                    <StackPanel
-                                        Height="20"
-                                        MinWidth="100"
-                                        Orientation="Horizontal">
-                                        <TextBlock
-                                            Margin="2,0"
+                                    <Grid MinWidth="100" Height="20">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <TextBlock 
+                                            Margin="2,0" Grid.Column="0" 
                                             FontFamily="{StaticResource ManropeBold}"
                                             FontSize="{StaticResource FontSizeNormal}"
-                                            Foreground="Black"
                                             Text="{Binding Path=name}" />
-                                        <!--<Image
-                                            Margin="6,0"
-                                            RenderOptions.BitmapScalingMode="Fant"
-                                            Source="/Resources/Whiteboard/Images/CloseButton.png">
-                                            <Image.Effect>
-                                                <DropShadowEffect BlurRadius="1" ShadowDepth="2" />
-                                            </Image.Effect>
-                                        </Image>
-                                        <Image
-                                            Margin="6,0"
-                                            RenderOptions.BitmapScalingMode="Fant"
-                                            Source="/Resources/Whiteboard/Images/ShareButton.png" />-->
-                                    </StackPanel>
+
+                                        <Image Grid.Column="1" HorizontalAlignment="Right"
+                                               RenderOptions.BitmapScalingMode="Fant" MouseDown="Kick_MouseDown"
+                                               Source="/Resources/Whiteboard/Images/CloseButton.png"/>
+                                    </Grid>
                                 </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

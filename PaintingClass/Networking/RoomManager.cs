@@ -32,14 +32,14 @@ namespace PaintingClass.Networking
         public Dictionary<int,NetworkUser> userList = new();
         public Action onUserListUpdate;
 
-        int wbItemIndex=0;//todo:could be replaced with whiteboardData.Count, maybe
         List<WBItemMessage> whiteboardData=new();
+        bool ignoreError;
 
         public RoomManager(UserData userData)
         {
 			ws = new WebSocket($"{Constants.urlWebSocket}/room/{userData.roomId}?name={userData.name}&clientID={userData.clientID}&profToken={userData.profToken}");
             ws.SslConfiguration.ServerCertificateValidationCallback = CertificateValidation;
-            ws.OnError += (sender, e) => { Trace.WriteLine(e.Message); };
+            ws.OnError += (sender, e) => { if (!ignoreError) MessageBox.Show(e.Message); };
             ws.OnMessage += OnMessage;
             ws.Connect();
         }
@@ -55,14 +55,12 @@ namespace PaintingClass.Networking
         /// </summary>
         public void SendWVBtem(WBItemMessage msg)
         {
-            msg.itemIndex = wbItemIndex;
-            wbItemIndex++;
+            msg.itemIndex = whiteboardData.Count;
             whiteboardData.Add(msg);
 
             if (msg.type == WBItemMessage.ContentType.clearAll)
             {
                 whiteboardData.Clear();
-                wbItemIndex = 0;
             }
 
             SendMessage(Packet.Pack(PacketType.WBItemMessage, JsonSerializer.Serialize(msg)));
@@ -124,6 +122,19 @@ namespace PaintingClass.Networking
                                 SendSyncRequest(item.id);
                         }
                         onUserListUpdate?.Invoke();
+                        break;
+                    }
+
+                case PacketType.KickAlertMessage:
+                    {
+                        var kam = JsonSerializer.Deserialize<KickAlertMessage>(p.msg);
+                        ignoreError = true;
+                        ws.Close();
+                        MainWindow.instance.Dispatcher.Invoke(()=>
+                        {
+                            MessageBox.Show(kam.message,"PaintingClass",MessageBoxButton.OK);
+                            MainWindow.instance.Close();
+                        });
                         break;
                     }
 
