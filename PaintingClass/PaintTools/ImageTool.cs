@@ -322,20 +322,27 @@ namespace PaintingClass.PaintTools
 		{
             if(e.Key == Key.V && Keyboard.IsKeyDown(Key.LeftCtrl))
 			{
-                e.Handled = true;
-                CheckIfLastImageIsNotSent();
-                BitmapSource src = ((InteropBitmap)Clipboard.GetImage());
-                if (src == null)
-                    return;
-                owner.selectedTool = this;
-                BmpBitmapEncoder encoder = new BmpBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(src));
-                using MemoryStream ms = new MemoryStream();
-                encoder.Save(ms);
-                isMoving = true;
-                resizeGrid.Visibility = Visibility.Visible;
-                bmp = new BitmapImage(Create_Memory_Resource_Uri(ms));
-                DisplayBmp(new Point(0, 0));
+				try
+				{
+                    e.Handled = true;
+                    CheckIfLastImageIsNotSent();
+                    BitmapSource src = ((InteropBitmap)Clipboard.GetImage());
+                    if (src == null)
+                        return;
+                    owner.selectedTool = this;
+                    BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(src));
+                    using MemoryStream ms = new MemoryStream();
+                    encoder.Save(ms);
+                    isMoving = true;
+                    resizeGrid.Visibility = Visibility.Visible;
+                    bmp = new BitmapImage(Create_Memory_Resource_Uri(ms));
+                    DisplayBmp(new Point(0, 0));
+				}
+                catch (Exception ex)
+				{
+                    MessageBox.Show(ex.Message,ex.Source);
+				}
             }
 		}
 

@@ -28,7 +28,7 @@ namespace PaintingClass.UserControls
 
             if (MainWindow.userData==null || MainWindow.userData.isTeacher==false)
             {
-                ((Grid)shareButton.Parent).Children.Remove(shareButton);
+                ((Canvas)shareButton.Parent).Children.Remove(shareButton);
                 shareButton = null;
             }
 
