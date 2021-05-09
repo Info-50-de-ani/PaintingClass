@@ -18,6 +18,7 @@ namespace PaintingClass
 	/// </summary>
 	public partial class App : Application
 	{
+		public const bool DEBUG_MODE = false;
 		public static int startedAppFromBrowserroomId = 0;
 
 		private void Application_Startup(object sender, StartupEventArgs e)

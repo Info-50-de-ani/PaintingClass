@@ -61,6 +61,8 @@ namespace PaintingClass.Login
 		public LoginSauRegister(Frame frame)
 		{
 			InitializeComponent();
+			if (!App.DEBUG_MODE)
+				Injector.Visibility = Visibility.Hidden;
 			CurrentFrame = frame;
 			ShowLoginMenu();
 			StartWindow.FadeAnimateElement(this, new Duration(new TimeSpan(0, 0, 0, 0, 400)), false);
@@ -76,18 +78,11 @@ namespace PaintingClass.Login
 		//pt debbuging
 		private void Inject_Click(object sender, RoutedEventArgs e)
 		{
-			int token = Convert.ToInt32(injectorText.Text);
-			if (token == 0)
-			{
-				System.Diagnostics.Trace.WriteLine("Nu poti injecta un token cu valoarea 0");
-				return;
-			}
-
 			UserData ud = new UserData
 			{
 				name = "profu",
 				clientID = PaintingClass.Storage.Settings.instance.clientID,
-				profToken = token,
+				profToken = 1234,
 				roomId = 0
 			};
 

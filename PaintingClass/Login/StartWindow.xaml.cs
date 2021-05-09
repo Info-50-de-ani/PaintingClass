@@ -34,6 +34,8 @@ namespace PaintingClass
         public StartWindow()
         {
             InitializeComponent();
+            if (!App.DEBUG_MODE)
+                TestButton.Visibility = Visibility.Hidden; 
             BackButton.Visibility = Visibility.Hidden;
             ///daca e inceputa aplicatia prin browser
             if (App.startedAppFromBrowserroomId != 0)

@@ -226,6 +226,7 @@
             </Button.Triggers>
         </Button>
         <Button
+            x:Name="TestButton"
             Width="80"
             Height="30"
             HorizontalAlignment="Right"
