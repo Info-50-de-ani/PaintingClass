@@ -9,6 +9,7 @@
     Width="700"
     Height="500"
     AllowsTransparency="True"
+    Icon="/Resources/Whiteboard/Images/icon.png"
     ResizeMode="CanMinimize"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"

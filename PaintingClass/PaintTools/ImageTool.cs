@@ -322,6 +322,7 @@ namespace PaintingClass.PaintTools
 		{
             if(e.Key == Key.V && Keyboard.IsKeyDown(Key.LeftCtrl))
 			{
+                e.Handled = true;
                 CheckIfLastImageIsNotSent();
                 BitmapSource src = ((InteropBitmap)Clipboard.GetImage());
                 if (src == null)
