@@ -367,7 +367,7 @@ namespace PaintingClass.PaintTools
 			owner.formulaToolResizeCollection.Add(formulaToolResize);
 			myWhiteboardCanvas.Children.Add(stackPanel);
 			position = MainWindow.instance.myWhiteboard.whiteboard.DenormalizePosition(position);
-
+			formulaToolResize.UpdateTextBoxSize(null, null);
 			Point offset = TextTool.CalculateOffset(owner);
 			Canvas.SetTop(stackPanel, offset.Y + position.Y * owner.myWhiteboardViewBox.RenderSize.Height * owner.myWhiteboardViewBox.RenderTransform.Value.M22);
 			Canvas.SetLeft(stackPanel, offset.X + position.X * owner.myWhiteboardViewBox.RenderSize.Width * owner.myWhiteboardViewBox.RenderTransform.Value.M11);

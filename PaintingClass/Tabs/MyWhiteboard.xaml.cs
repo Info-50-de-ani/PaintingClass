@@ -23,6 +23,7 @@ using System.IO;
 using PaintingClass.PaintTools.Interfaces;
 using PaintingClass.Resources;
 using PaintingClassCommon;
+using System.Diagnostics;
 
 namespace PaintingClass.Tabs
 {
@@ -49,6 +50,12 @@ namespace PaintingClass.Tabs
         /// se produce cand <see cref="myWhiteboardViewBox"/> isi schimba tranformul
         /// </summary>
         public Action OnTransformChanged = () => { };
+        
+        /// <summary>
+        /// Se produce cand userul da paste la ceva in whiteboard
+        /// </summary>
+        public Action OnPaste { get; set; } = () => { };
+
         #endregion
 
         private PaintTool _selectedTool;
@@ -159,7 +166,7 @@ namespace PaintingClass.Tabs
                 //adaugam butonul la toolbar
                 toolbar.Children.Add(button);
                 //cand butonul este apasat o sa selecteze unealta corecta
-                button.Click += (sender, e) => selectedTool = tools[toolbar.Children.IndexOf(sender as UIElement)];
+                button.Click += (sender, e) => { selectedTool = tools[toolbar.Children.IndexOf(sender as UIElement)]; Window.GetWindow(this).Focus(); };
                 OnToolSelect += (_tool) =>
                 {
                     if (tool == _tool)
@@ -174,10 +181,9 @@ namespace PaintingClass.Tabs
                     OnToolSelect += ((IToolSelected)tool).SelectToolEventHandler;
                 if (tool is ImageTool)
                 {
-                    Focusable = false;
                     ImageTool t = (ImageTool)tool;
                     this.Drop += t.OnDropEventHandler;
-                    MainWindow.instance.KeyDown += t.OnPasteEventHandler;
+                    OnPaste += t.OnPasteEventHandler;
                     this.OnTransformChanged += () => { t.ImageResizer_SizeChanged(null, null); };
                 }
             }
@@ -189,6 +195,7 @@ namespace PaintingClass.Tabs
             //adauga eventuri
             whiteboard.MouseDown += (sender,args) =>
             {
+                Window.GetWindow(this).Focus();
                 if (isDrawing) return;
                 isDrawing = true;
                 selectedTool.MouseDown(whiteboard.TransformPosition(args.GetPosition(whiteboard)));
@@ -213,7 +220,12 @@ namespace PaintingClass.Tabs
                 isDrawing = false;
                 selectedTool.MouseUp();
             };
-
+            MainWindow.instance.KeyDown += (sender, e) => { 
+                if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.Z)) 
+                    Undo();
+                if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.V))
+                    OnPaste();
+            };
 			MouseWheel += MyWhiteboard_OnScroll;
 			VerticalZoomScrollbar.Scroll += VerticalZoomScrollbar_Scroll;
 			HorizontalZoomScrollbar.Scroll += HorizontalZoomScrollbar_Scroll;
@@ -616,9 +628,7 @@ namespace PaintingClass.Tabs
             MessageUtils.SendClearAll();
         }
 
-        #endregion
-
-        #endregion
-
-    }
+		#endregion
+		#endregion
+	}
 }

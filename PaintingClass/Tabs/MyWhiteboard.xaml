@@ -15,8 +15,8 @@
 
     <UserControl.Resources>
         <!--  Panel button Style  -->
-        <Style TargetType="Button" >
-            <Setter Property="Background" Value="#FFF8F0"/>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#FFF8F0" />
         </Style>
         <!--  ControlTemplate pentru Toolbar  -->
         <ControlTemplate x:Key="ToolScrollViewer" TargetType="{x:Type ScrollViewer}">

@@ -240,10 +240,11 @@ namespace PaintingClass.PaintTools
 
         Uri Create_Memory_Resource_Uri(MemoryStream ms)
         {
-            if(DragDropImagesCnt == 0 && Directory.Exists(Directory.GetCurrentDirectory() + "\\ImageCache"))
-                Directory.Delete(Directory.GetCurrentDirectory() + "\\ImageCache",true);
-            Directory.CreateDirectory(Directory.GetCurrentDirectory() + "\\ImageCache");
-            string path = Directory.GetCurrentDirectory() + $"\\ImageCache\\ImageTransfer{DragDropImagesCnt++}";
+            var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\PaintingClass";
+            if(DragDropImagesCnt == 0 && Directory.Exists(folderPath + "\\ImageCache"))
+                Directory.Delete(folderPath + "\\ImageCache",true);
+            Directory.CreateDirectory(folderPath + "\\ImageCache");
+            string path = folderPath + $"\\ImageCache\\ImageTransfer{DragDropImagesCnt++}";
             using FileStream file = File.OpenWrite(path);
             file.Write(ms.ToArray());
             return new Uri(path);
@@ -318,31 +319,28 @@ namespace PaintingClass.PaintTools
             DisplayBmp(position);
         }
 
-        public void OnPasteEventHandler(object sender, KeyEventArgs e)
+        public void OnPasteEventHandler()
 		{
-            if(e.Key == Key.V && Keyboard.IsKeyDown(Key.LeftCtrl))
+			try
 			{
-				try
-				{
-                    CheckIfLastImageIsNotSent();
-                    BitmapSource src = ((InteropBitmap)Clipboard.GetImage());
-                    if (src == null)
-                        return;
-                    owner.selectedTool = this;
-                    BmpBitmapEncoder encoder = new BmpBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create(src));
-                    using MemoryStream ms = new MemoryStream();
-                    encoder.Save(ms);
-                    isMoving = true;
-                    resizeGrid.Visibility = Visibility.Visible;
-                    bmp = new BitmapImage(Create_Memory_Resource_Uri(ms));
-                    DisplayBmp(new Point(0, 0));
-				}
-                catch (Exception ex)
-				{
-                    MessageBox.Show(ex.Message,ex.Source);
-				}
-            }
+                CheckIfLastImageIsNotSent();
+                BitmapSource src = (Clipboard.GetImage());
+                if (src == null)
+                    return;
+                owner.selectedTool = this;
+                BmpBitmapEncoder encoder = new BmpBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(src));
+                using MemoryStream ms = new MemoryStream();
+                encoder.Save(ms);
+                isMoving = true;
+                resizeGrid.Visibility = Visibility.Visible;
+                bmp = new BitmapImage(Create_Memory_Resource_Uri(ms));
+                DisplayBmp(new Point(0, 0));
+			}
+            catch (Exception ex)
+			{
+                MessageBox.Show(ex.Message);
+			}
 		}
 
         #endregion

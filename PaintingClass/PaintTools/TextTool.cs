@@ -232,6 +232,7 @@ namespace PaintingClass.PaintTools
 			tb.FontSize = 20;
 			tb.TextChanged += (sender,e) => { TextChangedHandler(tbResize); };
 
+			tbResize.UpdateTextBoxSize(null,null);
 			Point offset = CalculateOffset(owner);
 			Canvas.SetTop(grid,offset.Y+ position.Y / Whiteboard.sizeY * owner.myWhiteboardViewBox.ActualHeight * owner.myWhiteboardViewBox.RenderTransform.Value.M22);
 			Canvas.SetLeft(grid,offset.X+ position.X/  Whiteboard.sizeX * owner.myWhiteboardViewBox.ActualWidth * owner.myWhiteboardViewBox.RenderTransform.Value.M11);
