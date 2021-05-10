@@ -151,7 +151,8 @@ namespace PaintingClass.Networking
             /// imaginea in jpg
             /// </summary>
             public byte[] data { get; set; }
-
+            public double posX { get; set; }
+            public double posY { get; set; }
             public double rectHeight { get; set; }
             public double rectWidth { get; set; }
             // pt serializare
@@ -164,6 +165,8 @@ namespace PaintingClass.Networking
                 using MemoryStream ms = new MemoryStream();
                 encoder.Save(ms);
                 data = ms.ToArray();
+                posX = drawing.Rect.TopLeft.X;
+                posY = drawing.Rect.TopLeft.Y;
                 rectHeight = drawing.Rect.Height;
                 rectWidth = drawing.Rect.Width;
             }
@@ -176,7 +179,7 @@ namespace PaintingClass.Networking
                 bitmapImage.BeginInit();
                 bitmapImage.StreamSource = ms;
                 bitmapImage.EndInit();
-                ImageDrawing drawing = new ImageDrawing { Rect = new Rect(new Size(rectWidth,rectHeight))};
+                ImageDrawing drawing = new ImageDrawing { Rect = new Rect(new Point(posX,posY),new Size(rectWidth,rectHeight))};
                 drawing.ImageSource = bitmapImage;
                 return drawing;
 			}
