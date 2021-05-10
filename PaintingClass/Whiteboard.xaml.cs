@@ -115,8 +115,7 @@ namespace PaintingClass
                         Trace.WriteLine("JSON Serializer returned null from WBItemMessage.content");
                         return false;
                     }
-                    drawingCollection.Add(wbImage.Deserialize());
-                    return true;
+                    drawing= wbImage.Deserialize();
                 }
                 catch
                 {
@@ -153,7 +152,10 @@ namespace PaintingClass
                         Trace.WriteLine("WBItemMessage.contentIndex has the wrong value!");
                         return false;
                     }
-                    drawingCollection[msg.contentIndex] = null;
+                    if (msg.contentIndex == drawingCollection.Count - 1)
+                        drawingCollection.RemoveAt(msg.contentIndex);
+                    else
+                        drawingCollection[msg.contentIndex] = new DrawingGroup();//set dummy drawing
                     return true;
             }
             return false;
