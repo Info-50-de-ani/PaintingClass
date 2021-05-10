@@ -189,16 +189,19 @@ namespace PaintingClass.Networking
         }
 
 
-        public static void SendNewWBImage(WBImage image,int index)
+        public static void SendNewWBImage(WBImage image,int index, bool pushToUndoBuffer = true)
 		{
-            MainWindow.instance.roomManager?.SendWVBtem(new WBItemMessage
+            WBItemMessage msg = new()
             {
                 clientID = MainWindow.userData.clientID,
                 contentIndex = index,
                 type = WBItemMessage.ContentType.drawing,
                 op = WBItemMessage.Operation.add,
                 content = JsonSerializer.Serialize(image)
-            });
+            };
+            if (pushToUndoBuffer)
+                MainWindow.instance.myWhiteboard.PushToUndoBuffer(msg);
+            MainWindow.instance.roomManager?.SendWVBtem(msg);
         }
 
         public static void SendClearAll()
