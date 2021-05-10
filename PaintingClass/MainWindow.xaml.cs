@@ -50,7 +50,7 @@ namespace PaintingClass
         public static UserData userData;
         public RoomManager roomManager;
         public Action<bool,MainWindow> OnConnect;
-
+        public Action OnPaste;
         //can be null
         public TeachersTab teachersTab;
         public MyWhiteboard myWhiteboard;
@@ -71,14 +71,15 @@ namespace PaintingClass
 
             //pagina de login va genera UserData si il va trimite prin constructor
             userData = data;
-            if (userData==null)
+            if (userData == null)
             {
                 TestInit();
             }
             else
             {
-                Init(); 
+                Init();
             }
+
         }
 
 

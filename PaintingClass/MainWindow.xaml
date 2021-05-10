@@ -11,8 +11,8 @@
     Height="824"
     MinWidth="400"
     MinHeight="400"
-    mc:Ignorable="d"
-    Icon="/Resources/Whiteboard/Images/icon.png">
+    Icon="/Resources/Whiteboard/Images/icon.png"
+    mc:Ignorable="d">
     <Window.Resources>
         <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#FFFFFF" />
         <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#ACACAC" />
@@ -111,9 +111,13 @@
             </Setter>
         </Style>
     </Window.Resources>
-
+    <Window.InputBindings>
+        <KeyBinding
+            Key="V"
+            Command="{Binding PasteMainWindowCommand}"
+            Modifiers="Ctrl" />
+    </Window.InputBindings>
     <Grid>
-
         <!--#region Formule-->
         <Grid
             x:Name="FormulaGrid"
@@ -547,21 +551,25 @@
                                     BorderBrush="Gray"
                                     BorderThickness="1"
                                     CornerRadius="10">
-                                    <Grid MinWidth="100" Height="20">
+                                    <Grid Height="20" MinWidth="100">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
-                                        
-                                        <TextBlock 
-                                            Margin="2,0" Grid.Column="0" 
+
+                                        <TextBlock
+                                            Grid.Column="0"
+                                            Margin="2,0"
                                             FontFamily="{StaticResource ManropeBold}"
                                             FontSize="{StaticResource FontSizeNormal}"
                                             Text="{Binding Path=name}" />
 
-                                        <Image Grid.Column="1" HorizontalAlignment="Right"
-                                               RenderOptions.BitmapScalingMode="Fant" MouseDown="Kick_MouseDown"
-                                               Source="/Resources/Whiteboard/Images/CloseButton.png"/>
+                                        <Image
+                                            Grid.Column="1"
+                                            HorizontalAlignment="Right"
+                                            MouseDown="Kick_MouseDown"
+                                            RenderOptions.BitmapScalingMode="Fant"
+                                            Source="/Resources/Whiteboard/Images/CloseButton.png" />
                                     </Grid>
                                 </Border>
                             </DataTemplate>

@@ -129,6 +129,7 @@ namespace PaintingClass.Tabs
             //le sortam folosind proprietate priority
             tools.Sort((a,b) => { return a.priority.CompareTo(b.priority); } );
 
+
             var toolbarButtonStyle = (Style)Application.Current.Resources["ToolBarButtonStyle"];
             //generaza controalele pt ToolBar
             foreach (PaintTool tool in tools)
@@ -172,9 +173,10 @@ namespace PaintingClass.Tabs
                     OnToolSelect += ((IToolSelected)tool).SelectToolEventHandler;
                 if (tool is ImageTool)
                 {
+                    Focusable = false;
                     ImageTool t = (ImageTool)tool;
                     this.Drop += t.OnDropEventHandler;
-                    this.Loaded += (sender, e) => { Window.GetWindow(whiteboard).KeyDown += t.OnPasteEventHandler; };
+                    MainWindow.instance.KeyDown += t.OnPasteEventHandler;
                     this.OnTransformChanged += () => { t.ImageResizer_SizeChanged(null, null); };
                 }
             }

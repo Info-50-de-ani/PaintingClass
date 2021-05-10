@@ -324,7 +324,6 @@ namespace PaintingClass.PaintTools
 			{
 				try
 				{
-                    e.Handled = true;
                     CheckIfLastImageIsNotSent();
                     BitmapSource src = ((InteropBitmap)Clipboard.GetImage());
                     if (src == null)

@@ -10,6 +10,7 @@ using System.Windows;
 using PaintingClass.Login;
 using System.Security.Principal;
 using System.Reflection;
+using System.Windows.Input;
 
 namespace PaintingClass
 {

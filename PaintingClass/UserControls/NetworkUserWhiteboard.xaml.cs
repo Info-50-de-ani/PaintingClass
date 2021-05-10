@@ -49,6 +49,7 @@ namespace PaintingClass.UserControls
                 if (nu.whiteboard.Parent!=null)
                 ((Viewbox)nu.whiteboard.Parent).Child = null;
                 whiteboardSlot.Child = nu.whiteboard;
+
             };
         }
 

@@ -96,7 +96,7 @@ namespace PaintingClass.Networking
                     }
                     else
 					{
-                        output = new TextBox { IsReadOnly = true, Text = tb.Text , Tag = tb.Tag, Background = tb.Background, TextWrapping = tb.TextWrapping };
+                        output = new TextBox { IsReadOnly = true, Text = tb.Text , Tag = tb.Tag, Background = tb.Background, TextWrapping = tb.TextWrapping, FontSize = tb.FontSize };
                         output.Width = control.Width;
                         output.Height = control.Height;
 					}
