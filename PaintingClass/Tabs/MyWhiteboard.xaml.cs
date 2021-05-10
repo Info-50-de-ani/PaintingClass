@@ -22,6 +22,7 @@ using Microsoft.Win32;
 using System.IO;
 using PaintingClass.PaintTools.Interfaces;
 using PaintingClass.Resources;
+using PaintingClassCommon;
 
 namespace PaintingClass.Tabs
 {
@@ -233,6 +234,41 @@ namespace PaintingClass.Tabs
                               select type).ToArray();
         }
 
+        #region Undo
+        //deocamdata Undo nu o sa suporte editarea
+        List<WBItemMessage> undoBuffer = new();
+        public void PushToUndoBuffer(WBItemMessage msg)
+        {
+            if (msg.op == WBItemMessage.Operation.edit)
+                throw new NotImplementedException();
+            undoBuffer.Add(msg);
+        }
+        public void Undo()
+        {
+            if (undoBuffer.Count == 0)
+                return;
+            WBItemMessage msg = undoBuffer.Last();
+            undoBuffer.RemoveAt(undoBuffer.Count-1);
+
+            WBItemMessage newMsg = new()
+            {
+                clientID=msg.clientID,
+                content=msg.content,
+                contentIndex=msg.contentIndex,
+                itemIndex=msg.itemIndex,
+                type=msg.type,
+                op = msg.op switch
+                {
+                    WBItemMessage.Operation.add => WBItemMessage.Operation.delete,
+                    WBItemMessage.Operation.edit => throw new NotImplementedException(),
+                    WBItemMessage.Operation.delete => WBItemMessage.Operation.add, //todo: NU ACOPERA TOATE CAZURILE!!!
+                    _ => throw new ArgumentException()
+                }
+            };
+            whiteboard.ApplyWBItem(newMsg);
+            MainWindow.instance?.roomManager.SendWVBtem(newMsg);
+        }
+        #endregion
 
         #region Zoom
 
@@ -545,21 +581,14 @@ namespace PaintingClass.Tabs
 		{
             var buton = (Button)sender;
 
-            switch ((string)buton.Tag)
+            globalFontSize= (string)buton.Tag switch
             {
-                case "Mic":
-                    globalFontSize = 12;
-                    break;
-                case "Mediu":
-                    globalFontSize = 14;
-                    break;
-                case "Mare":
-                    globalFontSize = 16;
-                    break;
-                case "Foarte Mare":
-                    globalFontSize = 20;
-                    break;
-            }
+                "Mic" => 14,
+                "Mediu" => 20,
+                "Mare" => 35,
+                "Foarte Mare" => 50,
+                _ => throw new ArgumentException()
+            };
 
             CloseOpenPanels();
         }
@@ -573,11 +602,16 @@ namespace PaintingClass.Tabs
 
             CloseOpenPanels();
         }
+        private void Undo_Click(object sender, RoutedEventArgs e)
+        {
+            Undo();
+        }
         private void ClearAll_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Esti sigur ca vrei să golești toată tabla? Această acțiune nu poate fi anulata", "PaintingClass", MessageBoxButton.OKCancel, MessageBoxImage.Warning) != MessageBoxResult.OK)
                 return;
 
+            undoBuffer.Clear();
             whiteboard.ClearWhiteboard();
             MessageUtils.SendClearAll();
         }

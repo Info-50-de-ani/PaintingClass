@@ -23,18 +23,21 @@ namespace PaintingClass.Networking
     public static class MessageUtils
     {
         /// <summary>
-        /// Creaza un WBItemMessage care este trimis
+        /// Creaza un WBItemMessage care este trimis si inregistreaza pt undo
         /// </summary>
-        public static void SendNewDrawing(Drawing drawing, int index)
+        public static void SendNewDrawing(Drawing drawing, int index, bool pushToUndoBuffer=true)
         {
-            MainWindow.instance.roomManager?.SendWVBtem(new WBItemMessage
+            WBItemMessage msg = new()
             {
                 clientID = MainWindow.userData.clientID,
                 contentIndex=index,
                 type=WBItemMessage.ContentType.drawing,
                 op=WBItemMessage.Operation.add,
                 content = XamlWriter.Save(drawing)
-            });
+            };
+            if (pushToUndoBuffer)
+                MainWindow.instance.myWhiteboard.PushToUndoBuffer(msg);
+            MainWindow.instance.roomManager?.SendWVBtem(msg);
         }
 
         /// <summary>
@@ -186,16 +189,19 @@ namespace PaintingClass.Networking
         }
 
 
-        public static void SendNewWBImage(WBImage image,int index)
+        public static void SendNewWBImage(WBImage image,int index, bool pushToUndoBuffer = true)
 		{
-            MainWindow.instance.roomManager?.SendWVBtem(new WBItemMessage
+            WBItemMessage msg = new()
             {
                 clientID = MainWindow.userData.clientID,
                 contentIndex = index,
                 type = WBItemMessage.ContentType.drawing,
                 op = WBItemMessage.Operation.add,
                 content = JsonSerializer.Serialize(image)
-            });
+            };
+            if (pushToUndoBuffer)
+                MainWindow.instance.myWhiteboard.PushToUndoBuffer(msg);
+            MainWindow.instance.roomManager?.SendWVBtem(msg);
         }
 
         public static void SendClearAll()

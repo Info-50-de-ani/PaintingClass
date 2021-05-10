@@ -229,6 +229,7 @@ namespace PaintingClass.PaintTools
 			owner.myWhiteboardGrid.SizeChanged += tbResize.UpdateTextBoxSize;
 
 			owner.textToolResizeCollection.Add(tbResize);
+			tb.FontSize = 20;
 			tb.TextChanged += (sender,e) => { TextChangedHandler(tbResize); };
 
 			Point offset = CalculateOffset(owner);
