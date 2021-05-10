@@ -152,11 +152,8 @@ namespace PaintingClass.Networking
             /// </summary>
             public byte[] data { get; set; }
 
-            /// <summary>
-            /// Drawing
-            /// </summary>
-            public string serializedDrawing { get; set; }
-
+            public double rectHeight { get; set; }
+            public double rectWidth { get; set; }
             // pt serializare
             public WBImage() { }
 
@@ -167,18 +164,19 @@ namespace PaintingClass.Networking
                 using MemoryStream ms = new MemoryStream();
                 encoder.Save(ms);
                 data = ms.ToArray();
-                serializedDrawing = XamlWriter.Save(drawing);
+                rectHeight = drawing.Rect.Height;
+                rectWidth = drawing.Rect.Width;
             }
 
             public ImageDrawing Deserialize()
 			{
-                var drawing = (ImageDrawing)XamlReader.Parse(serializedDrawing);
                 MemoryStream ms = new MemoryStream(data);
                 BitmapImage bitmapImage = new BitmapImage();
                 ms.Position = 0;
                 bitmapImage.BeginInit();
                 bitmapImage.StreamSource = ms;
                 bitmapImage.EndInit();
+                ImageDrawing drawing = new ImageDrawing { Rect = new Rect(new Size(rectWidth,rectHeight))};
                 drawing.ImageSource = bitmapImage;
                 return drawing;
 			}
