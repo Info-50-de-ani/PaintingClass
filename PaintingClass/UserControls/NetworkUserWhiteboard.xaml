@@ -77,18 +77,17 @@
                         FontSize="20"
                         Text="{Binding name, FallbackValue=asdasdasdas}" />
                 </Border>
-                <Canvas Grid.Column="1">
-                    <Button
-                        x:Name="shareButton"
-                        Margin="0,0,0,0"
-                        Click="shareButton_Click"
-                        Content="{Binding isShared, Converter={StaticResource ShareTextConverter}, FallbackValue=sadasdsa}"
-                        Opacity="1"
-                        Style="{StaticResource SlidingAnimatedButtonStyle}"
-                        TextBlock.FontFamily="{StaticResource ManropeExtraBold}"
-                        TextBlock.FontSize="12"
-                        TextBlock.Foreground="Black" />
-                </Canvas>
+                <Button
+                    VerticalAlignment="Center"
+                    Grid.Column="2"
+                    x:Name="shareButton"
+                    Click="shareButton_Click"
+                    Content="{Binding isShared, Converter={StaticResource ShareTextConverter}, FallbackValue=sadasdsa}"
+                    Opacity="1"
+                    Style="{StaticResource SlidingAnimatedButtonStyle}"
+                    TextBlock.FontFamily="{StaticResource ManropeExtraBold}"
+                    TextBlock.FontSize="12"
+                    TextBlock.Foreground="Black" />
             </Grid>
         </Grid>
 
